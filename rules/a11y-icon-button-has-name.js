@@ -25,10 +25,8 @@ module.exports = {
         let existNoIcon = false
         let targetNode = node
 
-        children.forEach((c) => {
-          if (c.type !== 'JSXElement') {
-            existNoIcon = true
-          } else if (c.openingElement.name.name.match(/Icon$/)) {
+        const child = children.find((c) => {
+          if (c.type === 'JSXElement' && c.openingElement.name.name.match(/Icon$/)) {
             existIcon = true
             targetNode = c
 
@@ -38,9 +36,11 @@ module.exports = {
           } else {
             existNoIcon = true
           }
+
+          return existIcon && !existNoIcon
         })
 
-        if (existIcon && !existNoIcon) {
+        if (child) {
           context.report({
             node: targetNode,
             messageId: 'a11y-icon-button-has-name',
