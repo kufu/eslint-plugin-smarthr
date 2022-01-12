@@ -1,6 +1,6 @@
 const path = require('path')
-const { replacePaths } = require('../libs/common')
-const { BASE_SCHEMA_PROPERTIES, calculateDomainContext, calculateDomainNode } = require('../libs/common_domain')
+const { replacePaths } = require('./common')
+const { BASE_SCHEMA_PROPERTIES, calculateDomainContext, calculateDomainNode } = require('./common_domain')
 
 const SCHEMA = [
   {
@@ -30,11 +30,11 @@ const isConvertType = (calcContext, calcDomainNode) => {
   if (domain && domain !== 'none' && isDomainImport) {
     return domain
   }
-  if (module && module !== 'none' && isModuleImport) {
-    return module
-  }
   if (globalModule && globalModule !== 'none' && isGlobalModuleImport) {
     return globalModule
+  }
+  if (module && module !== 'none' && isModuleImport) {
+    return module
   }
   if (outside && outside !== 'none' && !isLowerImport) {
     return outside
@@ -112,7 +112,7 @@ module.exports = {
           }
 
           const { filteredDirs, filteredPaths } = calcDomainNode
-          const fixedImportPath = `${filteredDirs.length === 0 ? './' : [...Array(filteredDirs.length)].reduce((prev) => `${prev}../`, '')}${filteredPaths.join('/')}`
+          const fixedImportPath = `${filteredDirs.length === 0 ? './' : [...Array(filteredDirs.length)].reduce((prev) => `${prev}../`, '')}${filteredPaths.join('/')}`.replace(/^(.+)\.[a-z0-9]+?$/, '$1')
 
           if (importPath !== fixedImportPath) {
             context.report({
