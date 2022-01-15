@@ -31,7 +31,6 @@ const DEFAULT_CONFIG = {
 const DEFAULT_SCHEMA_PROPERTY = {
   ignoreKeywords: { type: 'array', items: { type: 'string' } },
   keywordGenerator: { type: 'function' },
-  disabled: { type: 'boolean', default: false },
 }
 
 const SCHEMA = [
@@ -300,37 +299,37 @@ module.exports = {
       keywords,
     }
 
-    if (!option.type?.disabled) {
+    if (option.type) {
       rules = {
         ...rules,
         TSTypeAliasDeclaration: generateTypeRedundant(args),
       }
     }
-    if (!option.property?.disabled) {
+    if (option.property) {
       rules = {
         ...rules,
         Property: generatePropertyRedundant(args),
       }
     }
-    if (!option.file?.disabled) {
+    if (option.file) {
       rules = {
         ...rules,
         Program: generateFileRedundant(args),
       }
     }
-    if (!option.function?.disabled) {
+    if (option.function) {
       rules = {
         ...rules,
         FunctionDeclaration: generateFunctionRedundant(args),
       }
     }
-    if (!option.variable?.disabled) {
+    if (option.variable) {
       rules = {
         ...rules,
         VariableDeclarator: generateVariableRedundant(args),
       }
     }
-    if (!option.class?.disabled) {
+    if (option.class) {
       rules = {
         ...rules,
         ClassDeclaration: generateClassRedundant(args),
