@@ -36,6 +36,8 @@ const calculateDomainNode = (calclatedContext, node) => {
   let replacedPath = importPath 
 
   if (replacePaths) {
+    const exts = ['.ts', '.tsx', '.js', '.jsx', '']
+
     replacedPath = Object.entries(replacePaths).reduce((prev, [key, values]) => {
       if (replacedPath === prev) {
         const regexp = new RegExp(`^${key}(.+)$`)
@@ -44,11 +46,8 @@ const calculateDomainNode = (calclatedContext, node) => {
           return values.reduce((p, v) => {
             if (prev === p) {
               const id = p.replace(regexp, `${path.resolve(`${process.env.PWD}/${v}`)}/$1`)
-              const filePath = ['', '.ts', '.tsx', '.js', '.jsx'].map((j) => `${id}${j}`).find((j) => fs.existsSync(j))
 
-              if (filePath) {
-                return filePath
-              }
+              return exts.map((j) => `${id}${j}`).find((j) => fs.existsSync(j)) || p
             }
 
             return p
@@ -58,20 +57,18 @@ const calculateDomainNode = (calclatedContext, node) => {
 
       return prev
     }, replacedPath)
+
+    if (replacedPath[0] === '.') {
+      replacedPath = path.resolve(`${parentDir}/${replacedPath}`)
+    }
+    if (!replacedPath.match(/\.[a-z0-9]+$/)) {
+      replacedPath = exts.map((j) => `${replacedPath}${j}`).find((j) => fs.existsSync(j)) || replacedPath
+    }
+
+    replacedPath = replacedPath.replace(/^(.+?)((\/index)?\.[a-z0-9]+|\/)$/, '$1')
   }
 
-  let resolvedImportPath = ''
-
-  switch (replacedPath[0]) {
-    // HINT: 相対パスの場合
-    case '.': 
-      resolvedImportPath = path.resolve(`${parentDir}/${replacedPath}`)
-      break
-    // HINT: 絶対パスの場合
-    case '/':
-      resolvedImportPath = replacedPath
-      break
-  }
+  const resolvedImportPath = replacedPath[0] === '/' ? replacedPath : ''
 
   let isGlobalModuleImport = false
   if (
