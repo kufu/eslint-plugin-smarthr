@@ -63,7 +63,7 @@ const fetchTerminalImportName = (filename) => {
   return name
 }
 const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
-  const option = args.option[key]
+  const option = args.option[key] || {}
   const ignoreKeywords = option.ignoreKeywords || DEFAULT_CONFIG[key].IGNORE_KEYWORDS
   const terminalImportKeyword = terminalImportName ? terminalImportName.toLowerCase() : '' 
   const filterKeywords = (keys) => keys.filter((k) => k !== terminalImportKeyword && !ignoreKeywords.includes(k))
