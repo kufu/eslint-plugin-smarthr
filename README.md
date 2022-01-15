@@ -102,12 +102,13 @@ const DOMAIN_RULE_ARGS = {
       {
         ...DOMAIN_RULE_ARGS,
         format: {
-          // all: 'absolute', // 'relative', 'none'
-          outside: 'absolute', // 'relative', 'none'
-          globalModule: 'absolute', // 'relative', 'none'
-          module: 'relative', // 'relative', 'none'
-          domain: 'relative', // 'relative', 'none'
-          lower: 'relative', // 'relative', 'none'
+          // 'relative', 'auto', 'none'
+          // all: 'absolute',
+          outside: 'auto',
+          globalModule: 'absolute',
+          module: 'relative',
+          domain: 'relative',
+          lower: 'relative',
         },
       },
     ],
@@ -255,23 +256,24 @@ import modulePart from '../../modules/views/parts'
 import globalModulePart from '@/modules/views/parts'
 ```
 
-## smarthr/prohibit_import
+## smarthr/prohibit-import
 
-- 例えば特定の module の component にバグが発見された場合にimportを防ぎたい場合に利用するruleです
+- 例えば特定の module にバグが発見されたなど、importさせたくない場合に利用するルールです
 
 ### rules
 
 ```js
 {
   rules: {
-    'smarthr/prohibit_import': [
+    'smarthr/prohibit-import': [
       'error', // 'warn', 'off'
       {
         targets: {
-          '^smarthr-ui$': ['SecondaryButtonAnchor'], // key は 正規表現を指定する
+          '^query-string$': true, // key は 正規表現を指定する
+          '^smarthr-ui$': ['SecondaryButtonAnchor'], 
         },
         // generateReportMessage: (source, imported) => 
-        //   `${source}/${imported} はXxxxxxなので利用せず yyyy/zzzz を利用してください`
+        //   `${source}${imported && `/${imported}`} はXxxxxxなので利用せず yyyy/zzzz を利用してください`
       }
     ]
   },
@@ -281,6 +283,7 @@ import globalModulePart from '@/modules/views/parts'
 ### ❌ Incorrect
 
 ```js
+import queryString from 'query-string'
 import { SecondaryButtonAnchor } from 'smarthr-ui'
 ```
 
