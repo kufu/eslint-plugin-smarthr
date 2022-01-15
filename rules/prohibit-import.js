@@ -9,7 +9,7 @@ const SCHEMA = [
   }
 ]
 
-const generateDefaultReportMessage = (source, imported) => `${source}/${imported} は利用しないでください`
+const generateDefaultReportMessage = (source, imported) => `${source}${imported && `/${imported}`} は利用しないでください`
 
 module.exports = {
   meta: {
@@ -31,14 +31,21 @@ module.exports = {
             return
           }
 
-          const specifier = node.specifiers.find((s) => importNames.includes(s.imported.name))
+          const imported = (() => {
+            if (!Array.isArray(importNames)) {
+              return !!importNames
+            }
+            const specifier = node.specifiers.find((s) => importNames.includes(s.imported.name))
 
-          if (specifier) {
+            return specifier ? specifier.imported.name : false
+          })()
+
+          if (imported) {
             context.report({
               node,
               messageId: 'prohibit_import',
               data: {
-                message: generateReportMessage(node.source.value, specifier.imported.name),
+                message: generateReportMessage(node.source.value, imported === true ? '' : imported),
               },
             });
           }
