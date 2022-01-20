@@ -5,7 +5,10 @@
   "license": "MIT",
   "description": "A sharable ESLint plugin for SmartHR",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "release:dryrun": "standard-version --dry-run",
+    "release": "standard-version"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/kufu/eslint-plugin-smarthr"
@@ -17,7 +20,9 @@
     "json5": "^2.2.0",
     "path": "^0.12.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "standard-version": "^9.3.2"
+  },
   "peerDependencies": {
     "eslint": "^7 || ^8"
   },
