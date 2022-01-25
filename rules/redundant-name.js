@@ -99,9 +99,16 @@ const handleReportBetterName = ({
       return
     }
 
-    let betterName = redundantKeywords.reduce((prev, keyword) => (
-      prev.replace(new RegExp(keyword, 'i'), '')
-    ), name)
+    let hitCount = 0
+    let betterName = redundantKeywords.reduce((prev, keyword) => {
+      const replaced = prev.replace(new RegExp(keyword, 'i'), '')
+
+      if (prev !== replaced) {
+        hitCount++
+      }
+
+      return replaced
+    }, name)
 
     if (name !== betterName) {
       betterName = betterName
@@ -110,7 +117,8 @@ const handleReportBetterName = ({
                      .replace(/_+/, '_')
 
       if (!betterName) {
-        betterName = defaultBetterName
+        // HINT: 1keywordで構成されている名称はそのままにする
+        betterName = hitCount === 1 ? name : defaultBetterName
       }
 
       // HINT: camelCase、lower_snake_case の場合、keywordが取り除かれた結果違うケースになってしまう場合があるので対応する
