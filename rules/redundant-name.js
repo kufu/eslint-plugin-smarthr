@@ -26,6 +26,9 @@ const DEFAULT_CONFIG = {
   class: {
     IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
   },
+  method: {
+    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
+  },
 }
 
 const DEFAULT_SCHEMA_PROPERTY = {
@@ -248,6 +251,18 @@ const generateClassRedundant = (args) => {
   })
 }
 
+const generateMethodRedundant = (args) => {
+  const key = 'method'
+
+  return handleReportBetterName({
+    key,
+    context: args.context,
+    redundantKeywords: generateRedundantKeywords({ args, key }),
+    defaultBetterName: 'item',
+    fetchName: (node) => node.key.name,
+  })
+}
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -259,6 +274,7 @@ module.exports = {
       'function-name': ' {{ message }}',
       'variable-name': ' {{ message }}',
       'class-name': ' {{ message }}',
+      'method-name': ' {{ message }}',
     },
     schema: SCHEMA,
   },
@@ -307,9 +323,12 @@ module.exports = {
       }
     }
     if (option.property) {
+      propRedundant = generatePropertyRedundant(args)
+
       rules = {
         ...rules,
-        Property: generatePropertyRedundant(args),
+        Property: propRedundant,
+        PropertyDefinition: propRedundant,
       }
     }
     if (option.file) {
@@ -325,22 +344,21 @@ module.exports = {
       }
     }
     if (option.variable) {
+      const redundant = generateVariableRedundant(args)
+
       rules = {
         ...rules,
-        VariableDeclarator: generateVariableRedundant(args),
+        VariableDeclarator: redundant,
+        TSEnumDeclaration: redundant,
       }
     }
     if (option.class) {
-      propRedundant = generatePropertyRedundant(args) 
-      
       rules = {
         ...rules,
         ClassDeclaration: generateClassRedundant(args),
-        MethodDefinition: propRedundant,
-        PropertyDefinition: propRedundant,
+        MethodDefinition: generateMethodRedundant(args) ,
       }
     }
-
 
     return rules
   },
