@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs')
 
 const replacePaths = (() => {
-  const tsconfig = fs.readFileSync(`${process.env.PWD}/tsconfig.json`)
+  const tsconfig = fs.readFileSync(`${process.cwd()}/tsconfig.json`)
 
   if (!tsconfig) {
     return null 
@@ -34,7 +34,7 @@ const rootPath = (() => {
     return ''
   }
 
-  return path.resolve(`${process.env.PWD}/${p.replace(/\/\*$/, '')}`)
+  return path.resolve(`${process.cwd()}/${p.replace(/\/\*$/, '')}`)
 })()
 
 module.exports = { replacePaths, rootPath }
