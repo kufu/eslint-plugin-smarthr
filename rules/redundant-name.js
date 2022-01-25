@@ -237,7 +237,7 @@ const generateVariableRedundant = (args) => {
 }
 
 const generateClassRedundant = (args) => {
-  const key = 'variable'
+  const key = 'class'
 
   return handleReportBetterName({
     key,
@@ -258,6 +258,7 @@ module.exports = {
       'property-name': ' {{ message }}',
       'function-name': ' {{ message }}',
       'variable-name': ' {{ message }}',
+      'class-name': ' {{ message }}',
     },
     schema: SCHEMA,
   },
@@ -330,11 +331,16 @@ module.exports = {
       }
     }
     if (option.class) {
+      propRedundant = generatePropertyRedundant(args) 
+      
       rules = {
         ...rules,
         ClassDeclaration: generateClassRedundant(args),
+        MethodDefinition: propRedundant,
+        PropertyDefinition: propRedundant,
       }
     }
+
 
     return rules
   },
