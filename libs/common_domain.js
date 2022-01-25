@@ -45,7 +45,7 @@ const calculateDomainNode = (calclatedContext, node) => {
         if (matcher) {
           return values.reduce((p, v) => {
             if (prev === p) {
-              const id = p.replace(regexp, `${path.resolve(`${process.env.PWD}/${v}`)}/$1`)
+              const id = p.replace(regexp, `${path.resolve(`${process.cwd()}/${v}`)}/$1`)
 
               return exts.map((j) => `${id}${j}`).find((j) => fs.existsSync(j)) || p
             }
@@ -75,7 +75,7 @@ const calculateDomainNode = (calclatedContext, node) => {
     !resolvedImportPath ||
     option.globalModuleDir &&
     option.globalModuleDir.some((global) => 
-      !!resolvedImportPath.match(new RegExp(`^${path.resolve(`${process.env.PWD}/${global}`)}`))
+      !!resolvedImportPath.match(new RegExp(`^${path.resolve(`${process.cwd()}/${global}`)}`))
     )
   ) {
     isGlobalModuleImport = true

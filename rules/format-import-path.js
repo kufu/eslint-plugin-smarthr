@@ -53,7 +53,7 @@ const calculateAbsoluteImportPath = ({ importPath, resolvedImportPath }) => {
     if (resolvedImportPath === prev) {
       return values.reduce((p, v) => {
         if (prev === p) {
-          const regexp = new RegExp(`^${path.resolve(`${process.env.PWD}/${v}`)}(.+)$`)
+          const regexp = new RegExp(`^${path.resolve(`${process.cwd()}/${v}`)}(.+)$`)
 
           if (prev.match(regexp)) {
             return p.replace(regexp, `${key}/$1`).replace(/(\/)+/g, '/')
