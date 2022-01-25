@@ -26,6 +26,9 @@ const DEFAULT_CONFIG = {
   class: {
     IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
   },
+  method: {
+    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
+  },
 }
 
 const DEFAULT_SCHEMA_PROPERTY = {
@@ -237,7 +240,7 @@ const generateVariableRedundant = (args) => {
 }
 
 const generateClassRedundant = (args) => {
-  const key = 'variable'
+  const key = 'class'
 
   return handleReportBetterName({
     key,
@@ -245,6 +248,18 @@ const generateClassRedundant = (args) => {
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName: fetchTerminalImportName(args.filename) }),
     defaultBetterName: '',
     fetchName: (node) => node.id.name,
+  })
+}
+
+const generateMethodRedundant = (args) => {
+  const key = 'method'
+
+  return handleReportBetterName({
+    key,
+    context: args.context,
+    redundantKeywords: generateRedundantKeywords({ args, key }),
+    defaultBetterName: 'item',
+    fetchName: (node) => node.key.name,
   })
 }
 
@@ -258,6 +273,8 @@ module.exports = {
       'property-name': ' {{ message }}',
       'function-name': ' {{ message }}',
       'variable-name': ' {{ message }}',
+      'class-name': ' {{ message }}',
+      'method-name': ' {{ message }}',
     },
     schema: SCHEMA,
   },
@@ -306,9 +323,12 @@ module.exports = {
       }
     }
     if (option.property) {
+      propRedundant = generatePropertyRedundant(args)
+
       rules = {
         ...rules,
-        Property: generatePropertyRedundant(args),
+        Property: propRedundant,
+        PropertyDefinition: propRedundant,
       }
     }
     if (option.file) {
@@ -324,15 +344,19 @@ module.exports = {
       }
     }
     if (option.variable) {
+      const redundant = generateVariableRedundant(args)
+
       rules = {
         ...rules,
-        VariableDeclarator: generateVariableRedundant(args),
+        VariableDeclarator: redundant,
+        TSEnumDeclaration: redundant,
       }
     }
     if (option.class) {
       rules = {
         ...rules,
         ClassDeclaration: generateClassRedundant(args),
+        MethodDefinition: generateMethodRedundant(args) ,
       }
     }
 
