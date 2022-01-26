@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-smarthr",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "author": "SmartHR",
   "license": "MIT",
   "description": "A sharable ESLint plugin for SmartHR",
@@ -11,10 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kufu/eslint-plugin-smarthr"
+    "url": "git+ssh://git@github.com:kufu/eslint-plugin-smarthr.git"
   },
   "homepage": "https://github.com/kufu/eslint-plugin-smarthr",
-  "bugs": "https://github.com/kufu/eslint-plugin-smarthr/issues",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "bugs": {
+    "url": "https://github.com/kufu/eslint-plugin-smarthr/issues"
+  },
   "dependencies": {
     "json5": "^2.2.0"
   },
