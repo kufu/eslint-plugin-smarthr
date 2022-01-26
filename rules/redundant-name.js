@@ -197,6 +197,18 @@ const generateTypeRedundant = (args) => {
   }
 }
 
+const generateTypePropertyRedundant = (args) => {
+  const key = 'type'
+
+  return handleReportBetterName({
+    key,
+    context: args.context,
+    redundantKeywords: generateRedundantKeywords({ args, key }),
+    defaultBetterName: '',
+    fetchName: (node) => node.key.name,
+  })
+}
+
 const generatePropertyRedundant = (args) => {
   const key = 'property'
 
@@ -328,6 +340,8 @@ module.exports = {
       rules = {
         ...rules,
         TSTypeAliasDeclaration: generateTypeRedundant(args),
+        // TSInterfaceDeclaration: hoge, // 必要になったら実装する
+        TSPropertySignature: generateTypePropertyRedundant(args),
       }
     }
     if (option.property) {
