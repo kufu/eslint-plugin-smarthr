@@ -366,10 +366,14 @@ const suffixGenerator = ({ node, filename }) => {
       {
         type: { ignorekeywords, keywordGenerator, suffixGenerator },
         file: { ignorekeywords, keywordGenerator },
+        // typeProperty: { ignorekeywords, keywordGenerator },
+        // file: { ignorekeywords, keywordGenerator },
         // property: { ignorekeywords, keywordGenerator },
         // function: { ignorekeywords, keywordGenerator },
+        // functionParams: { ignorekeywords, keywordGenerator },
         // variable: { ignorekeywords, keywordGenerator },
         // class: { ignorekeywords, keywordGenerator },
+        // method: { ignorekeywords, keywordGenerator },
       }
     ]
   },
