@@ -3,6 +3,9 @@ const { rootPath } = require('../libs/common')
 
 const uniq = (array) => array.filter((elem, index, self) => self.indexOf(elem) === index)
 
+const COMMON_DEFAULT_CONFIG = {
+  IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
+}
 const DEFAULT_CONFIG = {
   type: {
     IGNORE_KEYWORDS: [
@@ -11,24 +14,14 @@ const DEFAULT_CONFIG = {
     ],
     SUFFIX: ['Props', 'Type'],
   },
-  file: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  property: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  function: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  variable: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  class: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  method: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
+  typeProperty: COMMON_DEFAULT_CONFIG,
+  file: COMMON_DEFAULT_CONFIG,
+  property: COMMON_DEFAULT_CONFIG,
+  function: COMMON_DEFAULT_CONFIG,
+  functionParams: COMMON_DEFAULT_CONFIG,
+  variable: COMMON_DEFAULT_CONFIG,
+  class: COMMON_DEFAULT_CONFIG,
+  method: COMMON_DEFAULT_CONFIG,
 }
 
 const DEFAULT_SCHEMA_PROPERTY = {
@@ -40,15 +33,18 @@ const SCHEMA = [
   {
     type: 'object',
     properties: {
-      file: DEFAULT_SCHEMA_PROPERTY,
       type: {
         ...DEFAULT_SCHEMA_PROPERTY,
         suffixGenerator: { type: 'function' },
       },
+      typeProperty: DEFAULT_SCHEMA_PROPERTY,
+      file: DEFAULT_SCHEMA_PROPERTY,
       property: DEFAULT_SCHEMA_PROPERTY,
       function: DEFAULT_SCHEMA_PROPERTY,
+      functionParams: DEFAULT_SCHEMA_PROPERTY,
       variable: DEFAULT_SCHEMA_PROPERTY,
       class: DEFAULT_SCHEMA_PROPERTY,
+      method: DEFAULT_SCHEMA_PROPERTY,
     },
     additionalProperties: false,
   }
@@ -198,7 +194,7 @@ const generateTypeRedundant = (args) => {
 }
 
 const generateTypePropertyRedundant = (args) => {
-  const key = 'type'
+  const key = 'typeProperty'
 
   return handleReportBetterName({
     key,
@@ -247,7 +243,7 @@ const generateFunctionRedundant = (args) => {
   })
 }
 const generateFunctionParamsRedundant = (args) => {
-  const key = 'function'
+  const key = 'functionParams'
   const redundant = handleReportBetterName({
     key,
     context: args.context,
@@ -304,8 +300,10 @@ module.exports = {
       'file-name': ' {{ message }}',
       'type-name': '{{ message }}',
       'type-name/invalid-suffix': '{{ message }}',
+      'typeProperty-name': '{{ message }}',
       'property-name': ' {{ message }}',
       'function-name': ' {{ message }}',
+      'functionParams-name': ' {{ message }}',
       'variable-name': ' {{ message }}',
       'class-name': ' {{ message }}',
       'method-name': ' {{ message }}',
@@ -350,67 +348,63 @@ module.exports = {
       keywords,
     }
 
+    const addRule = (key, redundant) => {
+      const addedRules = rules[key] || []
+
+      rules[key] = [...addedRules, redundant]
+    }
+
     if (option.type) {
-      rules = {
-        ...rules,
-        TSTypeAliasDeclaration: generateTypeRedundant(args),
-        // TSInterfaceDeclaration: hoge, // 必要になったら実装する
-        TSPropertySignature: generateTypePropertyRedundant(args),
-      }
+      addRule('TSTypeAliasDeclaration', generateTypeRedundant(args))
+      // addRule('TSInterfaceDeclaration', generateTypeRedundant(args)) // 必要になったら実装する
+    }
+    if (option.typeProperty) {
+      addRule('TSPropertySignature', generateTypePropertyRedundant(args))
     }
     if (option.property) {
-      const propRedundant = generatePropertyRedundant(args)
+      const redundant = generatePropertyRedundant(args)
 
-      rules = {
-        ...rules,
-        Property: propRedundant,
-        PropertyDefinition: propRedundant,
-      }
+      addRule('Property', redundant)
+      addRule('PropertyDefinition', redundant)
     }
     if (option.file) {
-      rules = {
-        ...rules,
-        Program: generateFileRedundant(args),
-      }
+      addRule('Program', generateFileRedundant(args))
     }
     if (option.function) {
-      const functionRedundant = generateFunctionRedundant(args)
-      const functionParamsRedundant = generateFunctionParamsRedundant(args)
+      addRule('FunctionDeclaration', generateFunctionRedundant(args))
+    }
+    if (option.functionParams) {
+      const redundant = generateFunctionParamsRedundant(args)
 
-      rules = {
-        ...rules,
-        FunctionDeclaration: (node) => {
-          functionRedundant(node)
-          functionParamsRedundant(node)
-        },
-        ArrowFunctionExpression: functionParamsRedundant,
-      }
+      addRule('FunctionDeclaration', redundant)
+      addRule('ArrowFunctionExpression', redundant)
+      addRule('MethodDefinition', (node) => {
+        if (node.value.type === 'FunctionExpression') {
+          redundant(node.value)
+        }
+      })
     }
     if (option.variable) {
       const redundant = generateVariableRedundant(args)
 
-      rules = {
-        ...rules,
-        VariableDeclarator: redundant,
-        TSEnumDeclaration: redundant,
-      }
+      addRule('VariableDeclarator', redundant)
+      addRule('TSEnumDeclaration', redundant)
     }
     if (option.class) {
-      const methodRedundant = generateMethodRedundant(args)
-      const functionParamsRedundant = generateFunctionParamsRedundant(args)
-
-      rules = {
-        ...rules,
-        ClassDeclaration: generateClassRedundant(args),
-        MethodDefinition: (node) => {
-          methodRedundant(node)
-
-          if (node.value.type === 'FunctionExpression') {
-            functionParamsRedundant(node.value)
-          }
-        },
-      }
+      addRule('ClassDeclaration', generateClassRedundant(args))
     }
+    if (option.method) {
+      addRule('MethodDefinition', generateMethodRedundant(args))
+    }
+
+    Object.keys(rules).forEach((key) => {
+      const redundants = rules[key]
+      rules[key] = (node) => {
+        redundants.forEach((redundant) => {
+          redundant(node)
+        })
+      }
+    })
 
     return rules
   },
