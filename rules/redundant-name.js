@@ -248,14 +248,17 @@ const generateFunctionRedundant = (args) => {
 }
 const generateFunctionParamsRedundant = (args) => {
   const key = 'function'
-
-  return handleReportBetterName({
+  const redundant = handleReportBetterName({
     key,
     context: args.context,
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: '',
     fetchName: (node) => node.name,
   })
+
+  return (node) => {
+    node.params.forEach((param) => redundant(param))
+  }
 }
 
 const generateVariableRedundant = (args) => {
@@ -356,7 +359,7 @@ module.exports = {
       }
     }
     if (option.property) {
-      propRedundant = generatePropertyRedundant(args)
+      const propRedundant = generatePropertyRedundant(args)
 
       rules = {
         ...rules,
@@ -371,21 +374,16 @@ module.exports = {
       }
     }
     if (option.function) {
-      functionDeclaration = generateFunctionRedundant(args)
-      functionParamsDeclaration = generateFunctionParamsRedundant(args)
-      paramsDecrations = (node) => {
-        node.params.forEach((param) => {
-          functionParamsDeclaration(param)
-        })
-      }
+      const functionRedundant = generateFunctionRedundant(args)
+      const functionParamsRedundant = generateFunctionParamsRedundant(args)
 
       rules = {
         ...rules,
         FunctionDeclaration: (node) => {
-          paramsDecrations(node)
-          functionDeclaration(node)
+          functionRedundant(node)
+          functionParamsRedundant(node)
         },
-        ArrowFunctionExpression: paramsDecrations,
+        ArrowFunctionExpression: functionParamsRedundant,
       }
     }
     if (option.variable) {
@@ -398,10 +396,19 @@ module.exports = {
       }
     }
     if (option.class) {
+      const methodRedundant = generateMethodRedundant(args)
+      const functionParamsRedundant = generateFunctionParamsRedundant(args)
+
       rules = {
         ...rules,
         ClassDeclaration: generateClassRedundant(args),
-        MethodDefinition: generateMethodRedundant(args) ,
+        MethodDefinition: (node) => {
+          methodRedundant(node)
+
+          if (node.value.type === 'FunctionExpression') {
+            functionParamsRedundant(node.value)
+          }
+        },
       }
     }
 
