@@ -246,6 +246,17 @@ const generateFunctionRedundant = (args) => {
     fetchName: (node) => node.id.name,
   })
 }
+const generateFunctionParamsRedundant = (args) => {
+  const key = 'function'
+
+  return handleReportBetterName({
+    key,
+    context: args.context,
+    redundantKeywords: generateRedundantKeywords({ args, key }),
+    defaultBetterName: '',
+    fetchName: (node) => node.name,
+  })
+}
 
 const generateVariableRedundant = (args) => {
   const key = 'variable'
@@ -360,9 +371,21 @@ module.exports = {
       }
     }
     if (option.function) {
+      functionDeclaration = generateFunctionRedundant(args)
+      functionParamsDeclaration = generateFunctionParamsRedundant(args)
+      paramsDecrations = (node) => {
+        node.params.forEach((param) => {
+          functionParamsDeclaration(param)
+        })
+      }
+
       rules = {
         ...rules,
-        FunctionDeclaration: generateFunctionRedundant(args),
+        FunctionDeclaration: (node) => {
+          paramsDecrations(node)
+          functionDeclaration(node)
+        },
+        ArrowFunctionExpression: paramsDecrations,
       }
     }
     if (option.variable) {
