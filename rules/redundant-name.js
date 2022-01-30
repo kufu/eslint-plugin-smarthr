@@ -204,6 +204,20 @@ const generateTypePropertyRedundant = (args) => {
     fetchName: (node) => node.key.name,
   })
 }
+const generateTypePropertyFunctionParamsRedundant = (args) => {
+  const key = 'typeProperty'
+  const redundant = handleReportBetterName({
+    key,
+    context: args.context,
+    redundantKeywords: generateRedundantKeywords({ args, key }),
+    defaultBetterName: '',
+    fetchName: (node) => node.name,
+  })
+
+  return (node) => {
+    node.params.forEach((param) => redundant(param))
+  }
+}
 
 const generatePropertyRedundant = (args) => {
   const key = 'property'
@@ -359,7 +373,16 @@ module.exports = {
       // addRule('TSInterfaceDeclaration', generateTypeRedundant(args)) // 必要になったら実装する
     }
     if (option.typeProperty) {
-      addRule('TSPropertySignature', generateTypePropertyRedundant(args))
+      const typePropRedundant = generateTypePropertyRedundant(args)
+      const typeFuncParamRedundant = generateTypePropertyFunctionParamsRedundant(args)
+
+      addRule('TSPropertySignature', (node) => {
+        typePropRedundant(node)
+
+        if (node.typeAnnotation.typeAnnotation.type === 'TSFunctionType') {
+          typeFuncParamRedundant(node.typeAnnotation.typeAnnotation)
+        }
+      })
     }
     if (option.property) {
       const redundant = generatePropertyRedundant(args)
