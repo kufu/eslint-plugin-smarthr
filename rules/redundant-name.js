@@ -95,12 +95,12 @@ const handleReportBetterName = ({
       return
     }
 
-    let hitCount = 0
+    let hitKeywords = []
     let betterName = redundantKeywords.reduce((prev, keyword) => {
       const replaced = prev.replace(new RegExp(keyword, 'i'), '')
 
       if (prev !== replaced) {
-        hitCount++
+        hitKeywords.push(keyword)
       }
 
       return replaced
@@ -114,12 +114,15 @@ const handleReportBetterName = ({
 
       if (!betterName) {
         // HINT: 1keywordで構成されている名称はそのままにする
-        betterName = hitCount === 1 ? name : defaultBetterName
+        betterName = hitKeywords.length === 1 ? name : defaultBetterName
       }
 
       // HINT: camelCase、lower_snake_case の場合、keywordが取り除かれた結果違うケースになってしまう場合があるので対応する
       if (name.match(/^[a-z]/) && betterName.match(/^[A-Z]/)) {
         betterName = `${betterName[0].toLowerCase()}${betterName.slice(1)}`
+      }
+      if (name.match(/^[A-Z]/)) {
+        hitKeywords = hitKeywords.map((k) => `${k[0].toUpperCase()}${k.slice(1)}`)
       }
     }
 
@@ -128,7 +131,7 @@ const handleReportBetterName = ({
         node,
         messageId: `${key}-name`,
         data: {
-          message: generateMessage({ name, betterName }),
+          message: generateMessage({ name, betterName: [betterName, ...hitKeywords].filter((k) => !!k).join(', ') }),
         },
       });
     }
