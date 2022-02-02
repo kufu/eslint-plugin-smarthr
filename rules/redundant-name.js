@@ -26,7 +26,8 @@ const DEFAULT_CONFIG = {
 
 const DEFAULT_SCHEMA_PROPERTY = {
   ignoreKeywords: { type: 'array', items: { type: 'string' } },
-  keywordGenerator: { type: 'function' },
+  keywordsGenerator: { type: 'function' },
+  betterNamesGenerator: { type: 'function' },
 }
 
 const SCHEMA = [
@@ -67,8 +68,8 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
   const filterKeywords = (keys) => keys.filter((k) => k !== terminalImportKeyword && !ignoreKeywords.includes(k))
 
   let redundantKeywords = filterKeywords(args.keywords)
-  if (option.keywordGenerator) {
-    redundantKeywords = option.keywordGenerator({
+  if (option.keywordsGenerator) {
+    redundantKeywords = option.keywordsGenerator({
       ...args,
       redundantKeywords,
     })
@@ -79,6 +80,8 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
 const handleReportBetterName = ({
   key, 
   context,
+  option,
+  filename,
   redundantKeywords,
   defaultBetterName,
   fetchName,
@@ -95,43 +98,61 @@ const handleReportBetterName = ({
       return
     }
 
-    let hitKeywords = []
-    let betterName = redundantKeywords.reduce((prev, keyword) => {
-      const replaced = prev.replace(new RegExp(keyword, 'i'), '')
+    let candidates = []
+    let conciseName = redundantKeywords.reduce((prev, keyword) => {
+      const regex = new RegExp(`(${keyword})`, 'i')
+      const matcher = prev.match(regex)
 
-      if (prev !== replaced) {
-        hitKeywords.push(keyword)
+      if (matcher) {
+        candidates.push(matcher[1])
+
+        return prev.replace(regex, '')
       }
 
-      return replaced
+      return prev
     }, name)
 
-    if (name !== betterName) {
-      betterName = betterName
+    if (name !== conciseName) {
+      conciseName = conciseName
                      .replace(/^_+/, '')
                      .replace(/_+$/, '')
                      .replace(/_+/, '_')
+      let fullRedundant = false
 
-      if (!betterName) {
+      if (!conciseName) {
+        fullRedundant = true
         // HINT: 1keywordで構成されている名称はそのままにする
-        betterName = hitKeywords.length === 1 ? name : defaultBetterName
+        conciseName = candidates.length === 1 ? name : defaultBetterName
       }
 
       // HINT: camelCase、lower_snake_case の場合、keywordが取り除かれた結果違うケースになってしまう場合があるので対応する
-      if (name.match(/^[a-z]/) && betterName.match(/^[A-Z]/)) {
-        betterName = `${betterName[0].toLowerCase()}${betterName.slice(1)}`
+      if (name.match(/^[a-z]/) && conciseName.match(/^[A-Z]/)) {
+        conciseName = `${conciseName[0].toLowerCase()}${conciseName.slice(1)}`
       }
-      if (name.match(/^[A-Z]/)) {
-        hitKeywords = hitKeywords.map((k) => `${k[0].toUpperCase()}${k.slice(1)}`)
+
+      if (fullRedundant) {
+        if (name.match(/^[A-Z]/)) {
+          candidates = candidates.map((k) => `${k[0].toUpperCase()}${k.slice(1)}`)
+        }
+      } else {
+        candidates = []
       }
+
+      candidates = uniq([conciseName, ...candidates].filter((k) => !!k))
+
+      if (option.betterNamesGenerator) {
+        candidates = option.betterNamesGenerator({ candidates, redundantName: name, redundantType: key, filename })
+      }
+
+      candidates = candidates.filter((c) => c !== name)
     }
 
-    if (name !== betterName) {
+    if (candidates.length > 0) {
       context.report({
         node,
         messageId: `${key}-name`,
         data: {
-          message: generateMessage({ name, betterName: [betterName, ...hitKeywords].filter((k) => !!k).join(', ') }),
+          message: generateMessage({ name, betterName: candidates.join(', ') }),
         },
       });
     }
@@ -200,8 +221,9 @@ const generateTypePropertyRedundant = (args) => {
   const key = 'typeProperty'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: '',
     fetchName: (node) => node.key.name,
@@ -210,8 +232,9 @@ const generateTypePropertyRedundant = (args) => {
 const generateTypePropertyFunctionParamsRedundant = (args) => {
   const key = 'typeProperty'
   const redundant = handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: '',
     fetchName: (node) => node.name,
@@ -226,8 +249,9 @@ const generatePropertyRedundant = (args) => {
   const key = 'property'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: 'item',
     fetchName: (node) => node.key.name,
@@ -239,8 +263,9 @@ const generateFileRedundant = (args) => {
   const terminalImportName = fetchTerminalImportName(args.filename)
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName }),
     defaultBetterName: 'index',
     fetchName: () => terminalImportName,
@@ -252,8 +277,9 @@ const generateFunctionRedundant = (args) => {
   const key = 'function'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName: fetchTerminalImportName(args.filename) }),
     defaultBetterName: '',
     fetchName: (node) => node.id.name,
@@ -262,8 +288,9 @@ const generateFunctionRedundant = (args) => {
 const generateFunctionParamsRedundant = (args) => {
   const key = 'functionParams'
   const redundant = handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: '',
     fetchName: (node) => node.name,
@@ -278,8 +305,9 @@ const generateVariableRedundant = (args) => {
   const key = 'variable'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName: fetchTerminalImportName(args.filename) }),
     defaultBetterName: '',
     fetchName: (node) => node.id.name,
@@ -290,8 +318,9 @@ const generateClassRedundant = (args) => {
   const key = 'class'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName: fetchTerminalImportName(args.filename) }),
     defaultBetterName: '',
     fetchName: (node) => node.id.name,
@@ -302,8 +331,9 @@ const generateMethodRedundant = (args) => {
   const key = 'method'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: 'item',
     fetchName: (node) => node.key.name,
