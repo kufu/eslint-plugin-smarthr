@@ -37,7 +37,7 @@ const SCHEMA = [
     properties: {
       type: {
         ...DEFAULT_SCHEMA_PROPERTY,
-        suffixGenerator: { type: 'function' },
+        suffix: { type: 'array', items: { type: 'string' } },
       },
       typeProperty: DEFAULT_SCHEMA_PROPERTY,
       file: DEFAULT_SCHEMA_PROPERTY,
@@ -181,17 +181,10 @@ const generateTypeRedundant = (args) => {
   const redundantKeywords = generateRedundantKeywords({ args, key })
   const option = args.option[key]
   const defaultConfig = DEFAULT_CONFIG[key]
-  const actualArgs = {
-    ...args,
-    redundantKeywords,
-  }
 
   return (node) => {
     const typeName = node.id.name
-    const suffix = option.suffixGenerator ? option.suffixGenerator({
-      ...actualArgs,
-      node,
-    }) : defaultConfig.SUFFIX
+    const suffix = option.suffix || defaultConfig.SUFFIX
 
     let SuffixedName = typeName
     let report = null

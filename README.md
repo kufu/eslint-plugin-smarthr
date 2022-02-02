@@ -309,10 +309,10 @@ import { PrimaryButton, SecondaryButton } from 'smarthr-ui'
   - ignoreKeywords
     - ディレクトリ名から生成されるキーワードに含めたくない文字列を指定します
   - betterNames
-    - 対象の名前を修正する候補を生成します
-  - suffixGenerator:
+    - 対象の名前を修正する候補を指定します
+  - suffix:
     - type のみ指定出来ます
-    - type のsuffixを生成します
+    - type のsuffixを指定します
 
 #### 指定例
 ```
@@ -333,20 +333,6 @@ const betterNames = {
     },
   },
 }
-
-// 例: actions 以下の場合だけ 'Action' もしくは `Actions` のSuffixを許可する
-const suffixGenerator = ({ node, filename }) => {
-  let suffix = ['Props', 'Type']
-
-  if (filename.match(/\/actions\//)) {
-    suffix = [
-      isUnionType || (node.typeAnnotation.type === 'TSTypeReference' && node.id.name.match(/Actions$/))
-        ? 'Actions'
-        : 'Action',
-      ...suffix,
-    ]
-  }
-}
 ```
 
 #### ファイル例
@@ -366,7 +352,7 @@ const suffixGenerator = ({ node, filename }) => {
     'smarthr/redundant-name': [
       'error', // 'warn', 'off'
       {
-        type: { ignorekeywords, betterNames, suffixGenerator },
+        type: { ignorekeywords, betterNames, suffix: ['Props', 'Type'] },
         file: { ignorekeywords, betterNames },
         // property: { ignorekeywords, betterNames },
         // function: { ignorekeywords, betterNames },
