@@ -3,13 +3,13 @@ const SCHEMA = [
     type: 'object',
     properties: {
       targets: { type: 'object', default: {} },
-      generateReportMessage: { type: 'function' },
+      customMessage: { type: 'string'},
     },
     additionalProperties: false,
   }
 ]
 
-const generateDefaultReportMessage = (source, imported) => `${source}${imported && `/${imported}`} は利用しないでください`
+const generateDefaultReportMessage = (source, imported) => `${source}${typeof imported == 'string' ? `/${imported}`: ''} は利用しないでください`
 
 module.exports = {
   meta: {
@@ -22,7 +22,7 @@ module.exports = {
   create(context) {
     const option = context.options[0]
     const parsedOption = Object.entries(option.targets)
-    const generateReportMessage = option.generateReportMessage || generateDefaultReportMessage
+    const customMessage = option.customMessage
 
     return {
       ImportDeclaration: (node) => {
@@ -35,7 +35,7 @@ module.exports = {
             if (!Array.isArray(importNames)) {
               return !!importNames
             }
-            const specifier = node.specifiers.find((s) => importNames.includes(s.imported.name))
+            const specifier = node.specifiers.find((s) => s.imported && importNames.includes(s.imported.name))
 
             return specifier ? specifier.imported.name : false
           })()
@@ -45,7 +45,7 @@ module.exports = {
               node,
               messageId: 'prohibit_import',
               data: {
-                message: generateReportMessage(node.source.value, imported === true ? '' : imported),
+                message: customMessage ? customMessage : generateDefaultReportMessage(node.source.value, imported),
               },
             });
           }
