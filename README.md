@@ -308,10 +308,7 @@ import { PrimaryButton, SecondaryButton } from 'smarthr-ui'
 - 以下の設定を行えます。全て省略可能です。
   - ignoreKeywords
     - ディレクトリ名から生成されるキーワードに含めたくない文字列を指定します
-  - keywordsGenerator
-    - ディレクトリ名から生成されるキーワードを元に最終的なキーワードを生成します
-    - 主に複数形のキーワードから単数形を生成するために利用します
-  - betterNamesGenerator
+  - betterNames
     - 対象の名前を修正する候補を生成します
   - suffixGenerator:
     - type のみ指定出来ます
@@ -320,38 +317,21 @@ import { PrimaryButton, SecondaryButton } from 'smarthr-ui'
 #### 指定例
 ```
 const ignorekeywords = ['views', 'parts']
-const keywordsGenerator = ({ keywords }) => (
-  keywords.reduce((prev, keyword, index) => {
-    switch (keyword) {
-      case 'repositories':
-        return [...prev, keyword, 'repository']
-    }
-
-    const replacedKeyword = keyword.replace(/(repository|s)$/, '')
-    if (keyword !== replacedKeyword) {
-      return [...prev, keyword, replacedKeyword]
-    }
-
-    return [...prev, keyword]
-  }, [])
-)
-const betterNamesGenerator = betterNamesGenerator: ({ candidates, redundantName, redundantType, filename }) => {
-  if (filename.match('/repositories/')) {
-    switch (redundantType) {
-      case 'file': 
-        return candidates.filter((c) => c !== 'repository')
-      case 'variable': 
-        return ['repository']
-    }
-  }
-
-  if (filename.match('/entities/')) {
-    if (redundantType === 'class') {
-      return ['Entity']
-    }
-  }
-
-  return candidates
+const betterNames = {
+  '\/repositories\/': {
+    file: {
+      operator: '-',
+      names: ['repository', 'Repository'],
+    },
+    variable: {
+      operator: '=',
+      names: ['repository'],
+    },
+    type: {
+      operator: '+',
+      names: ['Props'],
+    },
+  },
 }
 
 // 例: actions 以下の場合だけ 'Action' もしくは `Actions` のSuffixを許可する
@@ -386,12 +366,12 @@ const suffixGenerator = ({ node, filename }) => {
     'smarthr/redundant-name': [
       'error', // 'warn', 'off'
       {
-        type: { ignorekeywords, keywordsGenerator, betterNamesGenerator, suffixGenerator },
-        file: { ignorekeywords, keywordsGenerator, betterNamesGenerator },
-        // property: { ignorekeywords, keywordsGenerator, betterNamesGenerator },
-        // function: { ignorekeywords, keywordsGenerator, betterNamesGenerator },
-        // variable: { ignorekeywords, keywordsGenerator, betterNamesGenerator },
-        // class: { ignorekeywords, keywordsGenerator, betterNamesGenerator },
+        type: { ignorekeywords, betterNames, suffixGenerator },
+        file: { ignorekeywords, betterNames },
+        // property: { ignorekeywords, betterNames },
+        // function: { ignorekeywords, betterNames },
+        // variable: { ignorekeywords, betterNames },
+        // class: { ignorekeywords, betterNames },
       }
     ]
   },

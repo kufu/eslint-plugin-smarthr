@@ -28,7 +28,7 @@ const DEFAULT_CONFIG = {
 
 const DEFAULT_SCHEMA_PROPERTY = {
   ignoreKeywords: { type: 'array', items: { type: 'string' } },
-  betterNamesGenerator: { type: 'function' },
+  betterNames: { type: 'object' },
 }
 
 const SCHEMA = [
@@ -140,8 +140,24 @@ const handleReportBetterName = ({
 
       candidates = uniq([conciseName, ...candidates].filter((k) => !!k))
 
-      if (option.betterNamesGenerator) {
-        candidates = option.betterNamesGenerator({ candidates, redundantName: name, redundantType: key, filename })
+      if (option.betterNames) {
+        Object.entries(option.betterNames).forEach(([regex, calculator]) => {
+          const calc = calculator[key]
+
+          if (calc && filename.match(new RegExp(regex))) {
+            switch(calc.operator) {
+              case '=': 
+                candidates = calc.names
+                break
+              case '-': 
+                candidates = candidates.filter((c) => !calc.names.includes(c))
+                break
+              case '+': 
+                candidates = uniq([...candidates, ...calc.names])
+                break
+            }
+          }
+        })
       }
 
       candidates = candidates.filter((c) => c !== name)
