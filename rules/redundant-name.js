@@ -1,4 +1,6 @@
 const path = require('path')
+const Inflector = require('inflected')
+
 const { rootPath } = require('../libs/common')
 
 const uniq = (array) => array.filter((elem, index, self) => self.indexOf(elem) === index)
@@ -26,7 +28,6 @@ const DEFAULT_CONFIG = {
 
 const DEFAULT_SCHEMA_PROPERTY = {
   ignoreKeywords: { type: 'array', items: { type: 'string' } },
-  keywordsGenerator: { type: 'function' },
   betterNamesGenerator: { type: 'function' },
 }
 
@@ -65,17 +66,16 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
   const option = args.option[key] || {}
   const ignoreKeywords = option.ignoreKeywords || DEFAULT_CONFIG[key].IGNORE_KEYWORDS
   const terminalImportKeyword = terminalImportName ? terminalImportName.toLowerCase() : '' 
-  const filterKeywords = (keys) => keys.filter((k) => k !== terminalImportKeyword && !ignoreKeywords.includes(k))
 
-  let redundantKeywords = filterKeywords(args.keywords)
-  if (option.keywordsGenerator) {
-    redundantKeywords = option.keywordsGenerator({
-      ...args,
-      redundantKeywords,
-    })
-  }
+  return args.keywords.reduce((prev, keyword) => {
+    if (keyword === terminalImportKeyword || ignoreKeywords.includes(keyword)) {
+      return prev
+    }
 
-  return redundantKeywords
+    const singularized = Inflector.singularize(keyword)
+
+    return singularized === keyword ? [...prev, keyword] : [...prev, keyword, singularized]
+  }, [])
 }
 const handleReportBetterName = ({
   key, 
