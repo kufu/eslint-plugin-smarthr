@@ -26,9 +26,28 @@ const DEFAULT_CONFIG = {
   method: COMMON_DEFAULT_CONFIG,
 }
 
+const BETTER_NAMES_CALCULATER_PROPERTY = {
+  type: 'object',
+  properties: {
+    operator: ['-', '+', '='],
+    names:  {
+      type: 'array',
+      items: 'string',
+    },
+  },
+}
 const DEFAULT_SCHEMA_PROPERTY = {
   ignoreKeywords: { type: 'array', items: { type: 'string' } },
-  betterNames: { type: 'object' },
+  betterNames: {
+    type: 'object',
+    properties: {
+      operator: ['-', '+', '='],
+      names:  {
+        type: 'array',
+        items: 'string',
+      },
+    },
+  },
 }
 
 const SCHEMA = [
@@ -141,9 +160,7 @@ const handleReportBetterName = ({
       candidates = uniq([conciseName, ...candidates].filter((k) => !!k))
 
       if (option.betterNames) {
-        Object.entries(option.betterNames).forEach(([regex, calculator]) => {
-          const calc = calculator[key]
-
+        Object.entries(option.betterNames).forEach(([regex, calc]) => {
           if (calc && filename.match(new RegExp(regex))) {
             switch(calc.operator) {
               case '=': 

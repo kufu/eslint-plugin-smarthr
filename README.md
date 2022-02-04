@@ -314,27 +314,6 @@ import { PrimaryButton, SecondaryButton } from 'smarthr-ui'
     - type のみ指定出来ます
     - type のsuffixを指定します
 
-#### 指定例
-```
-const ignorekeywords = ['views', 'parts']
-const betterNames = {
-  '\/repositories\/': {
-    file: {
-      operator: '-',
-      names: ['repository', 'Repository'],
-    },
-    variable: {
-      operator: '=',
-      names: ['repository'],
-    },
-    type: {
-      operator: '+',
-      names: ['Props'],
-    },
-  },
-}
-```
-
 #### ファイル例
 - `@/crews/index/views/page.tsx` の場合
   - 生成されるキーワードは `['crews', 'crew', 'index', 'page']`
@@ -347,17 +326,33 @@ const betterNames = {
 ### rules
 
 ```js
+const ignorekeywords = ['views', 'parts']
+const betterNames = {
+  '\/repositories\/': {
+    operator: '-',
+    names: ['repository', 'Repository'],
+  },
+  '\/entities\/': {
+    operator: '+',
+    names: ['entity'],
+  },
+  '\/slices\/': {
+    operator: '=',
+    names: ['index'],
+  },
+}
+
 {
   rules: {
     'smarthr/redundant-name': [
       'error', // 'warn', 'off'
       {
-        type: { ignorekeywords, betterNames, suffix: ['Props', 'Type'] },
-        file: { ignorekeywords, betterNames },
-        // property: { ignorekeywords, betterNames },
-        // function: { ignorekeywords, betterNames },
-        // variable: { ignorekeywords, betterNames },
-        // class: { ignorekeywords, betterNames },
+        type: { ignorekeywords, suffix: ['Props', 'Type'] },
+        file: { ignorekeywords, betternames },
+        // property: { ignorekeywords },
+        // function: { ignorekeywords },
+        // variable: { ignorekeywords },
+        // class: { ignorekeywords },
       }
     ]
   },
