@@ -1,4 +1,6 @@
 const path = require('path')
+const Inflector = require('inflected')
+
 const { rootPath } = require('../libs/common')
 
 const uniq = (array) => array.filter((elem, index, self) => self.indexOf(elem) === index)
@@ -24,10 +26,28 @@ const DEFAULT_CONFIG = {
   method: COMMON_DEFAULT_CONFIG,
 }
 
+const BETTER_NAMES_CALCULATER_PROPERTY = {
+  type: 'object',
+  properties: {
+    operator: ['-', '+', '='],
+    names:  {
+      type: 'array',
+      items: 'string',
+    },
+  },
+}
 const DEFAULT_SCHEMA_PROPERTY = {
   ignoreKeywords: { type: 'array', items: { type: 'string' } },
-  keywordsGenerator: { type: 'function' },
-  betterNamesGenerator: { type: 'function' },
+  betterNames: {
+    type: 'object',
+    properties: {
+      operator: ['-', '+', '='],
+      names:  {
+        type: 'array',
+        items: 'string',
+      },
+    },
+  },
 }
 
 const SCHEMA = [
@@ -36,7 +56,7 @@ const SCHEMA = [
     properties: {
       type: {
         ...DEFAULT_SCHEMA_PROPERTY,
-        suffixGenerator: { type: 'function' },
+        suffix: { type: 'array', items: { type: 'string' } },
       },
       typeProperty: DEFAULT_SCHEMA_PROPERTY,
       file: DEFAULT_SCHEMA_PROPERTY,
@@ -65,17 +85,16 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
   const option = args.option[key] || {}
   const ignoreKeywords = option.ignoreKeywords || DEFAULT_CONFIG[key].IGNORE_KEYWORDS
   const terminalImportKeyword = terminalImportName ? terminalImportName.toLowerCase() : '' 
-  const filterKeywords = (keys) => keys.filter((k) => k !== terminalImportKeyword && !ignoreKeywords.includes(k))
 
-  let redundantKeywords = filterKeywords(args.keywords)
-  if (option.keywordsGenerator) {
-    redundantKeywords = option.keywordsGenerator({
-      ...args,
-      redundantKeywords,
-    })
-  }
+  return args.keywords.reduce((prev, keyword) => {
+    if (keyword === terminalImportKeyword || ignoreKeywords.includes(keyword)) {
+      return prev
+    }
 
-  return redundantKeywords
+    const singularized = Inflector.singularize(keyword)
+
+    return singularized === keyword ? [...prev, keyword] : [...prev, keyword, singularized]
+  }, [])
 }
 const handleReportBetterName = ({
   key, 
@@ -140,8 +159,22 @@ const handleReportBetterName = ({
 
       candidates = uniq([conciseName, ...candidates].filter((k) => !!k))
 
-      if (option.betterNamesGenerator) {
-        candidates = option.betterNamesGenerator({ candidates, redundantName: name, redundantType: key, filename })
+      if (option.betterNames) {
+        Object.entries(option.betterNames).forEach(([regex, calc]) => {
+          if (calc && filename.match(new RegExp(regex))) {
+            switch(calc.operator) {
+              case '=': 
+                candidates = calc.names
+                break
+              case '-': 
+                candidates = candidates.filter((c) => !calc.names.includes(c))
+                break
+              case '+': 
+                candidates = uniq([...candidates, ...calc.names])
+                break
+            }
+          }
+        })
       }
 
       candidates = candidates.filter((c) => c !== name)
@@ -165,17 +198,10 @@ const generateTypeRedundant = (args) => {
   const redundantKeywords = generateRedundantKeywords({ args, key })
   const option = args.option[key]
   const defaultConfig = DEFAULT_CONFIG[key]
-  const actualArgs = {
-    ...args,
-    redundantKeywords,
-  }
 
   return (node) => {
     const typeName = node.id.name
-    const suffix = option.suffixGenerator ? option.suffixGenerator({
-      ...actualArgs,
-      node,
-    }) : defaultConfig.SUFFIX
+    const suffix = option.suffix || defaultConfig.SUFFIX
 
     let SuffixedName = typeName
     let report = null
