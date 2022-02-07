@@ -269,11 +269,14 @@ import globalModulePart from '@/modules/views/parts'
       'error', // 'warn', 'off'
       {
         targets: {
-          '^query-string$': true, // key は 正規表現を指定する
-          '^smarthr-ui$': ['SecondaryButtonAnchor'], 
+          '^query-string$': { // key は 正規表現を指定する
+            imported: true,
+          },
+          '^smarthr-ui$': {
+            imported: ['SecondaryButtonAnchor'],
+            reportMessage: '{{prohibit}} はXXXXのため、利用しないでください'
+          }, 
         },
-        // generateReportMessage: (source, imported) => 
-        //   `${source}${imported && `/${imported}`} はXxxxxxなので利用せず yyyy/zzzz を利用してください`
       }
     ]
   },
