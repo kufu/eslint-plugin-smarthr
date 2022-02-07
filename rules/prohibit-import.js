@@ -3,13 +3,12 @@ const SCHEMA = [
     type: 'object',
     properties: {
       targets: { type: 'object', default: {} },
-      generateReportMessage: { type: 'function' },
     },
     additionalProperties: false,
   }
 ]
 
-const defaultReportMessage = '${prohibit} は利用しないでください'
+const defaultReportMessage = '{{prohibit}} は利用しないでください'
 
 module.exports = {
   meta: {
@@ -44,7 +43,7 @@ module.exports = {
               node,
               messageId: 'prohibit_import',
               data: {
-                message: (config.reportMessage || defaultReportMessage).replace('${prohibit}', `${node.source.value}${imported === true ? '' : `/${imported}`}`),
+                message: (config.reportMessage || defaultReportMessage).replace('{{prohibit}}', `${node.source.value}${imported === true ? '' : `/${imported}`}`),
               },
             });
           }
