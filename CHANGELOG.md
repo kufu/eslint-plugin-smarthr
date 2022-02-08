@@ -10,9 +10,6 @@ All notable changes to this project will be documented in this file. See [standa
 * add type property function params redundant ([758df90](https://github.com/kufu/eslint-plugin-smarthr/commit/758df90f89bd27dd589aeeb55165e27c8e072b08))
 * redundant-name の修正候補を操作できるように改修 ([20991e8](https://github.com/kufu/eslint-plugin-smarthr/commit/20991e874890556e84e7c682e789e4b2650a85b0))
 
-### [0.0.2](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.0.1...v0.0.2) (2022-01-26)
-
-### [0.0.1](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.0.0...v0.0.1) (2022-01-26)
 
 ## 0.0.0 (2022-01-25)
 
