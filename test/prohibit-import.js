@@ -13,41 +13,41 @@ ruleTester.run("prohibit-import-lodash", rule, {
     {
       code: `import _ from 'lodash-es'`,
       options: [
-        [{
-          "targets": {
-            '^lodash$': true,
+        {
+          '^lodash$': {
+            imported: true,
           },
-        }]
+        }
       ]
     },
     {
       code: `import { isEqual } from 'lodash-es'`,
       options: [
-        [{
-          "targets": {
-            '^lodash$': ['isEqual'],
+        {
+          '^lodash$': {
+            imported: ['isEqual']
           },
-        }]
+        }
       ]
     },
     {
       code: `import { isEqaul } from 'lodash'`,
       options: [
-        [{
-          "targets": {
-            '^lodash$': ['isDeepEqual'],
+        {
+          '^lodash$': {
+            imported: ['isEqual']
           },
-        }]
+        }
       ]
     },
     {
       code: `import _ from 'lodash'`,
       options: [
-        [{
-          "targets": {
-            '^lodash$': ['isEqual'],
-          }
-        }]
+        {
+          '^lodash$': {
+            imported: ['isEqual']
+          },
+        }
       ]
     }
   ],
@@ -55,45 +55,60 @@ ruleTester.run("prohibit-import-lodash", rule, {
     {
       code: `import _ from 'lodash'`,
       options: [
-        [{
-          "targets": {
-            '^lodash$': true,
-          }
-        }]
+        {
+          '^lodash$': {
+            imported: true
+          },
+        }
       ],
       errors: [{ message: 'lodash は利用しないでください' }]
     },
     {
       code: `import { isEqual } from 'lodash'`,
       options: [
-        [{
-          "targets": {
-            '^lodash$': true,
-          }
-        }]
+        {
+          '^lodash$': {
+            imported: true
+          },
+        }
       ],
       errors: [{ message: 'lodash は利用しないでください' }]
     },
     {
       code: `import { isEqual } from 'lodash'`,
       options: [
-        [{
-          "targets": {
-            '^lodash$': ['isEqual'],
-          }
-        }]
+        {
+          '^lodash$': {
+            imported: ['isEqual']
+          },
+        }
       ],
       errors: [{message: 'lodash/isEqual は利用しないでください'}]
     },
     {
       code: `import { isEqual } from 'lodash'`,
       options: [
-        [{
-          "targets": {
-            '^lodash$': ['isEqual'],
+        {
+          '^lodash$': {
+            imported: ['isEqual'],
+            "reportMessage": "must not use {{module}}/{{export}}"
           },
-          "reportMessage": "must not use $moduleName/$exportName"
-        }],
+        }
+      ],
+      errors: [{message: 'must not use lodash/isEqual'}]
+    },
+    {
+      code: `import { isEqual } from 'lodash'`,
+      options: [
+        {
+          'example': {
+            imported: true,
+          },
+          '^lodash$': {
+            imported: ['isEqual'],
+            reportMessage: "must not use {{module}}/{{export}}",
+          },
+        }
       ],
       errors: [{message: 'must not use lodash/isEqual'}]
     }
