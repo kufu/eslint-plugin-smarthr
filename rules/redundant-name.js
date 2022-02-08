@@ -1,8 +1,13 @@
 const path = require('path')
+const Inflector = require('inflected')
+
 const { rootPath } = require('../libs/common')
 
 const uniq = (array) => array.filter((elem, index, self) => self.indexOf(elem) === index)
 
+const COMMON_DEFAULT_CONFIG = {
+  IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
+}
 const DEFAULT_CONFIG = {
   type: {
     IGNORE_KEYWORDS: [
@@ -11,44 +16,56 @@ const DEFAULT_CONFIG = {
     ],
     SUFFIX: ['Props', 'Type'],
   },
-  file: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  property: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  function: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  variable: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  class: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
-  method: {
-    IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
-  },
+  typeProperty: COMMON_DEFAULT_CONFIG,
+  file: COMMON_DEFAULT_CONFIG,
+  property: COMMON_DEFAULT_CONFIG,
+  function: COMMON_DEFAULT_CONFIG,
+  functionParams: COMMON_DEFAULT_CONFIG,
+  variable: COMMON_DEFAULT_CONFIG,
+  class: COMMON_DEFAULT_CONFIG,
+  method: COMMON_DEFAULT_CONFIG,
 }
 
+const BETTER_NAMES_CALCULATER_PROPERTY = {
+  type: 'object',
+  properties: {
+    operator: ['-', '+', '='],
+    names:  {
+      type: 'array',
+      items: 'string',
+    },
+  },
+}
 const DEFAULT_SCHEMA_PROPERTY = {
   ignoreKeywords: { type: 'array', items: { type: 'string' } },
-  keywordGenerator: { type: 'function' },
+  betterNames: {
+    type: 'object',
+    properties: {
+      operator: ['-', '+', '='],
+      names:  {
+        type: 'array',
+        items: 'string',
+      },
+    },
+  },
 }
 
 const SCHEMA = [
   {
     type: 'object',
     properties: {
-      file: DEFAULT_SCHEMA_PROPERTY,
       type: {
         ...DEFAULT_SCHEMA_PROPERTY,
-        suffixGenerator: { type: 'function' },
+        suffix: { type: 'array', items: { type: 'string' } },
       },
+      typeProperty: DEFAULT_SCHEMA_PROPERTY,
+      file: DEFAULT_SCHEMA_PROPERTY,
       property: DEFAULT_SCHEMA_PROPERTY,
       function: DEFAULT_SCHEMA_PROPERTY,
+      functionParams: DEFAULT_SCHEMA_PROPERTY,
       variable: DEFAULT_SCHEMA_PROPERTY,
       class: DEFAULT_SCHEMA_PROPERTY,
+      method: DEFAULT_SCHEMA_PROPERTY,
     },
     additionalProperties: false,
   }
@@ -68,21 +85,22 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
   const option = args.option[key] || {}
   const ignoreKeywords = option.ignoreKeywords || DEFAULT_CONFIG[key].IGNORE_KEYWORDS
   const terminalImportKeyword = terminalImportName ? terminalImportName.toLowerCase() : '' 
-  const filterKeywords = (keys) => keys.filter((k) => k !== terminalImportKeyword && !ignoreKeywords.includes(k))
 
-  let redundantKeywords = filterKeywords(args.keywords)
-  if (option.keywordGenerator) {
-    redundantKeywords = option.keywordGenerator({
-      ...args,
-      redundantKeywords,
-    })
-  }
+  return args.keywords.reduce((prev, keyword) => {
+    if (keyword === terminalImportKeyword || ignoreKeywords.includes(keyword)) {
+      return prev
+    }
 
-  return redundantKeywords
+    const singularized = Inflector.singularize(keyword)
+
+    return singularized === keyword ? [...prev, keyword] : [...prev, keyword, singularized]
+  }, [])
 }
 const handleReportBetterName = ({
   key, 
   context,
+  option,
+  filename,
   redundantKeywords,
   defaultBetterName,
   fetchName,
@@ -99,40 +117,75 @@ const handleReportBetterName = ({
       return
     }
 
-    let hitCount = 0
-    let betterName = redundantKeywords.reduce((prev, keyword) => {
-      const replaced = prev.replace(new RegExp(keyword, 'i'), '')
+    let candidates = []
+    let conciseName = redundantKeywords.reduce((prev, keyword) => {
+      const regex = new RegExp(`(${keyword})`, 'i')
+      const matcher = prev.match(regex)
 
-      if (prev !== replaced) {
-        hitCount++
+      if (matcher) {
+        candidates.push(matcher[1])
+
+        return prev.replace(regex, '')
       }
 
-      return replaced
+      return prev
     }, name)
 
-    if (name !== betterName) {
-      betterName = betterName
+    if (name !== conciseName) {
+      conciseName = conciseName
                      .replace(/^_+/, '')
                      .replace(/_+$/, '')
                      .replace(/_+/, '_')
+      let fullRedundant = false
 
-      if (!betterName) {
+      if (!conciseName) {
+        fullRedundant = true
         // HINT: 1keywordで構成されている名称はそのままにする
-        betterName = hitCount === 1 ? name : defaultBetterName
+        conciseName = candidates.length === 1 ? name : defaultBetterName
       }
 
       // HINT: camelCase、lower_snake_case の場合、keywordが取り除かれた結果違うケースになってしまう場合があるので対応する
-      if (name.match(/^[a-z]/) && betterName.match(/^[A-Z]/)) {
-        betterName = `${betterName[0].toLowerCase()}${betterName.slice(1)}`
+      if (name.match(/^[a-z]/) && conciseName.match(/^[A-Z]/)) {
+        conciseName = `${conciseName[0].toLowerCase()}${conciseName.slice(1)}`
       }
+
+      if (fullRedundant) {
+        if (name.match(/^[A-Z]/)) {
+          candidates = candidates.map((k) => `${k[0].toUpperCase()}${k.slice(1)}`)
+        }
+      } else {
+        candidates = []
+      }
+
+      candidates = uniq([conciseName, ...candidates].filter((k) => !!k))
+
+      if (option.betterNames) {
+        Object.entries(option.betterNames).forEach(([regex, calc]) => {
+          if (calc && filename.match(new RegExp(regex))) {
+            switch(calc.operator) {
+              case '=': 
+                candidates = calc.names
+                break
+              case '-': 
+                candidates = candidates.filter((c) => !calc.names.includes(c))
+                break
+              case '+': 
+                candidates = uniq([...candidates, ...calc.names])
+                break
+            }
+          }
+        })
+      }
+
+      candidates = candidates.filter((c) => c !== name)
     }
 
-    if (name !== betterName) {
+    if (candidates.length > 0) {
       context.report({
         node,
         messageId: `${key}-name`,
         data: {
-          message: generateMessage({ name, betterName }),
+          message: generateMessage({ name, betterName: candidates.join(', ') }),
         },
       });
     }
@@ -145,17 +198,10 @@ const generateTypeRedundant = (args) => {
   const redundantKeywords = generateRedundantKeywords({ args, key })
   const option = args.option[key]
   const defaultConfig = DEFAULT_CONFIG[key]
-  const actualArgs = {
-    ...args,
-    redundantKeywords,
-  }
 
   return (node) => {
     const typeName = node.id.name
-    const suffix = option.suffixGenerator ? option.suffixGenerator({
-      ...actualArgs,
-      node,
-    }) : defaultConfig.SUFFIX
+    const suffix = option.suffix || defaultConfig.SUFFIX
 
     let SuffixedName = typeName
     let report = null
@@ -197,12 +243,41 @@ const generateTypeRedundant = (args) => {
   }
 }
 
+const generateTypePropertyRedundant = (args) => {
+  const key = 'typeProperty'
+
+  return handleReportBetterName({
+    ...args,
+    key,
+    option: args.option[key],
+    redundantKeywords: generateRedundantKeywords({ args, key }),
+    defaultBetterName: '',
+    fetchName: (node) => node.key.name,
+  })
+}
+const generateTypePropertyFunctionParamsRedundant = (args) => {
+  const key = 'typeProperty'
+  const redundant = handleReportBetterName({
+    ...args,
+    key,
+    option: args.option[key],
+    redundantKeywords: generateRedundantKeywords({ args, key }),
+    defaultBetterName: '',
+    fetchName: (node) => node.name,
+  })
+
+  return (node) => {
+    node.params.forEach((param) => redundant(param))
+  }
+}
+
 const generatePropertyRedundant = (args) => {
   const key = 'property'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: 'item',
     fetchName: (node) => node.key.name,
@@ -214,8 +289,9 @@ const generateFileRedundant = (args) => {
   const terminalImportName = fetchTerminalImportName(args.filename)
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName }),
     defaultBetterName: 'index',
     fetchName: () => terminalImportName,
@@ -227,20 +303,37 @@ const generateFunctionRedundant = (args) => {
   const key = 'function'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName: fetchTerminalImportName(args.filename) }),
     defaultBetterName: '',
     fetchName: (node) => node.id.name,
   })
+}
+const generateFunctionParamsRedundant = (args) => {
+  const key = 'functionParams'
+  const redundant = handleReportBetterName({
+    ...args,
+    key,
+    option: args.option[key],
+    redundantKeywords: generateRedundantKeywords({ args, key }),
+    defaultBetterName: '',
+    fetchName: (node) => node.name,
+  })
+
+  return (node) => {
+    node.params.forEach((param) => redundant(param))
+  }
 }
 
 const generateVariableRedundant = (args) => {
   const key = 'variable'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName: fetchTerminalImportName(args.filename) }),
     defaultBetterName: '',
     fetchName: (node) => node.id.name,
@@ -251,8 +344,9 @@ const generateClassRedundant = (args) => {
   const key = 'class'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key, terminalImportName: fetchTerminalImportName(args.filename) }),
     defaultBetterName: '',
     fetchName: (node) => node.id.name,
@@ -263,8 +357,9 @@ const generateMethodRedundant = (args) => {
   const key = 'method'
 
   return handleReportBetterName({
+    ...args,
     key,
-    context: args.context,
+    option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: 'item',
     fetchName: (node) => node.key.name,
@@ -278,8 +373,10 @@ module.exports = {
       'file-name': ' {{ message }}',
       'type-name': '{{ message }}',
       'type-name/invalid-suffix': '{{ message }}',
+      'typeProperty-name': '{{ message }}',
       'property-name': ' {{ message }}',
       'function-name': ' {{ message }}',
+      'functionParams-name': ' {{ message }}',
       'variable-name': ' {{ message }}',
       'class-name': ' {{ message }}',
       'method-name': ' {{ message }}',
@@ -324,49 +421,72 @@ module.exports = {
       keywords,
     }
 
+    const addRule = (key, redundant) => {
+      const addedRules = rules[key] || []
+
+      rules[key] = [...addedRules, redundant]
+    }
+
     if (option.type) {
-      rules = {
-        ...rules,
-        TSTypeAliasDeclaration: generateTypeRedundant(args),
-      }
+      addRule('TSTypeAliasDeclaration', generateTypeRedundant(args))
+      // addRule('TSInterfaceDeclaration', generateTypeRedundant(args)) // 必要になったら実装する
+    }
+    if (option.typeProperty) {
+      const typePropRedundant = generateTypePropertyRedundant(args)
+      const typeFuncParamRedundant = generateTypePropertyFunctionParamsRedundant(args)
+
+      addRule('TSPropertySignature', (node) => {
+        typePropRedundant(node)
+
+        if (node.typeAnnotation.typeAnnotation.type === 'TSFunctionType') {
+          typeFuncParamRedundant(node.typeAnnotation.typeAnnotation)
+        }
+      })
     }
     if (option.property) {
-      propRedundant = generatePropertyRedundant(args)
+      const redundant = generatePropertyRedundant(args)
 
-      rules = {
-        ...rules,
-        Property: propRedundant,
-        PropertyDefinition: propRedundant,
-      }
+      addRule('Property', redundant)
+      addRule('PropertyDefinition', redundant)
     }
     if (option.file) {
-      rules = {
-        ...rules,
-        Program: generateFileRedundant(args),
-      }
+      addRule('Program', generateFileRedundant(args))
     }
     if (option.function) {
-      rules = {
-        ...rules,
-        FunctionDeclaration: generateFunctionRedundant(args),
-      }
+      addRule('FunctionDeclaration', generateFunctionRedundant(args))
+    }
+    if (option.functionParams) {
+      const redundant = generateFunctionParamsRedundant(args)
+
+      addRule('FunctionDeclaration', redundant)
+      addRule('ArrowFunctionExpression', redundant)
+      addRule('MethodDefinition', (node) => {
+        if (node.value.type === 'FunctionExpression') {
+          redundant(node.value)
+        }
+      })
     }
     if (option.variable) {
       const redundant = generateVariableRedundant(args)
 
-      rules = {
-        ...rules,
-        VariableDeclarator: redundant,
-        TSEnumDeclaration: redundant,
-      }
+      addRule('VariableDeclarator', redundant)
+      addRule('TSEnumDeclaration', redundant)
     }
     if (option.class) {
-      rules = {
-        ...rules,
-        ClassDeclaration: generateClassRedundant(args),
-        MethodDefinition: generateMethodRedundant(args) ,
-      }
+      addRule('ClassDeclaration', generateClassRedundant(args))
     }
+    if (option.method) {
+      addRule('MethodDefinition', generateMethodRedundant(args))
+    }
+
+    Object.keys(rules).forEach((key) => {
+      const redundants = rules[key]
+      rules[key] = (node) => {
+        redundants.forEach((redundant) => {
+          redundant(node)
+        })
+      }
+    })
 
     return rules
   },

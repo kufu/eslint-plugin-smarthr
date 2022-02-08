@@ -1,17 +1,14 @@
 const SCHEMA = [
   {
-    type: 'array',
-    items: {
-      properties: {
-        targets: { type: 'object', default: {} },
-        customMessage: { type: 'string'},
-      },
-      reportMessage: false,
-    }
+    type: 'object',
+    properties: {
+      targets: { type: 'object', default: {} },
+    },
+    additionalProperties: false,
   }
 ]
 
-const generateDefaultReportMessage = (source, imported) => `${source}${typeof imported == 'string' ? `/${imported}`: ''} は利用しないでください`
+const defaultReportMessage = '{{prohibit}} は利用しないでください'
 
 module.exports = {
   meta: {
@@ -22,16 +19,21 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
-    const options = context.options[0]
+    const option = context.options[0]
+    const parsedOption = Object.entries(option.targets)
+
     return {
       ImportDeclaration: (node) => {
-        options.forEach((option) => {
-          const parsedOption = Object.entries(option.targets)
-          const reportMessage = option.reportMessage
-          parsedOption.forEach(([matchText, importNames]) => {
-            if (!node.source.value.match(new RegExp(matchText))) {
-              return
+        parsedOption.forEach(([matchText, config]) => {
+          if (!node.source.value.match(new RegExp(matchText))) {
+            return
+          }
+
+          const imported = (() => {
+            if (!Array.isArray(config.imported)) {
+              return !!config.imported
             }
+            const specifier = node.specifiers.find((s) => config.imported.includes(s.imported.name))
 
             const imported = (() => {
               if (!Array.isArray(importNames)) {
@@ -41,20 +43,21 @@ module.exports = {
 
               return specifier ? specifier.imported.name : false
             })()
-
-            if (imported) {
-              context.report({
-                node,
-                messageId: 'prohibit_import',
-                data: {
-                  message: reportMessage ? reportMessage.replace('$moduleName', node.source.value).replace('$exportName', imported) : generateDefaultReportMessage(node.source.value, imported),
-                },
-              });
-            }
           })
+
+          if (imported) {
+            context.report({
+              node,
+              messageId: 'prohibit_import',
+              data: {
+                message: (config.reportMessage || defaultReportMessage).replace('{{prohibit}}', `${node.source.value}${imported === true ? '' : `/${imported}`}`),
+              },
+            });
+          }
         })
       },
     }
   },
 }
+
 module.exports.schema = SCHEMA

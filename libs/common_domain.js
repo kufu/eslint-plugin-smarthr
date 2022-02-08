@@ -6,7 +6,6 @@ const BASE_SCHEMA_PROPERTIES = {
   globalModuleDir: { type: 'array', items: { type: 'string' } },
   domainModuleDir: { type: 'array', items: { type: 'string' }, default: [] },
   domainConstituteDir: { type: 'array', items: { type: 'string' } },
-  isDomain: { type: 'function' },
 }
 
 const calculateDomainContext = (context) => {
@@ -87,13 +86,14 @@ const calculateDomainNode = (calclatedContext, node) => {
   let filteredDirs = dirs
   let filteredPaths = paths
 
+  const deductedNames = []
   const recursiveDeductionEq = () => {
     if (dirs.length === 0 || paths.length === 0) {
       return
     }
 
     if (dirs[0] === paths[0]) {
-      dirs.shift()
+      deductedNames.push(dirs.shift())
       paths.shift()
       recursiveDeductionEq()
     }
@@ -102,21 +102,22 @@ const calculateDomainNode = (calclatedContext, node) => {
   filteredDirs = dirs
   filteredPaths = paths
 
+  let isDomainConstitute = false
+
   if (option.domainConstituteDir) {
+    const { domainConstituteDir } = option
+    isDomainConstitute =
+      !!deductedNames.find((d) => domainConstituteDir.includes(d)) || // 同一dirを削り、その中にconstitute dir があれば同一ドメイン
+      domainConstituteDir.includes(dirs[0]) && domainConstituteDir.includes(paths[0]) // 同一を削りきった先頭が両方constitute dirならば同一ドメイン
+
     // HINT: 同一ドメイン内（例: workflows/index）で定形で利用されるディレクトリ名を省くことで
     // ドメインの識別に利用される文字を抽出する
     dirs = dirs.filter((k) => !option.domainConstituteDir.includes(k))
     paths = paths.filter((k) => !option.domainConstituteDir.includes(k))
   }
 
-  if (option.isDomain) {
-    // HINT: ドメインの識別に利用される文字を抽出する
-    dirs = dirs.filter((k) => option.isDomain(k))
-    paths = paths.filter((k) => option.isDomain(k))
-  }
-
   const isLowerImport = filteredDirs.length === 0 // 同一階層、もしくは下層からのimport
-  const isDomainImport = dirs.length === 0 // 同一ドメイン内、もしくは同一階層・下層からのimport
+  const isDomainImport = dirs.length === 0 || isDomainConstitute // 同一ドメイン内、もしくは同一階層・下層からのimport
   const isModuleImport = paths.length > 0 && option.domainModuleDir.includes(paths[0]) // ドメイン内共通パーツ
 
   return {

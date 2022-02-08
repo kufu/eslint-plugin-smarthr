@@ -305,47 +305,14 @@ import { PrimaryButton, SecondaryButton } from 'smarthr-ui'
 ### config
 
 - tsconfig.json の compilerOptions.pathsに '@/*' としてroot path を指定する必要があります
-- 以下の設定を記述する必要があります
+- 以下の設定を行えます。全て省略可能です。
   - ignoreKeywords
     - ディレクトリ名から生成されるキーワードに含めたくない文字列を指定します
-  - keywordGenerator
-    - ディレクトリ名から生成されるキーワードを元に最終的なキーワードを生成します
-  - suffixGenerator:
+  - betterNames
+    - 対象の名前を修正する候補を指定します
+  - suffix:
     - type のみ指定出来ます
-    - type のsuffixを生成します
-
-#### 指定例
-```
-const ignorekeywords = ['views', 'parts']
-const keywordGenerator = ({ keywords }) => (
-  keywords.reduce((prev, keyword, index) => {
-    switch (keyword) {
-      case 'repositories':
-        return [...prev, keyword, 'repository']
-    }
-
-    const replacedKeyword = keyword.replace(/(repository|s)$/, '')
-    if (keyword !== replacedKeyword) {
-      return [...prev, keyword, replacedKeyword]
-    }
-
-    return [...prev, keyword]
-  }, [])
-)
-// 例: actions 以下の場合だけ 'Action' もしくは `Actions` のSuffixを許可する
-const suffixGenerator = ({ node, filename }) => {
-  let suffix = ['Props', 'Type']
-
-  if (filename.match(/\/actions\//)) {
-    suffix = [
-      isUnionType || (node.typeAnnotation.type === 'TSTypeReference' && node.id.name.match(/Actions$/))
-        ? 'Actions'
-        : 'Action',
-      ...suffix,
-    ]
-  }
-}
-```
+    - type のsuffixを指定します
 
 #### ファイル例
 - `@/crews/index/views/page.tsx` の場合
@@ -359,17 +326,33 @@ const suffixGenerator = ({ node, filename }) => {
 ### rules
 
 ```js
+const ignorekeywords = ['views', 'parts']
+const betterNames = {
+  '\/repositories\/': {
+    operator: '-',
+    names: ['repository', 'Repository'],
+  },
+  '\/entities\/': {
+    operator: '+',
+    names: ['entity'],
+  },
+  '\/slices\/': {
+    operator: '=',
+    names: ['index'],
+  },
+}
+
 {
   rules: {
     'smarthr/redundant-name': [
       'error', // 'warn', 'off'
       {
-        type: { ignorekeywords, keywordGenerator, suffixGenerator },
-        file: { ignorekeywords, keywordGenerator },
-        // property: { ignorekeywords, keywordGenerator },
-        // function: { ignorekeywords, keywordGenerator },
-        // variable: { ignorekeywords, keywordGenerator },
-        // class: { ignorekeywords, keywordGenerator },
+        type: { ignorekeywords, suffix: ['Props', 'Type'] },
+        file: { ignorekeywords, betternames },
+        // property: { ignorekeywords },
+        // function: { ignorekeywords },
+        // variable: { ignorekeywords },
+        // class: { ignorekeywords },
       }
     ]
   },
