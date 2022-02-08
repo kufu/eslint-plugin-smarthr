@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-smarthr",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "SmartHR",
   "license": "MIT",
   "description": "A sharable ESLint plugin for SmartHR",
