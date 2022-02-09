@@ -274,14 +274,17 @@ import globalModulePart from '@/modules/views/parts'
     'smarthr/prohibit-import': [
       'error', // 'warn', 'off'
       {
-        'query-string': {
-          imported: true,
-          targetRegex: '\/pages\/views\/',
+        '^.+$': {
+          'smarthr-ui': {
+            imported: ['SecondaryButtonAnchor'],
+            reportMessage: `{{module}}/{{export}} はXxxxxxなので利用せず yyyy/zzzz を利用してください`
+          }, 
+        }
+        '\/pages\/views\/': {
+          'query-string': {
+            imported: true,
+          },
         },
-        'smarthr-ui': {
-          imported: ['SecondaryButtonAnchor'],
-          reportMessage: `{{module}}/{{export}} はXxxxxxなので利用せず yyyy/zzzz を利用してください`
-        }, 
       }
     ]
   },
@@ -317,15 +320,17 @@ import { PrimaryButton, SecondaryButton } from 'smarthr-ui'
     'smarthr/require-import': [
       'error',
       {
-        'smarthr-ui': {
-          imported: ['SecondaryButton'],
-          targetRegex: 'Buttons\/.+\.tsx',
-          reportMessage: 'Buttons以下のコンポーネントでは {{module}}/{{export}} を拡張するようにしてください',
+        'Buttons\/.+\.tsx': {
+          'smarthr-ui': {
+            imported: ['SecondaryButton'],
+            reportMessage: 'Buttons以下のコンポーネントでは {{module}}/{{export}} を拡張するようにしてください',
+          },
         },
-        './client/src/hooks/useTitle': {
-          imported: true,
-          targetRegex: 'Page.tsx$',
-          reportMessage: '{{module}} を利用してください（ページタイトルを設定するため必要です）',
+        'Page.tsx$': {
+          './client/src/hooks/useTitle': {
+            imported: true,
+            reportMessage: '{{module}} を利用してください（ページタイトルを設定するため必要です）',
+          },
         },
       },
     ]
