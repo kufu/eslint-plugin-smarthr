@@ -30,8 +30,7 @@ const SCHEMA = [{
   additionalProperties: true,
 }]
 
-const defaultReportMessage = '{{module}}/{{export}} をimportしてください'
-// const defaultReportMessage = (moduleName, exportName) => `${moduleName}${typeof exportName == 'string' ? `/${exportName}`: ''} は利用しないでください`
+const defaultReportMessage = (moduleName, exportName) => `${moduleName}${typeof exportName == 'string' ? `/${exportName}`: ''} をimportしてください`
 
 module.exports = {
   meta: {
@@ -84,7 +83,7 @@ module.exports = {
                 node,
                 messageId: 'require_import',
                 data: {
-                  message: (reportMessage || defaultReportMessage).replace('{{module}}', actualTarget).replace('{{export}}', item)
+                  message: reportMessage ? reportMessage.replace('{{module}}', actualTarget).replace('{{export}}', item) : defaultReportMessage(actualTarget, item)
                 },
               })
             }
