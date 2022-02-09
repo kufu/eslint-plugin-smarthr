@@ -61,7 +61,20 @@ ruleTester.run("prohibit-import-lodash", rule, {
           },
         }
       ]
-    }
+    },
+    {
+      code: `import _ from 'lodash'`,
+      filename: 'hoge.js',
+      options: [
+        {
+          '^fuga.js$': {
+            'lodash': {
+              imported: true
+            },
+          },
+        }
+      ],
+    },
   ],
   invalid: [
     {
@@ -138,6 +151,24 @@ ruleTester.run("prohibit-import-lodash", rule, {
         }
       ],
       errors: [{message: 'must not use lodash/isEqual'}]
-    }
+    },
+    {
+      code: `import { isEqual } from 'lodash'`,
+      filename: 'hoge.js',
+      options: [
+        {
+          '^hoge.js$': {
+            'example': {
+              imported: true,
+            },
+            'lodash': {
+              imported: ['isEqual'],
+              reportMessage: "must not use {{module}}/{{export}}",
+            },
+          },
+        }
+      ],
+      errors: [{message: 'must not use lodash/isEqual'}]
+    },
   ]
 })
