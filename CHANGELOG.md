@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.0.1...v0.1.0) (2022-02-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* update prohibit-imoprt option
+
+* chore: require-importの対象ファイル指定方法をoptionの第一階層のkeyにする
+
+* chore: update README.md
+
+* chore: require-importのdefaultReportMessageを修正
+
+* chore: update yarn.lock
+
+* chore: fix test
+
+* chore: add test
+
+* chore: refactoring prohibit-import
+
+* chore: add test
+
+* BREAKING CHANGE: add require-import & update prohibit-import (#12) ([e6c5c44](https://github.com/kufu/eslint-plugin-smarthr/commit/e6c5c445a21620d4b796ded00a685e5da367c7bb)), closes [#12](https://github.com/kufu/eslint-plugin-smarthr/issues/12)
+
 ### [0.0.1](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.0.0...v0.0.1) (2022-02-08)
 
 
