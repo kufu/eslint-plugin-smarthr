@@ -94,7 +94,7 @@ module.exports = {
                   reporter(i)
                 })
               } else if (imported) {
-                reporter('')
+                reporter()
               }
             } else if (Array.isArray(imported)) {
               imported.forEach((i) => {
