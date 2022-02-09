@@ -1,35 +1,34 @@
 const path = require('path')
 
 const SCHEMA = [{
-  type: "object",
+  type: 'object',
   patternProperties: {
-    ".+": {
-      type: "object",
+    '.+': {
+      type: 'object',
       patternProperties: {
-        ".+": {
-          type: "object",
+        '.+': {
+          type: 'object',
           required: [
-            "imported",
+            'imported',
           ],
           properties: {
             imported: {
-                type: ["boolean", "array"],
-                items: {
-                  type: "string"
-                }
+              type: ['boolean', 'array'],
+              items: {
+                type: 'string',
+              },
             },
             reportMessage: {
-                type: "string"
-            }
+              type: 'string',
+            },
           },
           additionalProperties: false
-          }
         }
-      },
+      }
     },
-    additionalProperties: true,
-  }
-]
+  },
+  additionalProperties: true,
+}]
 
 const defaultReportMessage = (moduleName, exportName) => `${moduleName}${typeof exportName == 'string' ? `/${exportName}`: ''} は利用しないでください`
 
