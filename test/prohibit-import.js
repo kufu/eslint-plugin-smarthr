@@ -12,40 +12,52 @@ ruleTester.run("prohibit-import-lodash", rule, {
   valid: [
     {
       code: `import _ from 'lodash-es'`,
+      filename: 'hoge.js',
       options: [
         {
-          '^lodash$': {
-            imported: true,
+          '^.+$': {
+            'lodash': {
+              imported: true,
+            },
           },
         }
       ]
     },
     {
       code: `import { isEqual } from 'lodash-es'`,
+      filename: 'hoge.js',
       options: [
         {
-          '^lodash$': {
-            imported: ['isEqual']
+          '^.+$': {
+            'lodash': {
+              imported: ['isEqual']
+            },
           },
         }
       ]
     },
     {
       code: `import { isEqaul } from 'lodash'`,
+      filename: 'hoge.js',
       options: [
         {
-          '^lodash$': {
-            imported: ['isEqual']
+          '^.+$': {
+            'lodash': {
+              imported: ['isEqual']
+            },
           },
         }
       ]
     },
     {
       code: `import _ from 'lodash'`,
+      filename: 'hoge.js',
       options: [
         {
-          '^lodash$': {
-            imported: ['isEqual']
+          '^.+$': {
+            'lodash': {
+              imported: ['isEqual']
+            },
           },
         }
       ]
@@ -54,10 +66,13 @@ ruleTester.run("prohibit-import-lodash", rule, {
   invalid: [
     {
       code: `import _ from 'lodash'`,
+      filename: 'hoge.js',
       options: [
         {
-          '^lodash$': {
-            imported: true
+          '^.+$': {
+            'lodash': {
+              imported: true
+            },
           },
         }
       ],
@@ -65,10 +80,13 @@ ruleTester.run("prohibit-import-lodash", rule, {
     },
     {
       code: `import { isEqual } from 'lodash'`,
+      filename: 'hoge.js',
       options: [
         {
-          '^lodash$': {
-            imported: true
+          '^.+$': {
+            'lodash': {
+              imported: true
+            },
           },
         }
       ],
@@ -76,10 +94,13 @@ ruleTester.run("prohibit-import-lodash", rule, {
     },
     {
       code: `import { isEqual } from 'lodash'`,
+      filename: 'hoge.js',
       options: [
         {
-          '^lodash$': {
-            imported: ['isEqual']
+          '^.+$': {
+            'lodash': {
+              imported: ['isEqual']
+            },
           },
         }
       ],
@@ -87,11 +108,14 @@ ruleTester.run("prohibit-import-lodash", rule, {
     },
     {
       code: `import { isEqual } from 'lodash'`,
+      filename: 'hoge.js',
       options: [
         {
-          '^lodash$': {
-            imported: ['isEqual'],
-            "reportMessage": "must not use {{module}}/{{export}}"
+          '^.+$': {
+            'lodash': {
+              imported: ['isEqual'],
+              "reportMessage": "must not use {{module}}/{{export}}"
+            },
           },
         }
       ],
@@ -99,14 +123,17 @@ ruleTester.run("prohibit-import-lodash", rule, {
     },
     {
       code: `import { isEqual } from 'lodash'`,
+      filename: 'hoge.js',
       options: [
         {
-          'example': {
-            imported: true,
-          },
-          '^lodash$': {
-            imported: ['isEqual'],
-            reportMessage: "must not use {{module}}/{{export}}",
+          '^.+$': {
+            'example': {
+              imported: true,
+            },
+            'lodash': {
+              imported: ['isEqual'],
+              reportMessage: "must not use {{module}}/{{export}}",
+            },
           },
         }
       ],
