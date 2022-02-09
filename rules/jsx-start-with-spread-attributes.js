@@ -35,19 +35,20 @@ module.exports = {
 
         if (insertIndex >= 0) {
           const option = context.options[0]
+          const sourceCode = context.getSourceCode()
+          const attributeCode = sourceCode.getText(node)
 
           context.report({
             node,
             messageId: 'jsx-start-with-spread-attributes',
             data: {
-              message: `"${context.getSourceCode().getText(node)}" は意図しない上書きを防ぐため、spread attributesでない属性より先に記述してください`,
+              message: `"${attributeCode}" は意図しない上書きを防ぐため、spread attributesでない属性より先に記述してください`,
             },
             fix: option?.fix ? (fixer) => {
-              const sourceCode = context.getSourceCode()
               const elementNode = node.parent
               const sortedAttributes = [...elementNode.attributes].reduce((p, a, i) => {
                 if (insertIndex === i) {
-                  p = [sourceCode.getText(node), ...p]
+                  p = [attributeCode, ...p]
                 }
 
                 if (a !== node) {
