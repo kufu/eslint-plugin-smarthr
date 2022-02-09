@@ -5,22 +5,27 @@ const SCHEMA = [{
   patternProperties: {
     ".+": {
       type: "object",
-      required: [
-        "imported",
-      ],
-      properties: {
-        imported: {
-            type: ["boolean", "array"],
-            items: {
-              type: "string"
+      patternProperties: {
+        ".+": {
+          type: "object",
+          required: [
+            "imported",
+          ],
+          properties: {
+            imported: {
+                type: ["boolean", "array"],
+                items: {
+                  type: "string"
+                }
+            },
+            reportMessage: {
+                type: "string"
             }
-        },
-        reportMessage: {
-            type: "string"
+          },
+          additionalProperties: false
+          }
         }
       },
-      additionalProperties: false
-      }
     },
     additionalProperties: true,
   }
@@ -45,47 +50,52 @@ module.exports = {
 
       return dir.join('/')
     })()
-    const targetModules = Object.keys(options)
+    const targetPathRegexs = Object.keys(options)
+    const targetProhibits = targetPathRegexs.filter((regex) => !!filename.match(new RegExp(regex)))
+
+    if (targetProhibits.length === 0) {
+      return {}
+    }
 
     return {
       ImportDeclaration: (node) => {
-        targetModules.forEach((targetModule) => {
-          const { imported, reportMessage, targetRegex } = Object.assign({imported: true}, options[targetModule])
+        targetProhibits.forEach((prohibitKey) => {
+          const option = options[prohibitKey]
+          const targetModules = Object.keys(option)
 
-          if (targetRegex && !filename.match(new RegExp(targetRegex))) {
-            return
-          }
+          targetModules.forEach((targetModule) => {
+            const { imported, reportMessage } = Object.assign({imported: true}, option[targetModule])
+            const actualTarget = targetModule[0] !== '.' ? targetModule : path.resolve(`${process.cwd()}/${targetModule}`)
+            let sourceValue = node.source.value
 
-          const actualTarget = targetModule[0] !== '.' ? targetModule : path.resolve(`${process.cwd()}/${targetModule}`)
-          let sourceValue = node.source.value
-
-          if (actualTarget[0] === '/') {
-            sourceValue = path.resolve(`${parentDir}/${sourceValue}`)
-          }
-
-          if (actualTarget !== sourceValue) {
-            return
-          }
-          
-          const useImported = (() => {
-            if (!Array.isArray(imported)) {
-              return !!imported
+            if (actualTarget[0] === '/') {
+              sourceValue = path.resolve(`${parentDir}/${sourceValue}`)
             }
 
-            const specifier = node.specifiers.find((s) => s.imported && imported.includes(s.imported.name))
+            if (actualTarget !== sourceValue) {
+              return
+            }
+            
+            const useImported = (() => {
+              if (!Array.isArray(imported)) {
+                return !!imported
+              }
 
-            return specifier ? specifier.imported.name : false
-          })()
+              const specifier = node.specifiers.find((s) => s.imported && imported.includes(s.imported.name))
 
-          if (useImported) {
-            context.report({
-              node,
-              messageId: 'prohibit_import',
-              data: {
-                message: reportMessage ? reportMessage.replace('{{module}}', node.source.value).replace('{{export}}', useImported) : defaultReportMessage(node.source.value, useImported)
-              },
-            });
-          }
+              return specifier ? specifier.imported.name : false
+            })()
+
+            if (useImported) {
+              context.report({
+                node,
+                messageId: 'prohibit_import',
+                data: {
+                  message: reportMessage ? reportMessage.replace('{{module}}', node.source.value).replace('{{export}}', useImported) : defaultReportMessage(node.source.value, useImported)
+                },
+              });
+            }
+          })
         })
       },
     }
