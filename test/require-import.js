@@ -1,4 +1,4 @@
-const rule = require('../rules/prohibit-import')
+const rule = require('../rules/require-import')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
@@ -8,10 +8,10 @@ const ruleTester = new RuleTester({
   },
 })
 
-ruleTester.run('prohibit-import', rule, {
+ruleTester.run('require-import', rule, {
   valid: [
     {
-      code: `import _ from 'lodash-es'`,
+      code: `import _ from 'lodash'`,
       filename: 'hoge.js',
       options: [
         {
@@ -21,149 +21,34 @@ ruleTester.run('prohibit-import', rule, {
             },
           },
         }
-      ]
+      ],
     },
     {
-      code: `import { isEqual } from 'lodash-es'`,
-      filename: 'hoge.js',
-      options: [
-        {
-          '^.+$': {
-            'lodash': {
-              imported: ['isEqual']
-            },
-          },
-        }
-      ]
-    },
-    {
-      code: `import { isEqaul } from 'lodash'`,
-      filename: 'hoge.js',
-      options: [
-        {
-          '^.+$': {
-            'lodash': {
-              imported: ['isEqual']
-            },
-          },
-        }
-      ]
-    },
-    {
-      code: `import _ from 'lodash'`,
-      filename: 'hoge.js',
-      options: [
-        {
-          '^.+$': {
-            'lodash': {
-              imported: ['isEqual']
-            },
-          },
-        }
-      ]
-    },
-    {
-      code: `import _ from 'lodash'`,
+      code: ``,
       filename: 'hoge.js',
       options: [
         {
           '^fuga.js$': {
             'lodash': {
-              imported: true
+              imported: true,
             },
           },
         }
       ],
     },
-    {
-      code: `import { isEqual } from './module/validator'`,
-      filename: 'page/hoge.js',
-      options: [
-        {
-          '^.+$': {
-            './module/validator': {
-              imported: ['isEqual'],
-            },
-          },
-        }
-      ],
-    },
-  ],
-  invalid: [
     {
       code: `import _ from 'lodash'`,
       filename: 'hoge.js',
       options: [
         {
-          '^.+$': {
+          '^hoge.js$': {
             'lodash': {
-              imported: true
-            },
-          },
-        }
-      ],
-      errors: [{ message: 'lodash は利用しないでください' }]
-    },
-    {
-      code: `import { isEqual } from 'lodash'`,
-      filename: 'hoge.js',
-      options: [
-        {
-          '^.+$': {
-            'lodash': {
-              imported: true
-            },
-          },
-        }
-      ],
-      errors: [{ message: 'lodash は利用しないでください' }]
-    },
-    {
-      code: `import { isEqual } from 'lodash'`,
-      filename: 'hoge.js',
-      options: [
-        {
-          '^.+$': {
-            'lodash': {
-              imported: ['isEqual']
-            },
-          },
-        }
-      ],
-      errors: [{message: 'lodash/isEqual は利用しないでください'}]
-    },
-    {
-      code: `import { isEqual } from 'lodash'`,
-      filename: 'hoge.js',
-      options: [
-        {
-          '^.+$': {
-            'lodash': {
-              imported: ['isEqual'],
-              "reportMessage": "must not use {{module}}/{{export}}"
-            },
-          },
-        }
-      ],
-      errors: [{message: 'must not use lodash/isEqual'}]
-    },
-    {
-      code: `import { isEqual } from 'lodash'`,
-      filename: 'hoge.js',
-      options: [
-        {
-          '^.+$': {
-            'example': {
               imported: true,
-            },
-            'lodash': {
-              imported: ['isEqual'],
-              reportMessage: "must not use {{module}}/{{export}}",
+              reportMessage: '{{module}} を絶対使ってください'
             },
           },
         }
       ],
-      errors: [{message: 'must not use lodash/isEqual'}]
     },
     {
       code: `import { isEqual } from 'lodash'`,
@@ -171,17 +56,27 @@ ruleTester.run('prohibit-import', rule, {
       options: [
         {
           '^hoge.js$': {
-            'example': {
-              imported: true,
-            },
             'lodash': {
               imported: ['isEqual'],
-              reportMessage: "must not use {{module}}/{{export}}",
+              reportMessage: '{{module}}/{{export}} を絶対使ってください'
             },
           },
         }
       ],
-      errors: [{message: 'must not use lodash/isEqual'}]
+      errors: [{ message: 'lodash/isEqual を絶対使ってください' }],
+    },
+    {
+      code: `import { chunk } from 'lodash'`,
+      filename: 'hoge.js',
+      options: [
+        {
+          '^hoge.js$': {
+            'lodash': {
+              imported: true,
+            },
+          },
+        }
+      ],
     },
     {
       code: `import { isEqual } from './module/validator'`,
@@ -195,7 +90,95 @@ ruleTester.run('prohibit-import', rule, {
           },
         }
       ],
-      errors: [{ message: './module/validator/isEqual は利用しないでください' }]
+    },
+  ],
+  invalid: [
+    {
+      code: ``,
+      filename: 'hoge.js',
+      options: [
+        {
+          '^.+$': {
+            'lodash': {
+              imported: true,
+            },
+          },
+        }
+      ],
+      errors: [{ message: 'lodash をimportしてください' }],
+    },
+    {
+      code: ``,
+      filename: 'hoge.js',
+      options: [
+        {
+          '^hoge.js$': {
+            'lodash': {
+              imported: true,
+            },
+          },
+        }
+      ],
+      errors: [{ message: 'lodash をimportしてください' }],
+    },
+    {
+      code: ``,
+      filename: 'hoge.js',
+      options: [
+        {
+          '^hoge.js$': {
+            'lodash': {
+              imported: true,
+              reportMessage: '{{module}} を絶対使ってください'
+            },
+          },
+        }
+      ],
+      errors: [{ message: 'lodash を絶対使ってください' }],
+    },
+    {
+      code: ``,
+      filename: 'hoge.js',
+      options: [
+        {
+          '^hoge.js$': {
+            'lodash': {
+              imported: ['isEqual'],
+              reportMessage: '{{module}}/{{export}} を絶対使ってください'
+            },
+          },
+        }
+      ],
+      errors: [{ message: 'lodash/isEqual を絶対使ってください' }],
+    },
+    {
+      code: `import { chunk } from 'lodash'`,
+      filename: 'hoge.js',
+      options: [
+        {
+          '^hoge.js$': {
+            'lodash': {
+              imported: ['isEqual'],
+              reportMessage: '{{module}}/{{export}} を絶対使ってください'
+            },
+          },
+        }
+      ],
+      errors: [{ message: 'lodash/isEqual を絶対使ってください' }],
+    },
+    {
+      code: `import { isEqual } from './module/validator'`,
+      filename: 'page/hoge.js',
+      options: [
+        {
+          '^.+$': {
+            './module/validator': {
+              imported: ['isEqual'],
+            },
+          },
+        }
+      ],
+      errors: [{ message: /module\/validator\/isEqual をimportしてください$/ }],
     },
   ]
 })

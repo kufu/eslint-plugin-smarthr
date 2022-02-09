@@ -274,12 +274,17 @@ import globalModulePart from '@/modules/views/parts'
     'smarthr/prohibit-import': [
       'error', // 'warn', 'off'
       {
-        targets: {
-          '^query-string$': true, // key は 正規表現を指定する
-          '^smarthr-ui$': ['SecondaryButtonAnchor'], 
+        '^.+$': {
+          'smarthr-ui': {
+            imported: ['SecondaryButtonAnchor'],
+            reportMessage: `{{module}}/{{export}} はXxxxxxなので利用せず yyyy/zzzz を利用してください`
+          }, 
+        }
+        '\/pages\/views\/': {
+          'query-string': {
+            imported: true,
+          },
         },
-        // generateReportMessage: (source, imported) => 
-        //   `${source}${imported && `/${imported}`} はXxxxxxなので利用せず yyyy/zzzz を利用してください`
       }
     ]
   },
@@ -289,6 +294,7 @@ import globalModulePart from '@/modules/views/parts'
 ### ❌ Incorrect
 
 ```js
+// src/pages/views/Page.tsx
 import queryString from 'query-string'
 import { SecondaryButtonAnchor } from 'smarthr-ui'
 ```
@@ -297,10 +303,61 @@ import { SecondaryButtonAnchor } from 'smarthr-ui'
 
 
 ```js
+// src/pages/views/Page.tsx
 import { PrimaryButton, SecondaryButton } from 'smarthr-ui'
 ```
 
+## smarthr/require-import
 
+- 対象ファイルにimportを強制させたい場合に利用します
+  - 例: Page.tsx ではページタイトルを設定させたいので useTitle を必ずimportさせたい
+
+### rules
+
+```js
+{
+  rules: {
+    'smarthr/require-import': [
+      'error',
+      {
+        'Buttons\/.+\.tsx': {
+          'smarthr-ui': {
+            imported: ['SecondaryButton'],
+            reportMessage: 'Buttons以下のコンポーネントでは {{module}}/{{export}} を拡張するようにしてください',
+          },
+        },
+        'Page.tsx$': {
+          './client/src/hooks/useTitle': {
+            imported: true,
+            reportMessage: '{{module}} を利用してください（ページタイトルを設定するため必要です）',
+          },
+        },
+      },
+    ]
+  },
+}
+```
+
+### ❌ Incorrect
+
+```js
+// client/src/Buttons/SecondaryButton.tsx
+import { SecondaryButtonAnchor } from 'smarthr-ui'
+
+// client/src/Page.tsx
+import { SecondaryButton } from 'smarthr-ui'
+```
+
+### ✅ Correct
+
+
+```js
+// client/src/Buttons/SecondaryButton.tsx
+import { SecondaryButton } from 'smarthr-ui'
+
+// client/src/Page.tsx
+import useTitle from '.hooks/useTitle'
+```
 
 
 ## smarthr/redundant-name
