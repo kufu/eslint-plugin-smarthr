@@ -43,6 +43,7 @@ const calculateReplacedImportPath = (source) => {
     return prev
   }, source)
 }
+const TARGET_EXTS = ['ts', 'tsx', 'js', 'jsx']
 
 module.exports = {
   meta: {
@@ -54,11 +55,6 @@ module.exports = {
   },
   create(context) {
     const filename = context.getFilename()
-
-    // HINT: indexファイルがある == barrelであるとする
-    if (filename.match(/\/index\.(js|ts)x?$/)) {
-      return {}
-    }
 
     const dir = (() => {
       const d = filename.split('/')
@@ -82,39 +78,40 @@ module.exports = {
         }
 
         const sources = sourceValue.split('/')
-        let joinedSources = sourceValue
-        let ext = undefined
+
+        // HINT: directoryの場合、indexファイルからimportしていることは自明であるため、一階層上からチェックする
+        if (fs.existsSync(sourceValue) && fs.statSync(sourceValue).isDirectory()) {
+          sources.pop()
+          sourceValue = sources.join('/')
+        }
+
+        let barrel = undefined
 
         while (sources.length > 0) {
           // HINT: 以下の場合は即終了
           // - import元以下のimportだった場合
           // - rootまで捜索した場合
-          if (dir === joinedSources || dir === rootPath) {
-            return
-          }
-
-          ext = ['ts', 'tsx', 'js', 'jsx'].find((e) => fs.existsSync(`${sources.join('/')}/index.${e}`))
-
-          if (ext) {
+          if (
+            dir === rootPath ||
+            dir.match(new RegExp(`^${sourceValue}`))
+          ) {
             break
           }
 
+          barrel = TARGET_EXTS.map((e) => `${sourceValue}/index.${e}`).find((p) => fs.existsSync(p)) || barrel
+
           sources.pop()
-          joinedSources = sources.join('/')
+          sourceValue = sources.join('/')
         }
 
-        if (
-          joinedSources &&
-          sourceValue !== joinedSources &&
-          !dir.match(new RegExp(`^${joinedSources}/`))
-        ) {
-          const replacedSources = calculateReplacedImportPath(joinedSources)
+        if (barrel) {
+          barrel = calculateReplacedImportPath(barrel)
 
           context.report({
             node,
             messageId: 'require-barrel-import',
             data: {
-              message: `${replacedSources}からimportするか、${replacedSources}/index.${ext}を削除してください`,
+              message: `${barrel.replace(/\/index\.(ts|js)x?$/, '')} からimportするか、${barrel} を削除してください`,
             },
           });
         }
