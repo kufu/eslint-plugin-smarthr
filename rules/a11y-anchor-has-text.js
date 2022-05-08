@@ -17,12 +17,6 @@ module.exports = {
           return
         }
 
-        const children = filterFalsyJSXText(node.parent.children)
-
-        if (children.length === 0) {
-          return
-        }
-
         const recursiveSearch = (c) => {
           if (['JSXText', 'JSXExpressionContainer'].includes(c.type)) {
             return true
@@ -41,7 +35,7 @@ module.exports = {
           return false
         }
 
-        const child = children.find(recursiveSearch)
+        const child = filterFalsyJSXText(node.parent.children).find(recursiveSearch)
 
         if (!child) {
           context.report({
