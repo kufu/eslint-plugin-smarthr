@@ -13,7 +13,7 @@ module.exports = {
   create(context) {
     return {
       JSXOpeningElement: (node) => {
-        if (!node.name.name || !node.name.name.match(/^(a|(.*?)Anchor|(.*?)Link)$/)) {
+        if (!node.name.name || !node.name.name.match(/^(a|(.*?)Anchor(Button)?|(.*?)Link)$/)) {
           return
         }
 
