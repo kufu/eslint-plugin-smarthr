@@ -23,7 +23,7 @@ module.exports = {
           }
 
           if (c.type === 'JSXElement') {
-            if (c.openingElement.attributes.some((a) => ['visuallyHiddenText', 'alt'].includes(a.name.name))) {
+            if (c.openingElement.attributes.some((a) => (['visuallyHiddenText', 'alt'].includes(a.name.name) && !!a.value.value))) {
               return true
             }
 
