@@ -31,7 +31,7 @@ module.exports = {
             targetNode = c
 
             if (!existNoIcon) {
-              existNoIcon = c.openingElement.attributes.some((a) => a.name.name === 'visuallyHiddenText')
+              existNoIcon = c.openingElement.attributes.some((a) => ['visuallyHiddenText', 'alt'].includes(a.name.name))
             }
           } else {
             existNoIcon = true
@@ -45,7 +45,7 @@ module.exports = {
             node: targetNode,
             messageId: 'a11y-icon-button-has-name',
             data: {
-              message: `Button 内に Icon のみを設置する場合、Icon に visuallyHiddenText props を指定してください`,
+              message: 'Button 内に Icon のみを設置する場合、Icon に visuallyHiddenText props、もしくは alt props を指定してください',
             },
           });
         }

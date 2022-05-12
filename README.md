@@ -1,5 +1,57 @@
 # eslint-plugin-smarthr
 
+## smarthr/a11y-anchor-has-text
+
+- Anchor, Link にテキスト要素が設定されていない場合など、アクセシビリティの問題が発生する可能性を防ぐルールです
+
+### rules
+
+```js
+{
+  rules: {
+    'smarthr/a11y-anchor-has-text': 'error', // 'warn', 'off'
+  },
+}
+```
+
+### ❌ Incorrect
+
+```jsx
+<XxxAnchor>
+  <Yyy />
+</XxxAnchor>
+```
+
+```jsx
+<XxxLink>
+  <Zzz />
+</XxxLink>
+```
+
+### ✅ Correct
+
+```jsx
+<XxxAnchor>
+  Hoge
+</XxxAnchor>
+```
+```jsx
+<XxxLink>
+  <YyyIcon />
+  Fuga
+</XxxLink>
+```
+```jsx
+<XxxAnchor>>
+  <YyyIcon visuallyHiddenText="hoge" />
+</XxxAnchor>
+```
+```jsx
+<XxxLink>
+  <YyyImage alt="fuga" />
+</XxxLink>
+```
+
 ## smarthr/a11y-icon-button-has-name
 
 - ボタンの中にIconのみが設置されている場合、アクセシビリティの問題が発生する可能性を防ぐルールです
@@ -39,6 +91,11 @@
 ```jsx
 <XxxButton>
   <YyyIcon visuallyHiddenText="hoge" />
+</XxxButton>
+```
+```jsx
+<XxxButton>
+  <YyyIcon alt="fuga" />
 </XxxButton>
 ```
 
