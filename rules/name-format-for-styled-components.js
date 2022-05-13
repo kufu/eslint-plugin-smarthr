@@ -41,7 +41,9 @@ const EXPECTED_NAMES = {
   'Icon$': 'Icon$',
   '(t|T)able$': 'Table$',
   'Head$': 'Head$',
+  '^thead$': 'Head$',
   'Body$': 'Body$',
+  '^tbody$': 'Body$',
   'Row$': 'Row$',
   'Cell$': '(Cell|Td|Th)$',
   '(t|T)d$': 'Td$',
@@ -90,7 +92,7 @@ const EXPECTED_NAMES = {
   'Sidebar$': 'Sidebar$',
 
   '(f|F)orm$': 'Form$',
-  '(u|o)l$': 'List$',
+  '^(u|o)l$': 'List$',
   '^li$': 'ListItem$',
 }
 
