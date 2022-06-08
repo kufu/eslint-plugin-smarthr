@@ -72,7 +72,14 @@ module.exports = {
           }
         })
       },
-      JSXOpeningElement: (node) => {
+      JSXElement: (parentNode) => {
+        // HINT: 閉じタグが存在しない === テキストノードが存在しない
+        if (!parentNode.closingElement) {
+          return
+        }
+
+        const node = parentNode.openingElement
+
         if (!node.name.name || !node.name.name.match(/^(a|(.*?)Anchor(Button)?|(.*?)Link|(b|B)utton)$/)) {
           return
         }
@@ -95,7 +102,7 @@ module.exports = {
           return false
         }
 
-        const child = filterFalsyJSXText(node.parent.children).find(recursiveSearch)
+        const child = filterFalsyJSXText(parentNode.children).find(recursiveSearch)
 
         if (!child) {
           context.report({
