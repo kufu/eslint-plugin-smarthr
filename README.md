@@ -1,15 +1,15 @@
 # eslint-plugin-smarthr
 
-## smarthr/a11y-anchor-has-text
+## smarthr/a11y-clickable-element-has-text
 
-- Anchor, Link にテキスト要素が設定されていない場合など、アクセシビリティの問題が発生する可能性を防ぐルールです
+- ButtonやAnchor,Link コンポーネントにテキスト要素が設定されていない場合、アクセシビリティの問題が発生する可能性を防ぐルールです
 
 ### rules
 
 ```js
 {
   rules: {
-    'smarthr/a11y-anchor-has-text': 'error', // 'warn', 'off'
+    'smarthr/a11y-clickable-element-has-text': 'error', // 'warn', 'off'
   },
 }
 ```
@@ -18,14 +18,20 @@
 
 ```jsx
 <XxxAnchor>
-  <Yyy />
+  <Xxx />
 </XxxAnchor>
 ```
 
 ```jsx
 <XxxLink>
-  <Zzz />
+  <Yyy />
 </XxxLink>
+```
+
+```jsx
+<XxxButton>
+  <Zzz />
+</XxxButton>
 ```
 
 ### ✅ Correct
@@ -47,56 +53,13 @@
 </XxxAnchor>
 ```
 ```jsx
-<XxxLink>
+<XxxButton>
   <YyyImage alt="fuga" />
-</XxxLink>
-```
-
-## smarthr/a11y-icon-button-has-name
-
-- ボタンの中にIconのみが設置されている場合、アクセシビリティの問題が発生する可能性を防ぐルールです
-
-### rules
-
-```js
-{
-  rules: {
-    'smarthr/a11y-icon-button-has-name': 'error', // 'warn', 'off'
-  },
-}
-```
-
-### ❌ Incorrect
-
-```jsx
-<XxxButton>
-  <YyyIcon />
 </XxxButton>
 ```
 
-### ✅ Correct
-
 ```jsx
-<XxxButton>
-  <YyyIcon />
-  Hoge
-</XxxButton>
-```
-```jsx
-<XxxButton>
-  <YyyIcon />
-  <AnyComponent />
-</XxxButton>
-```
-```jsx
-<XxxButton>
-  <YyyIcon visuallyHiddenText="hoge" />
-</XxxButton>
-```
-```jsx
-<XxxButton>
-  <YyyIcon alt="fuga" />
-</XxxButton>
+<YyyAnchoor />
 ```
 
 ## smarthr/format-import-path
