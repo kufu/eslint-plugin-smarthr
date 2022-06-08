@@ -1,9 +1,5 @@
 const EXPECTED_NAMES = {
-  'TextButton$': 'TextButton$',
   '(b|B)utton$': 'Button$',
-  'AnchorButton$': 'AnchorButton$',
-  'TextButtonAnchor$': 'TextButtonAnchor$',
-  'ButtonAnchor$': 'ButtonAnchor$',
   'Anchor$': 'Anchor$',
   'Link$': 'Link$',
   '^a$': '(Anchor|Link)$',
@@ -60,11 +56,9 @@ module.exports = {
 
         const extended = node.parent.id.name
 
-        let extendedregex = null
-
         Object.entries(EXPECTED_NAMES).forEach(([b, e]) => {
           if (base.match(new RegExp(b))) {
-            extendedregex = new RegExp(e)
+            const extendedregex = new RegExp(e)
 
             if (!extended.match(extendedregex)) {
               context.report({
@@ -77,12 +71,6 @@ module.exports = {
             }
           }
         })
-
-        // if (!extendedregex) {
-        //   if (!['div', 'p', 'span', 'dl', 'dt', 'dd'].includes(base)) {
-        //     console.log(base, extended)
-        //   }
-        // }
       },
       JSXOpeningElement: (node) => {
         if (!node.name.name || !node.name.name.match(/^(a|(.*?)Anchor(Button)?|(.*?)Link|(b|B)utton)$/)) {
@@ -114,7 +102,7 @@ module.exports = {
             node,
             messageId: 'a11y-clickable-element-has-text',
             data: {
-              message: 'a, button要素にはテキストを設定してください。リンク要素内にアイコン、画像のみを設置する場合はSmartHR UIのvisuallyHiddenText、通常のHTML要素にはaltなどの代替テキスト用属性を指定してください',
+              message: 'a, button要素にはテキストを設定してください。要素内にアイコン、画像のみを設置する場合はSmartHR UIのvisuallyHiddenText、通常のHTML要素にはaltなどの代替テキスト用属性を指定してください',
             },
           });
         }
