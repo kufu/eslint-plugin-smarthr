@@ -114,7 +114,7 @@ module.exports = {
             node,
             messageId: 'a11y-clickable-element-has-text',
             data: {
-              message: 'a, button要素にはテキストを設定してください。リンク要素内にアイコン、画像を設置する場合はvisuallyHiddenText、altなどの代替テキスト用属性を指定してください',
+              message: 'a, button要素にはテキストを設定してください。リンク要素内にアイコン、画像のみを設置する場合はSmartHR UIのvisuallyHiddenText、通常のHTML要素にはaltなどの代替テキスト用属性を指定してください',
             },
           });
         }
