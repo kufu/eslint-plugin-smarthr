@@ -91,9 +91,11 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
       return prev
     }
 
-    const singularized = Inflector.singularize(keyword)
-
-    return singularized === keyword ? [...prev, keyword] : [...prev, keyword, singularized]
+    return [...prev, ...uniq([
+      Inflector.pluralize(keyword),
+      keyword,
+      Inflector.singularize(keyword),
+    ])]
   }, [])
 }
 const handleReportBetterName = ({
