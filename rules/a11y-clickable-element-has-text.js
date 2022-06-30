@@ -15,6 +15,7 @@ module.exports = {
   meta: {
     type: 'suggestion',
     messages: {
+      'format-styled-components': '{{ message }}',
       'a11y-clickable-element-has-text': '{{ message }}',
     },
     schema: [],

@@ -9,7 +9,7 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES }) => ({
     if (invalidNameNode) {
       context.report({
         node: invalidNameNode,
-        messageId: 'a11y-clickable-element-has-text',
+        messageId: 'format-styled-components',
         data: {
           message: "styled-components をimportする際は、名称が`styled` となるようにしてください。例: `import styled from 'styled-components'`",
         },
@@ -43,7 +43,7 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES }) => ({
         if (!extended.match(extendedregex)) {
           context.report({
             node: node.parent,
-            messageId: 'a11y-clickable-element-has-text',
+            messageId: 'format-styled-components',
             data: {
               message: `${extended}を正規表現 "${extendedregex.toString()}" がmatchする名称に変更してください`,
             },
