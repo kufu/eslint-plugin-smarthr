@@ -48,6 +48,10 @@ const DEFAULT_SCHEMA_PROPERTY = {
       },
     },
   },
+  allowedNames: {
+    type: 'array',
+    items: 'string',
+  },
 }
 
 const SCHEMA = [
@@ -115,7 +119,11 @@ const handleReportBetterName = ({
   return (node) => {
     const name = fetchName(node)
 
-    if (!name) {
+    if (
+      !name ||
+      option.allowedNames &&
+      Object.entries(option.allowedNames).find(([regex, calcs]) => filename.match(new RegExp(regex)) && calcs.find((c) => c === name))
+    ) {
       return
     }
 
@@ -178,9 +186,11 @@ const handleReportBetterName = ({
           }
         })
       }
+
+      candidates = candidates.filter((c) => c !== name)
     }
 
-    if (candidates.length > 0 && !candidates.find((c) => c === name)) {
+    if (candidates.length > 0) {
       context.report({
         node,
         messageId: `${key}-name`,
