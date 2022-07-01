@@ -48,6 +48,10 @@ const DEFAULT_SCHEMA_PROPERTY = {
       },
     },
   },
+  allowedNames: {
+    type: 'array',
+    items: 'string',
+  },
 }
 
 const SCHEMA = [
@@ -91,9 +95,11 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
       return prev
     }
 
-    const singularized = Inflector.singularize(keyword)
-
-    return singularized === keyword ? [...prev, keyword] : [...prev, keyword, singularized]
+    return [...prev, ...uniq([
+      Inflector.pluralize(keyword),
+      keyword,
+      Inflector.singularize(keyword),
+    ])]
   }, [])
 }
 const handleReportBetterName = ({
@@ -113,7 +119,11 @@ const handleReportBetterName = ({
   return (node) => {
     const name = fetchName(node)
 
-    if (!name) {
+    if (
+      !name ||
+      option.allowedNames &&
+      Object.entries(option.allowedNames).find(([regex, calcs]) => filename.match(new RegExp(regex)) && calcs.find((c) => c === name))
+    ) {
       return
     }
 

@@ -433,6 +433,8 @@ import { Item } from './Page/parts/Menu'
     - ディレクトリ名から生成されるキーワードに含めたくない文字列を指定します
   - betterNames
     - 対象の名前を修正する候補を指定します
+  - allowedNames
+    - 許可する名前を指定します
   - suffix:
     - type のみ指定出来ます
     - type のsuffixを指定します
@@ -464,6 +466,9 @@ const betterNames = {
     names: ['index'],
   },
 }
+// const allowedNames = {
+//   '\/views\/crews\/histories\/': ['crewId'],
+// }
 
 {
   rules: {
@@ -472,7 +477,7 @@ const betterNames = {
       {
         type: { ignorekeywords, suffix: ['Props', 'Type'] },
         file: { ignorekeywords, betternames },
-        // property: { ignorekeywords },
+        // property: { ignorekeywords, allowedNames },
         // function: { ignorekeywords },
         // variable: { ignorekeywords },
         // class: { ignorekeywords },
