@@ -178,11 +178,9 @@ const handleReportBetterName = ({
           }
         })
       }
-
-      candidates = candidates.filter((c) => c !== name)
     }
 
-    if (candidates.length > 0) {
+    if (candidates.length > 0 && !candidates.find((c) => c === name)) {
       context.report({
         node,
         messageId: `${key}-name`,
