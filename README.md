@@ -513,7 +513,7 @@ type ItemProps = { hoge: string }
 
 type IndexProps = { hoge: () => any }
 type ResponseType = { hoge: () => any }
-``
+```
 
 ## smarthr/format-translate-component
 
