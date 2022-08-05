@@ -1,9 +1,9 @@
-## smarthr/require-import
+# smarthr/require-import
 
 - 対象ファイルにimportを強制させたい場合に利用します
   - 例: Page.tsx ではページタイトルを設定させたいので useTitle を必ずimportさせたい
 
-### rules
+## rules
 
 ```js
 {
@@ -29,7 +29,7 @@
 }
 ```
 
-### ❌ Incorrect
+## ❌ Incorrect
 
 ```js
 // client/src/Buttons/SecondaryButton.tsx
@@ -39,7 +39,7 @@ import { SecondaryButtonAnchor } from 'smarthr-ui'
 import { SecondaryButton } from 'smarthr-ui'
 ```
 
-### ✅ Correct
+## ✅ Correct
 
 
 ```js
