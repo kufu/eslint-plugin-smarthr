@@ -1,6 +1,7 @@
 # eslint-plugin-smarthr
 
 - [a11y-clickable-element-has-text](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-clickable-element-has-text)
+- [a11y-image-has-alt-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-image-has-alt-attribute)
 - [format-import-path](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-import-path)
 - [format-translate-component](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-translate-component)
 - [jsx-start-with-spread-attributes](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/jsx-start-with-spread-attributes)
