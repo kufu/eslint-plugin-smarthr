@@ -1,41 +1,12 @@
 # eslint-plugin-smarthr
 
-## smarthr/a11y-clickable-element-has-text
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-clickable-element-has-text)
-
-## smarthr/format-import-path
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-import-path)
-
-## smarthr/jsx-start-with-spread-attributes
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/jsx-start-with-spread-attributes)
-
-## smarthr/no-import-other-domain
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/no-import-other-domain)
-
-## smarthr/prohibit-import
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/prohibit-import)
-
-## smarthr/require-import
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-import)
-
-## smarthr/require-export
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-export)
-
-## smarthr/require-barrel-import
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-barrel-import)
-
-## smarthr/redundant-name
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/redundant-name)
-
-## smarthr/format-translate-component
-
-[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-translate-component)
+- [a11y-clickable-element-has-text](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-clickable-element-has-text)
+- [format-import-path](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-import-path)
+- [jsx-start-with-spread-attributes](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/jsx-start-with-spread-attributes)
+- [no-import-other-domain](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/no-import-other-domain)
+- [prohibit-import](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/prohibit-import)
+- [require-import](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-import)
+- [require-export](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-export)
+- [require-barrel-import](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-barrel-import)
+- [redundant-name](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/redundant-name)
+- [format-translate-component](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-translate-component)
