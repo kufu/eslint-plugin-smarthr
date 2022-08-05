@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const { replacePaths, rootPath } = require('../libs/common')
+const { replacePaths, rootPath } = require('../../libs/common')
 const calculateAbsoluteImportPath = (source) => {
   if (source[0] === '/') {
     return source
