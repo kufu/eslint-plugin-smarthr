@@ -7,6 +7,7 @@
 - [format-translate-component](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-translate-component)
 - [jsx-start-with-spread-attributes](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/jsx-start-with-spread-attributes)
 - [no-import-other-domain](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/no-import-other-domain)
+- [prohibit-export-array-type](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/prohibit-export-array-type)
 - [prohibit-file-name](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/prohibit-file-name)
 - [prohibit-import](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/prohibit-import)
 - [redundant-name](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/redundant-name)
