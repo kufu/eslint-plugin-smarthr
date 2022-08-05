@@ -379,6 +379,10 @@ import { SecondaryButton } from 'smarthr-ui'
 import useTitle from '.hooks/useTitle'
 ```
 
+## smarthr/require-export
+
+[README](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-export)
+
 ## smarthr/require-barrel-import
 
 - tsconfig.json の compilerOptions.pathsに '@/*' としてroot path を指定する必要があります
