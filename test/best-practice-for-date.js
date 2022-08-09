@@ -1,4 +1,4 @@
-const rule = require('../rules/date-with-parsed-number')
+const rule = require('../rules/best-practice-for-date')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
@@ -15,7 +15,7 @@ const ruleTester = new RuleTester({
 const errorNewDate = "'new Date(arg)' のように引数一つのみの指定方は実行環境により結果が変わる可能性があるため 'new Date(2022, 12 - 1, 31)' のようにparseするなど他の方法を検討してください。"
 const errorDateParse = 'Date.parse は日付形式の解釈がブラウザによって異なるため、他の手段を検討してください'
 
-ruleTester.run('date-with-parsed-number', rule, {
+ruleTester.run('best-practice-for-date', rule, {
   valid: [
     { code: `new Date()` },
     { code: `new Date(2022, 11, 31)` },

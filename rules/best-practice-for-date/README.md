@@ -1,4 +1,4 @@
-# smarthr/date-with-parsed-number
+# smarthr/best-practice-for-date
 
 - `new Date(arg)` と `Date.parse(arg)` を禁止するルールです
   - `new Date()` と`new Date(year, month, date)` などのように引数が1つ以外の場合は許容します
@@ -11,7 +11,7 @@
 ```js
 {
   rules: {
-    'smarthr/date-with-parsed-number': 'error', // 'warn', 'off'
+    'smarthr/best-practice-for-date': 'error', // 'warn', 'off'
   },
 }
 ```
