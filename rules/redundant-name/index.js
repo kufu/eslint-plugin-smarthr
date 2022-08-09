@@ -1,7 +1,7 @@
 const path = require('path')
 const Inflector = require('inflected')
 
-const { rootPath } = require('../libs/common')
+const { rootPath } = require('../../libs/common')
 
 const uniq = (array) => array.filter((elem, index, self) => self.indexOf(elem) === index)
 

@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-const { replacePaths, rootPath } = require('../libs/common')
-const { BASE_SCHEMA_PROPERTIES, calculateDomainContext, calculateDomainNode } = require('../libs/common_domain')
+const { replacePaths, rootPath } = require('../../libs/common')
+const { BASE_SCHEMA_PROPERTIES, calculateDomainContext, calculateDomainNode } = require('../../libs/common_domain')
 
 const SCHEMA = [
   {

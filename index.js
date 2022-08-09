@@ -14,14 +14,11 @@ module.exports = {
 
 function generateRulesMap() {
   let rulesPath = path.join(__dirname, 'rules');
-  let files = fs.readdirSync(rulesPath);
+  let dirs = fs.readdirSync(rulesPath);
 
   let rulesMap = {};
-  for (let file of files) {
-    if (file.endsWith('.js') && !file.endsWith('.test.js')) {
-      let ruleName = path.parse(file).name;
-      rulesMap[ruleName] = require(`./rules/${file}`);
-    }
+  for (let dir of dirs) {
+    rulesMap[path.parse(dir).name] = require(`./rules/${dir}`);
   }
   return rulesMap;
 }

@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../libs/format_styled_components')
+const { generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   '(b|B)utton$': 'Button$',
