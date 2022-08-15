@@ -203,7 +203,7 @@ const handleReportBetterName = ({
 }
 
 const generateTypeRedundant = (args) => {
-  const { context } = args
+  const { context, filename } = args
   const key = 'type'
   const redundantKeywords = generateRedundantKeywords({ args, key })
   const option = args.option[key]
@@ -211,6 +211,14 @@ const generateTypeRedundant = (args) => {
 
   return (node) => {
     const typeName = node.id.name
+
+    if (
+      option.allowedNames &&
+      Object.entries(option.allowedNames).find(([regex, calcs]) => filename.match(new RegExp(regex)) && calcs.find((c) => c === typeName))
+    ) {
+      return
+    }
+
     const suffix = option.suffix || defaultConfig.SUFFIX
 
     let SuffixedName = typeName
