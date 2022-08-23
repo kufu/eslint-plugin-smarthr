@@ -18,39 +18,35 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES }) => ({
   },
   TaggedTemplateExpression: (node) => {
     const { tag } = node
-    const base = (() => {
+    const extended = node.parent.id?.name
+
+    if (extended) {
+      let base = null
+
       if (tag.type === 'CallExpression' && tag.callee.name === 'styled') {
-        return tag.arguments[0].name
+        base = tag.arguments[0].name
+      } else if (tag?.object?.name === 'styled') {
+        base = tag.property.name
       }
 
-      if (tag?.object?.name === 'styled') {
-        return tag.property.name
+      if (base) {
+        Object.entries(EXPECTED_NAMES).forEach(([b, e]) => {
+          if (base.match(new RegExp(b))) {
+            const extendedregex = new RegExp(e)
+
+            if (!extended.match(extendedregex)) {
+              context.report({
+                node: node.parent,
+                messageId: 'format-styled-components',
+                data: {
+                  message: `${extended}を正規表現 "${extendedregex.toString()}" がmatchする名称に変更してください`,
+                },
+              });
+            }
+          }
+        })
       }
-
-      return null
-    })()
-
-    if (!base) {
-      return
     }
-
-    const extended = node.parent.id.name
-
-    Object.entries(EXPECTED_NAMES).forEach(([b, e]) => {
-      if (base.match(new RegExp(b))) {
-        const extendedregex = new RegExp(e)
-
-        if (!extended.match(extendedregex)) {
-          context.report({
-            node: node.parent,
-            messageId: 'format-styled-components',
-            data: {
-              message: `${extended}を正規表現 "${extendedregex.toString()}" がmatchする名称に変更してください`,
-            },
-          });
-        }
-      }
-    })
   },
 })
 
