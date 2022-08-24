@@ -1,3 +1,31 @@
+const getExtendedComponentName = (node) => {
+  if (!node.parent) {
+    return null
+  }
+
+  return node.parent.id?.name || getExtendedComponentName(node.parent)
+}
+const getBaseComponentName = (node) => {
+  if (!node) {
+    return null
+  }
+
+  if (node.type === 'CallExpression') {
+    if (node.callee.name === 'styled') {
+      return node.arguments[0].name
+    }
+    if (node.callee.object?.name === 'styled') {
+      return node.callee.property.name
+    }
+  }
+
+  if (node?.object?.name === 'styled') {
+    return node.property.name
+  }
+
+  return getBaseComponentName(node.parent)
+}
+
 const generateTagFormatter = ({ context, EXPECTED_NAMES }) => ({
   ImportDeclaration: (node) => {
     if (node.source.value !== 'styled-components') {
@@ -17,17 +45,10 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES }) => ({
     }
   },
   TaggedTemplateExpression: (node) => {
-    const { tag } = node
-    const extended = node.parent.id?.name
+    const extended = getExtendedComponentName(node)
 
     if (extended) {
-      let base = null
-
-      if (tag.type === 'CallExpression' && tag.callee.name === 'styled') {
-        base = tag.arguments[0].name
-      } else if (tag?.object?.name === 'styled') {
-        base = tag.property.name
-      }
+      const base = getBaseComponentName(node.tag)
 
       if (base) {
         Object.entries(EXPECTED_NAMES).forEach(([b, e]) => {
