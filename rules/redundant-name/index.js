@@ -298,7 +298,15 @@ const generatePropertyRedundant = (args) => {
     option: args.option[key],
     redundantKeywords: generateRedundantKeywords({ args, key }),
     defaultBetterName: 'item',
-    fetchName: (node) => node.key.name,
+    fetchName: (node) => {
+      // argumentsとしてわたされたobjectの展開などの場合は許可する
+      // このファイル内で修正すべき場合はtypePropertyの設定などで判断出来る
+      if (node.parent.type === 'ObjectPattern') {
+        return null
+      }
+
+      return node.key.name
+    },
   })
 }
 
