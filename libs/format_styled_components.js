@@ -1,3 +1,31 @@
+const getExtendedComponentName = (node) => {
+  if (!node.parent) {
+    return null
+  }
+
+  return node.parent.id?.name || getExtendedComponentName(node.parent)
+}
+const getBaseComponentName = (node) => {
+  if (!node) {
+    return null
+  }
+
+  if (node.type === 'CallExpression') {
+    if (node.callee.name === 'styled') {
+      return node.arguments[0].name
+    }
+    if (node.callee.object?.name === 'styled') {
+      return node.callee.property.name
+    }
+  }
+
+  if (node?.object?.name === 'styled') {
+    return node.property.name
+  }
+
+  return getBaseComponentName(node.parent)
+}
+
 const generateTagFormatter = ({ context, EXPECTED_NAMES }) => ({
   ImportDeclaration: (node) => {
     if (node.source.value !== 'styled-components') {
@@ -17,40 +45,29 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES }) => ({
     }
   },
   TaggedTemplateExpression: (node) => {
-    const { tag } = node
-    const base = (() => {
-      if (tag.type === 'CallExpression' && tag.callee.name === 'styled') {
-        return tag.arguments[0].name
+    const extended = getExtendedComponentName(node)
+
+    if (extended) {
+      const base = getBaseComponentName(node.tag)
+
+      if (base) {
+        Object.entries(EXPECTED_NAMES).forEach(([b, e]) => {
+          if (base.match(new RegExp(b))) {
+            const extendedregex = new RegExp(e)
+
+            if (!extended.match(extendedregex)) {
+              context.report({
+                node: node.parent,
+                messageId: 'format-styled-components',
+                data: {
+                  message: `${extended}を正規表現 "${extendedregex.toString()}" がmatchする名称に変更してください`,
+                },
+              });
+            }
+          }
+        })
       }
-
-      if (tag?.object?.name === 'styled') {
-        return tag.property.name
-      }
-
-      return null
-    })()
-
-    if (!base) {
-      return
     }
-
-    const extended = node.parent.id.name
-
-    Object.entries(EXPECTED_NAMES).forEach(([b, e]) => {
-      if (base.match(new RegExp(b))) {
-        const extendedregex = new RegExp(e)
-
-        if (!extended.match(extendedregex)) {
-          context.report({
-            node: node.parent,
-            messageId: 'format-styled-components',
-            data: {
-              message: `${extended}を正規表現 "${extendedregex.toString()}" がmatchする名称に変更してください`,
-            },
-          });
-        }
-      }
-    })
   },
 })
 
