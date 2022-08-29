@@ -47,7 +47,21 @@ module.exports = {
           return
         }
 
-        filterFalsyJSXText(parentNode.children).forEach((c) => {
+        const children = filterFalsyJSXText(parentNode.children)
+
+        if (children.length > 1) {
+          context.report({
+            node,
+            messageId: 'a11y-trigger-has-button',
+            data: {
+              message: `${match[1]}Trigger の直下には複数のコンポーネントを設置することは出来ません。buttonコンポーネントが一つだけ設置されている状態にしてください`,
+            },
+          })
+
+          return
+        }
+
+        children.forEach((c) => {
           // `<DialogTrigger>{button}</DialogTrigger>` のような場合は許可する
           if (c.type === 'JSXExpressionContainer') {
             return false
@@ -56,7 +70,7 @@ module.exports = {
           if (
             c.type !== 'JSXElement' ||
             !c.openingElement.name.name.match(/(b|B)utton$/) ||
-            c.openingElement.name.name.match(/AnchorButton?/)
+            c.openingElement.name.name.match(/AnchorButton$/)
           ) {
             context.report({
               node: c,
