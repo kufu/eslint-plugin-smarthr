@@ -16,7 +16,6 @@ const DEFAULT_CONFIG = {
     ],
     SUFFIX: ['Props', 'Type'],
   },
-  typeProperty: COMMON_DEFAULT_CONFIG,
   file: COMMON_DEFAULT_CONFIG,
   property: COMMON_DEFAULT_CONFIG,
   function: COMMON_DEFAULT_CONFIG,
@@ -62,7 +61,6 @@ const SCHEMA = [
         ...DEFAULT_SCHEMA_PROPERTY,
         suffix: { type: 'array', items: { type: 'string' } },
       },
-      typeProperty: DEFAULT_SCHEMA_PROPERTY,
       file: DEFAULT_SCHEMA_PROPERTY,
       property: DEFAULT_SCHEMA_PROPERTY,
       function: DEFAULT_SCHEMA_PROPERTY,
@@ -89,7 +87,6 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
   const option = args.option[key] || {}
   const ignoreKeywords = option.ignoreKeywords || DEFAULT_CONFIG[key].IGNORE_KEYWORDS
   const terminalImportKeyword = terminalImportName ? terminalImportName.toLowerCase() : '' 
-
   return args.keywords.reduce((prev, keyword) => {
     if (keyword === terminalImportKeyword || ignoreKeywords.includes(keyword)) {
       return prev
@@ -262,8 +259,7 @@ const generateTypeRedundant = (args) => {
 }
 
 const generateTypePropertyRedundant = (args) => {
-  const key = 'typeProperty'
-
+  const key = 'property'
   return handleReportBetterName({
     ...args,
     key,
@@ -274,7 +270,7 @@ const generateTypePropertyRedundant = (args) => {
   })
 }
 const generateTypePropertyFunctionParamsRedundant = (args) => {
-  const key = 'typeProperty'
+  const key = 'property'
   const redundant = handleReportBetterName({
     ...args,
     key,
@@ -300,7 +296,7 @@ const generatePropertyRedundant = (args) => {
     defaultBetterName: 'item',
     fetchName: (node) => {
       // argumentsとしてわたされたobjectの展開などの場合は許可する
-      // このファイル内で修正すべき場合はtypePropertyの設定などで判断出来る
+      // このファイル内で修正すべき場合などは冗長な名前を修正するべき場合はtype propertyなどで判断出来る
       if (node.parent.type === 'ObjectPattern') {
         return null
       }
@@ -399,7 +395,6 @@ module.exports = {
       'file-name': ' {{ message }}',
       'type-name': '{{ message }}',
       'type-name/invalid-suffix': '{{ message }}',
-      'typeProperty-name': '{{ message }}',
       'property-name': ' {{ message }}',
       'function-name': ' {{ message }}',
       'functionParams-name': ' {{ message }}',
@@ -457,9 +452,10 @@ module.exports = {
       addRule('TSTypeAliasDeclaration', generateTypeRedundant(args))
       // addRule('TSInterfaceDeclaration', generateTypeRedundant(args)) // 必要になったら実装する
     }
-    if (option.typeProperty) {
+    if (option.property) {
       const typePropRedundant = generateTypePropertyRedundant(args)
       const typeFuncParamRedundant = generateTypePropertyFunctionParamsRedundant(args)
+      const redundant = generatePropertyRedundant(args)
 
       addRule('TSPropertySignature', (node) => {
         typePropRedundant(node)
@@ -468,10 +464,6 @@ module.exports = {
           typeFuncParamRedundant(node.typeAnnotation.typeAnnotation)
         }
       })
-    }
-    if (option.property) {
-      const redundant = generatePropertyRedundant(args)
-
       addRule('Property', redundant)
       addRule('PropertyDefinition', redundant)
     }
