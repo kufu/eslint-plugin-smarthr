@@ -28,7 +28,7 @@ const rootPath = (() => {
     return ''
   }
 
-  const p = (replacePaths['@/'] || [])[0]
+  const p = (replacePaths['@/'] || replacePaths['~/'] || [])[0]
 
   if (!p) {
     return ''
