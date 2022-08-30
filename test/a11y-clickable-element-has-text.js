@@ -26,6 +26,7 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const HogeLink = styled(Link)``' },
     { code: 'const HogeButton = styled(Button)``' },
     { code: 'const FugaAnchor = styled(HogeAnchor)``' },
+    { code: 'const FugaSmartHRLogo = styled(SmartHRLogo)``' },
     {
       code: `<a>ほげ</a>`,
     },
@@ -89,6 +90,12 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     {
       code: `<a><span>{any}</span></a>`,
     },
+    {
+      code: `<a><SmartHRLogo /></a>`,
+    },
+    {
+      code: `<a><PrefixSmartHRLogo /></a>`,
+    },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: "styled-components をimportする際は、名称が`styled` となるようにしてください。例: `import styled from 'styled-components'`" } ] },
@@ -98,6 +105,8 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const Hoge = styled(Link)``', errors: [ { message: `Hogeを正規表現 "/Link$/" がmatchする名称に変更してください` } ]  },
     { code: 'const Hoge = styled(Button)``', errors: [ { message: `Hogeを正規表現 "/Button$/" がmatchする名称に変更してください` } ]  },
     { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ]  },
+    { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ]  },
+    { code: 'const Fuga = styled(SmartHRLogo)``', errors: [ { message: `Fugaを正規表現 "/SmartHRLogo$/" がmatchする名称に変更してください` } ]  },
     {
       code: `<a><img src="hoge.jpg" /></a>`,
       errors: [{ message: defaultErrorMessage }]
@@ -136,6 +145,10 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     },
     {
       code: `<button><AnyComponent><Icon visuallyHiddenText="" /></AnyComponent></button>`,
+      errors: [{ message: defaultErrorMessage }]
+    },
+    {
+      code: `<button><SmartHRLogoSuffix /></button>`,
       errors: [{ message: defaultErrorMessage }]
     },
   ]

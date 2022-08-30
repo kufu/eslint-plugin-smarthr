@@ -104,7 +104,7 @@ module.exports = {
           sourceValue = sources.join('/')
         }
 
-        if (barrel) {
+        if (barrel && !barrel.match(new RegExp(`^${rootPath}/index\.`))) {
           barrel = calculateReplacedImportPath(barrel)
 
           context.report({
