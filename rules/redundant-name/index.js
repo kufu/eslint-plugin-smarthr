@@ -406,7 +406,7 @@ module.exports = {
   },
   create(context) {
     if (!rootPath) {
-      throw new Error('tsconfig.json の compilerOptions.paths に `"@/*": ["any_path/*"]` 形式でフロントエンドのroot dir を指定してください')
+      throw new Error('tsconfig.json の compilerOptions.paths に `@/*`、もしくは `~/*` 形式でフロントエンドのroot dir を指定してください(例: `"@/*": ["./any_path/*"]`)')
     }
 
     let rules = {}
