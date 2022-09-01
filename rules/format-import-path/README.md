@@ -7,7 +7,7 @@
 
 ## config
 
-- tsconfig.json の compilerOptions.pathsに '@/*' としてroot path を指定する必要があります
+- tsconfig.json の compilerOptions.pathsに '@/*', もしくは '~/*' としてroot path を指定する必要があります
 - ドメインを識別するために以下の設定を記述する必要があります
   - globalModuleDir
     - 全体で利用するファイルを収めているディレクトリを相対パスで指定します
