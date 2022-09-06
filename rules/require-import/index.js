@@ -83,7 +83,7 @@ module.exports = {
                 node,
                 messageId: 'require_import',
                 data: {
-                  message: reportMessage ? reportMessage.replace('{{module}}', actualTarget).replace('{{export}}', item) : defaultReportMessage(actualTarget, item)
+                  message: reportMessage ? reportMessage.replaceAll('{{module}}', actualTarget).replaceAll('{{export}}', item) : defaultReportMessage(actualTarget, item)
                 },
               })
             }
