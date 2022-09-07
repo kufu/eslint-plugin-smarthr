@@ -90,7 +90,7 @@ module.exports = {
                 node,
                 messageId: 'prohibit_import',
                 data: {
-                  message: reportMessage ? reportMessage.replace('{{module}}', node.source.value).replace('{{export}}', useImported) : defaultReportMessage(node.source.value, useImported)
+                  message: reportMessage ? reportMessage.replaceAll('{{module}}', node.source.value).replaceAll('{{export}}', useImported) : defaultReportMessage(node.source.value, useImported)
                 },
               });
             }
