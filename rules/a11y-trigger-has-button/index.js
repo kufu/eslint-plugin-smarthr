@@ -17,7 +17,7 @@ const filterFalsyJSXText = (cs) => cs.filter((c) => (
 
 module.exports = {
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     messages: {
       'format-styled-components': '{{ message }}',
       'a11y-trigger-has-button': '{{ message }}',

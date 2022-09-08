@@ -9,7 +9,7 @@ const EXPECTED_NAMES = {
 
 module.exports = {
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     messages: {
       'format-styled-components': '{{ message }}',
       'a11y-image-has-alt-attribute': '{{ message }}',

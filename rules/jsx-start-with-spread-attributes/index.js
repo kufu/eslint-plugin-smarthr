@@ -10,7 +10,7 @@ const SCHEMA = [
 
 module.exports = {
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     messages: {
       'jsx-start-with-spread-attributes': '{{ message }}',
     },

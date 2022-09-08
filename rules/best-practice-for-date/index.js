@@ -1,6 +1,6 @@
 module.exports = {
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     messages: {
       'best-practice-for-date': '{{ message }}',
     },
