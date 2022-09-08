@@ -42,6 +42,11 @@ module.exports = {
           }
 
           if (c.type === 'JSXElement') {
+            // // HINT: SmartHRLogo コンポーネントは内部でaltを持っているため対象外にする
+            if (c.openingElement.name.name.match(/SmartHRLogo$/)) {
+              return true
+            }
+            
             if (c.openingElement.attributes.some((a) =>  {
               if (!['visuallyHiddenText', 'alt'].includes(a.name.name)) {
                 return false
