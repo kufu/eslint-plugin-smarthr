@@ -36,17 +36,34 @@ module.exports = {
           return
         }
 
-        const recursiveSearch = (c) => (
-          ['JSXText', 'JSXExpressionContainer'].includes(c.type) ||
-          (
-            c.type === 'JSXElement' && (
-              // HINT: SmartHRLogo コンポーネントは内部でaltを持っているため対象外にする
-              c.openingElement.name.name.match(/SmartHRLogo$/) ||
-              c.openingElement.attributes.some((a) => (['visuallyHiddenText', 'alt'].includes(a.name.name) && !!a.value.value)) ||
-              (c.children && filterFalsyJSXText(c.children).some(recursiveSearch))
-            )
-          )
-        ) 
+        const recursiveSearch = (c) => {
+          if (['JSXText', 'JSXExpressionContainer'].includes(c.type)) {
+            return true
+          }
+
+          if (c.type === 'JSXElement') {
+            // // HINT: SmartHRLogo コンポーネントは内部でaltを持っているため対象外にする
+            if (c.openingElement.name.name.match(/SmartHRLogo$/)) {
+              return true
+            }
+            
+            if (c.openingElement.attributes.some((a) =>  {
+              if (!['visuallyHiddenText', 'alt'].includes(a.name.name)) {
+                return false
+              }
+
+              return (!!a.value.value || a.value.type === 'JSXExpressionContainer')
+            })) {
+              return true
+            }
+
+            if (c.children && filterFalsyJSXText(c.children).some(recursiveSearch)) {
+              return true
+            }
+          }
+
+          return false
+        }
 
         const child = filterFalsyJSXText(parentNode.children).find(recursiveSearch)
 

@@ -21,7 +21,7 @@ module.exports = {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
         if ((node.name.name || '').match(/(img|image)$/i)) { // HINT: Iconは別途テキストが存在する場合が多いためチェックの対象外とする
-          const alt = node.attributes.find((a) => a.name.name === 'alt')
+          const alt = node.attributes.find((a) => a.name?.name === 'alt')
 
           let message = ''
 
