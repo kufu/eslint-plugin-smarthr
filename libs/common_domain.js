@@ -14,7 +14,7 @@ const calculateDomainContext = (context) => {
   }
 
   const parentDir = (() => {
-    const dir = context.getFilename().match(/^(.+?)\..+?$/)[1].split('/')
+    const dir = context.getFilename().split('/')
     dir.pop()
     return dir.join('/')
   })()
