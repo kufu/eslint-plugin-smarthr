@@ -3,6 +3,8 @@ const { generateTagFormatter } = require('../../libs/format_styled_components')
 const EXPECTED_NAMES = {
   '(i|I)nput$': 'Input$',
   '(t|T)extarea$': 'Textarea$',
+  'FieldSet$': 'FieldSet$',
+  'ComboBox$': 'ComboBox$',
 }
 
 module.exports = {
@@ -22,7 +24,7 @@ module.exports = {
           return
         }
 
-        const match = node.name.name.match(/((i|I)nput|(t|T)extarea)$/)
+        const match = node.name.name.match(/((i|I)nput|(t|T)extarea|FieldSet|ComboBox)$/)
 
         if (!match) {
           return
@@ -35,7 +37,7 @@ module.exports = {
               node: placeholder,
               messageId: 'a11y-prohibit-input-placeholder',
               data: {
-                message: 'input, textarea要素のplaceholder属性は設定せず、smarthr-ui/Tooltip や別途ヒント用要素の利用を検討してください (例: `<><Input /><Hint>ヒント</Hint></>`, `<Tooltip message="ヒント"><Textarea/></Tooltip>`)',
+                message: `${node.name.name} にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。検索ボックス等、ヒント用要素の領域が確保できない場合のみ、Tooltipの利用を検討してください (例: '<><Input /><Hint>ヒント</Hint></>', '<Tooltip message="ヒント"><Textarea/></Tooltip>')`,
               },
             })
         }
