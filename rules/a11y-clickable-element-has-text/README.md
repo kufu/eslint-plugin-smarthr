@@ -7,7 +7,12 @@
 ```js
 {
   rules: {
-    'smarthr/a11y-clickable-element-has-text': 'error', // 'warn', 'off'
+    'smarthr/a11y-clickable-element-has-text': [
+      'error', // 'warn', 'off'
+      // {
+      //   componentsWithText: ['AnyComponentName'],
+      // },
+    ]
   },
 }
 ```
@@ -58,4 +63,21 @@
 
 ```jsx
 <YyyAnchoor />
+```
+
+```jsx
+/*
+rules: {
+  'smarthr/a11y-clickable-element-has-text': [
+    'error',
+    {
+      componentsWithText: ['AnyComponent'],
+    },
+  ]
+},
+*/
+
+<XxxButton>
+  <AnyComponent />
+</XxxButton>
 ```
