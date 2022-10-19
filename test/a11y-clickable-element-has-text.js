@@ -96,6 +96,18 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     {
       code: `<a><PrefixSmartHRLogo /></a>`,
     },
+    {
+      code: `<a><>ほげ</></a>`,
+    },
+    {
+      code: `<a><svg role="img" aria-label="hoge" /></a>`,
+    },
+    {
+      code: `<a><AnyComponent /></a>`,
+      options: [{
+        componentsWithText: ['AnyComponent']
+      }],
+    },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: "styled-components をimportする際は、名称が`styled` となるようにしてください。例: `import styled from 'styled-components'`" } ] },
@@ -149,6 +161,17 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     },
     {
       code: `<button><SmartHRLogoSuffix /></button>`,
+      errors: [{ message: defaultErrorMessage }]
+    },
+    {
+      code: `<a><div role="article" aria-label="hoge" /></a>`,
+      errors: [{ message: defaultErrorMessage }]
+    },
+    {
+      code: `<a><AnyComponent /></a>`,
+      options: [{
+        componentsWithText: ['HogeComponent']
+      }],
       errors: [{ message: defaultErrorMessage }]
     },
   ]

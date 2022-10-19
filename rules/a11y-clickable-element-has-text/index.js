@@ -1,5 +1,15 @@
 const { generateTagFormatter } = require('../../libs/format_styled_components')
 
+const SCHEMA = [
+  {
+    type: 'object',
+    properties: {
+      componentsWithText: { type: 'array', items: { type: 'string' }, default: [] },
+    },
+    additionalProperties: false,
+  }
+]
+
 const EXPECTED_NAMES = {
   'SmartHRLogo$': 'SmartHRLogo$',
   '(b|B)utton$': 'Button$',
@@ -19,9 +29,12 @@ module.exports = {
       'format-styled-components': '{{ message }}',
       'a11y-clickable-element-has-text': '{{ message }}',
     },
-    schema: [],
+    schema: SCHEMA,
   },
   create(context) {
+    const option = context.options[0] || {}
+    const componentsWithText = option.componentsWithText || []
+
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXElement: (parentNode) => {
@@ -41,19 +54,43 @@ module.exports = {
             return true
           }
 
+          if (c.type === 'JSXFragment') {
+            if (c.children && filterFalsyJSXText(c.children).some(recursiveSearch)) {
+              return true
+            }
+
+            return false
+          }
+
           if (c.type === 'JSXElement') {
             // // HINT: SmartHRLogo コンポーネントは内部でaltを持っているため対象外にする
             if (c.openingElement.name.name.match(/SmartHRLogo$/)) {
               return true
             }
-            
-            if (c.openingElement.attributes.some((a) =>  {
-              if (!['visuallyHiddenText', 'alt'].includes(a.name.name)) {
-                return false
+
+            if (componentsWithText.includes(c.openingElement.name.name)) {
+              return true
+            }
+
+            // HINT: role & aria-label を同時に設定されている場合は許可
+            let existRole = false
+            let existAriaLabel = false
+            const result = c.openingElement.attributes.reduce((prev, a) =>  {
+              existRole = existRole || (a.name.name === 'role' && a.value.value === 'img')
+              existAriaLabel = existAriaLabel || a.name.name === 'aria-label'
+
+              if (prev) {
+                return prev
               }
 
-              return (!!a.value.value || a.value.type === 'JSXExpressionContainer')
-            })) {
+              if (!['visuallyHiddenText', 'alt'].includes(a.name.name)) {
+                return prev
+              }
+
+              return (!!a.value.value || a.value.type === 'JSXExpressionContainer') ? a : prev
+            }, null)
+            
+            if (result || (existRole && existAriaLabel)) {
               return true
             }
 
@@ -80,4 +117,4 @@ module.exports = {
     }
   },
 }
-module.exports.schema = []
+module.exports.schema = SCHEMA
