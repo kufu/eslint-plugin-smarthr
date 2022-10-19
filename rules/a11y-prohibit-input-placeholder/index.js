@@ -2,6 +2,7 @@ const { generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   '(i|I)nput$': 'Input$',
+  'SearchInput$': 'SearchInput$',
   '(t|T)extarea$': 'Textarea$',
   'FieldSet$': 'FieldSet$',
   'ComboBox$': 'ComboBox$',
@@ -20,26 +21,40 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        if (!node.name.name) {
+        const name = node.name.name
+
+        if (!name) {
           return
         }
 
-        const match = node.name.name.match(/((i|I)nput|(t|T)extarea|FieldSet|ComboBox)$/)
-
-        if (!match) {
+        if (!name.match(/((i|I)nput|(t|T)extarea|FieldSet|ComboBox)$/)) {
           return
         }
 
         const placeholder = node.attributes.find((a) => a.name?.name === 'placeholder')
 
         if (placeholder) {
-          context.report({
+          if (name.match(/SearchInput$/)) {
+            const tooltipMessage = node.attributes.find((a) => a.name?.name === 'tooltipMessage')
+
+            if (!tooltipMessage) {
+              context.report({
+                node: placeholder,
+                messageId: 'a11y-prohibit-input-placeholder',
+                data: {
+                  message: `${name} にはplaceholder属性を単独で利用せず、tooltipMessageオプションのみ、もしくはplaceholderとtooltipMessageの併用を検討してください。 (例: '<${name} tooltipMessage="ヒント" />', '<${name} tooltipMessage={hint} placeholder={hint} />')`,
+                },
+              })
+            }
+          } else {
+            context.report({
               node: placeholder,
               messageId: 'a11y-prohibit-input-placeholder',
               data: {
-                message: `${node.name.name} にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。検索ボックス等、ヒント用要素の領域が確保できない場合のみ、Tooltipの利用を検討してください (例: '<><Input /><Hint>ヒント</Hint></>', '<Tooltip message="ヒント"><Textarea/></Tooltip>')`,
+                message: `${name} にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。(例: '<div><${name} /><Hint>ヒント</Hint></div>')`,
               },
             })
+          }
         }
       },
     }
