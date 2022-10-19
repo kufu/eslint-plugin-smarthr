@@ -163,5 +163,16 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
       code: `<button><SmartHRLogoSuffix /></button>`,
       errors: [{ message: defaultErrorMessage }]
     },
+    {
+      code: `<a><div role="article" aria-label="hoge" /></a>`,
+      errors: [{ message: defaultErrorMessage }]
+    },
+    {
+      code: `<a><AnyComponent /></a>`,
+      options: [{
+        componentsWithText: ['HogeComponent']
+      }],
+      errors: [{ message: defaultErrorMessage }]
+    },
   ]
 })

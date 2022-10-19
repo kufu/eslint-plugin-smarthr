@@ -76,7 +76,7 @@ module.exports = {
             let existRole = false
             let existAriaLabel = false
             const result = c.openingElement.attributes.reduce((prev, a) =>  {
-              existRole = existRole || a.name.name === 'role'
+              existRole = existRole || (a.name.name === 'role' && a.value.value === 'img')
               existAriaLabel = existAriaLabel || a.name.name === 'aria-label'
 
               if (prev) {
