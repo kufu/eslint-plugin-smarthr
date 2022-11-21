@@ -30,6 +30,7 @@ ruleTester.run('a11y-image-has-alt-attribute', rule, {
     { code: '<HogeImg alt="hoge" />' },
     { code: '<HogeImage alt="hoge" />' },
     { code: '<HogeIcon />' },
+    { code: '<svg><image /></svg>' },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: "styled-components をimportする際は、名称が`styled` となるようにしてください。例: `import styled from 'styled-components'`" } ] },
@@ -40,5 +41,6 @@ ruleTester.run('a11y-image-has-alt-attribute', rule, {
     { code: 'const Hoge = styled(Image)``', errors: [ { message: `Hogeを正規表現 "/Image$/" がmatchする名称に変更してください` } ] },
     { code: '<img />', errors: [ { message: '画像にはalt属性を指定してください。SVG component の場合、altを属性として受け取れるようにした上で `<svg role="img" aria-label={alt}>` のように指定してください。画像ではない場合、img or image を末尾に持たない名称に変更してください。' } ] },
     { code: '<HogeImage alt="" />', errors: [ { message: '画像の情報をテキストにした代替テキスト（`alt`）を設定してください。装飾目的の画像など、alt属性に指定すべき文字がない場合は背景画像にすることを検討してください。' } ] },
+    { code: '<hoge><image /></hoge>', errors: [ { message: '画像にはalt属性を指定してください。SVG component の場合、altを属性として受け取れるようにした上で `<svg role="img" aria-label={alt}>` のように指定してください。画像ではない場合、img or image を末尾に持たない名称に変更してください。' } ] },
   ]
 })
