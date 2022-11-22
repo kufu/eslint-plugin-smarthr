@@ -35,6 +35,7 @@ ruleTester.run('a11y-prohibit-input-placeholder', rule, {
     { code: `<FugaFieldSet />` },
     { code: `<CustomComboBox />` },
     { code: `<SearchInput />` },
+    { code: `<DatePicker />` },
     { code: `<CustomSearchInput tooltipMessage="hoge" />` },
     { code: `<CustomSearchInput tooltipMessage="hoge" placeholder="fuga" />` },
     { code: `<ComboBox defaultItem={items[0]} />` },
@@ -61,6 +62,7 @@ ruleTester.run('a11y-prohibit-input-placeholder', rule, {
     { code: `<StyledInput placeholder={any} />`, errors: [ { message: `StyledInput にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。(例: '<div><StyledInput /><Hint>ヒント</Hint></div>')` } ] },
     { code: `<HogeTextarea placeholder="any" />`, errors: [ { message: `HogeTextarea にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。(例: '<div><HogeTextarea /><Hint>ヒント</Hint></div>')` } ] },
     { code: `<HogeFieldSet placeholder="any" />`, errors: [ { message: `HogeFieldSet にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。(例: '<div><HogeFieldSet /><Hint>ヒント</Hint></div>')` } ] },
+    { code: `<HogeDatePicker placeholder="any" />`, errors: [ { message: `HogeDatePicker にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。(例: '<div><HogeDatePicker /><Hint>ヒント</Hint></div>')` } ] },
     { code: `<HogeComboBox placeholder="any" />`, errors: [ { message: `HogeComboBox にはplaceholder属性は設定せず、以下のいずれか、もしくは組み合わせての対応を検討してください。
  - 選択肢をどんな値で絞り込めるかの説明をしたい場合は dropdownHelpMessage 属性に変更してください。
  - 空の値の説明のためにplaceholderを利用している場合は defaultItem 属性に変更してください。

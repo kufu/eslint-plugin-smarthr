@@ -6,6 +6,7 @@ const EXPECTED_NAMES = {
   '(t|T)extarea$': 'Textarea$',
   'FieldSet$': 'FieldSet$',
   'ComboBox$': 'ComboBox$',
+  'DatePicker$': 'DatePicker$',
 }
 
 module.exports = {
@@ -27,7 +28,7 @@ module.exports = {
           return
         }
 
-        if (!name.match(/((i|I)nput|(t|T)extarea|FieldSet|ComboBox)$/)) {
+        if (!name.match(/((i|I)nput|(t|T)extarea|FieldSet|ComboBox|DatePicker)$/)) {
           return
         }
 
