@@ -2,6 +2,7 @@
 
 - [a11y-clickable-element-has-text](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-clickable-element-has-text)
 - [a11y-image-has-alt-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-image-has-alt-attribute)
+- [a11y-prohibit-input-placeholder](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-input-placeholder)
 - [a11y-trigger-has-button](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-trigger-has-button)
 - [best-practice-for-date](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-date)
 - [format-import-path](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-import-path)
