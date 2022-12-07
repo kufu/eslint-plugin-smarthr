@@ -412,7 +412,7 @@ module.exports = {
     let rules = {}
 
     const option = context.options[0]
-    const filename = context.getFilename().match(/^(.+?)\..+?$/)[1]
+    const filename = context.getFilename().match(/^(.+)\..+?$/)[1]
     const keywords = uniq((() => {
       const keywordMatcher = filename.match(new RegExp(`${rootPath}/(.+?)$`))
 
