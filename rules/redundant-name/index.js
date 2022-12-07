@@ -86,7 +86,8 @@ const fetchTerminalImportName = (filename) => {
 const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
   const option = args.option[key] || {}
   const ignoreKeywords = option.ignoreKeywords || DEFAULT_CONFIG[key].IGNORE_KEYWORDS
-  const terminalImportKeyword = terminalImportName ? terminalImportName.toLowerCase() : '' 
+  const terminalImportKeyword = terminalImportName ? terminalImportName.toLowerCase() : ''
+
   return args.keywords.reduce((prev, keyword) => {
     if (keyword === terminalImportKeyword || ignoreKeywords.includes(keyword)) {
       return prev
@@ -100,7 +101,7 @@ const generateRedundantKeywords = ({ args, key, terminalImportName }) => {
   }, [])
 }
 const handleReportBetterName = ({
-  key, 
+  key,
   context,
   option,
   filename,
@@ -170,13 +171,13 @@ const handleReportBetterName = ({
         Object.entries(option.betterNames).forEach(([regex, calc]) => {
           if (calc && filename.match(new RegExp(regex))) {
             switch(calc.operator) {
-              case '=': 
+              case '=':
                 candidates = calc.names
                 break
-              case '-': 
+              case '-':
                 candidates = candidates.filter((c) => !calc.names.includes(c))
                 break
-              case '+': 
+              case '+':
                 candidates = uniq([...candidates, ...calc.names])
                 break
             }
@@ -412,12 +413,15 @@ module.exports = {
     let rules = {}
 
     const option = context.options[0]
-    const filename = context.getFilename().match(/^(.+)\..+?$/)[1]
+    let filename = context.getFilename()
     const keywords = uniq((() => {
       const keywordMatcher = filename.match(new RegExp(`${rootPath}/(.+?)$`))
 
       if (keywordMatcher) {
         const keywords = keywordMatcher[1].split('/')
+        keywords[keywords.length - 1] = keywords[keywords.length - 1].split('.')[0]
+
+        filename = keywords.join('/')
 
         if (keywords[keywords.length - 1] === 'index') {
           keywords.pop()
@@ -435,7 +439,7 @@ module.exports = {
       return []
     })())
 
-    const args = { 
+    const args = {
       context,
       option,
       filename,
