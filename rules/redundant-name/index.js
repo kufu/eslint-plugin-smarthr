@@ -421,7 +421,7 @@ module.exports = {
         const keywords = keywordMatcher[1].split('/')
         keywords[keywords.length - 1] = keywords[keywords.length - 1].split('.')[0]
 
-        filename = keywords.join('/')
+        filename = `${rootPath}/${keywords.join('/')}`
 
         if (keywords[keywords.length - 1] === 'index') {
           keywords.pop()
