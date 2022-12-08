@@ -2,7 +2,7 @@ module.exports = {
   meta: {
     type: 'suggestion',
     messages: {
-      'rulesdir/trim-props': '{{ message }}',
+      'trim-props': '{{ message }}',
     },
     schema: [],
     fixable: 'whitespace',
