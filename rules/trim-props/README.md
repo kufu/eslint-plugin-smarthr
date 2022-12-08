@@ -8,9 +8,7 @@
 ```js
 {
   rules: {
-    'smarthr/trim-props': [
-      'error', // 'warn', 'off'
-    ]
+    'smarthr/trim-props': 'error', // 'warn', 'off',
   },
 }
 ```
