@@ -17,22 +17,14 @@
 
 ```jsx
 <a href=" https://www.google.com">google</a>
-<a href="https://www.amazon.co.jp ">amazon</a>
-<a href=" https://www.facebook.com ">facebook</a>
-
-<a href={" https://www.apple.com"}>apple</a>
-<a href={"https://www.microsoft.com "}>microsoft</a>
-<a href={" https://smarthr.jp "}>smarthr</a>
+<img src={"/sample.jpg "} alt={" sample "} />
+<div data-spec=" info-area ">....</div>
 ```
 
 ## ✅ Correct
 
 ```jsx
 <a href="https://www.google.com">google</a>
-<a href="https://www.amazon.co.jp">amazon</a>
-<a href="https://www.facebook.com">facebook</a>
-
-<a href={"https://www.apple.com"}>apple</a>
-<a href={"https://www.microsoft.com"}>microsoft</a>
-<a href={"https://smarthr.jp"}>smarthr</a>
+<img src={"/sample.jpg"} alt={"sample"} />
+<div data-spec="info-area">....</div>
 ```
