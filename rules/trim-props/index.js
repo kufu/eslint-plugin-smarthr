@@ -22,7 +22,7 @@ module.exports = {
               loc: current.loc,
               messageId: 'rulesdir/trim-props',
               data: {
-                message: `属性に設定している文字列から先頭、末尾の空白文字を削除してください`,
+                message: '属性に設定している文字列から先頭、末尾の空白文字を削除してください',
               },
               fix(fixer) {
                 return fixer.replaceTextRange([attribute.range[0] + 1, attribute.range[1] - 1], props.trim())
