@@ -20,7 +20,7 @@ module.exports = {
             return context.report({
               node,
               loc: current.loc,
-              messageId: 'rulesdir/trim-props',
+              messageId: 'trim-props',
               data: {
                 message: '属性に設定している文字列から先頭、末尾の空白文字を削除してください',
               },
