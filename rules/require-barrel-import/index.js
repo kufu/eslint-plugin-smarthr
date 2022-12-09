@@ -44,6 +44,15 @@ const calculateReplacedImportPath = (source) => {
   }, source)
 }
 const TARGET_EXTS = ['ts', 'tsx', 'js', 'jsx']
+const SCHEMA = [
+  {
+    type: 'object',
+    properties: {
+      ignores: { type: 'array', items: { type: 'string' }, default: [] },
+    },
+    additionalProperties: false,
+  }
+]
 
 module.exports = {
   meta: {
@@ -51,10 +60,15 @@ module.exports = {
     messages: {
       'require-barrel-import': '{{ message }}',
     },
-    schema: [],
+    schema: SCHEMA,
   },
   create(context) {
+    const option = context.options[0] || {}
     const filename = context.getFilename()
+
+    if ((option.ignores || []).some((i) => !!filename.match(new RegExp(i)))) {
+      return {}
+    }
 
     const dir = (() => {
       const d = filename.split('/')
@@ -119,4 +133,4 @@ module.exports = {
     }
   },
 }
-module.exports.schema = []
+module.exports.schema = SCHEMA
