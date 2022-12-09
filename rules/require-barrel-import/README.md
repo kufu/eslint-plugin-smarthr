@@ -10,7 +10,10 @@
 ```js
 {
   rules: {
-    'smarthr/require-barrel-import': 'error',
+    'smarthr/require-barrel-import': [
+      'error',
+      // ignores: ['\\/test\\/'], // 除外したいファイルの正規表現
+    ],
   },
 }
 ```

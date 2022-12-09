@@ -56,6 +56,7 @@ const DOMAIN_RULE_ARGS = {
       'error', // 'warn', 'off'
       {
         ...DOMAIN_RULE_ARGS,
+        // ignores: ['\\/test\\/'], // 除外したいファイルの正規表現
         // analyticsMode: 'all', // 'same-domain', 'another-domain'
       }
     ]
