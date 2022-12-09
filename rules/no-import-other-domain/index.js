@@ -8,6 +8,7 @@ const SCHEMA = [
     type: 'object',
     properties: {
       ...BASE_SCHEMA_PROPERTIES,
+      ignores: { type: 'array', items: { type: 'string' }, default: [] },
       analyticsMode: { type: 'string', default: 'none' }, // 'none' | 'all' | 'same-domain' | 'another-domain'
     },
     additionalProperties: false,
@@ -27,7 +28,7 @@ module.exports = {
     const calcContext = calculateDomainContext(context)
 
     // 対象外ファイル
-    if (!calcContext.isTarget) {
+    if (!calcContext.isTarget || (calcContext.option.ignores || []).some((i) => !!calcContext.filename.match(new RegExp(i)))) {
       return {}
     }
 
@@ -65,7 +66,7 @@ module.exports = {
               message: `別ドメインから ${importPath} がimportされています。`,
             },
           })
-        } 
+        }
       },
     }
   },
