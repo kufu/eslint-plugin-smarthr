@@ -17,3 +17,4 @@
 - [require-declaration](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-declaration)
 - [require-export](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-export)
 - [require-import](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-import)
+- [trim-props](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/trim-props)
