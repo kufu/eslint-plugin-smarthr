@@ -48,6 +48,24 @@ const SCHEMA = [
   {
     type: 'object',
     properties: {
+      allowedImports: {
+        type: 'object',
+        patternProperties: {
+          '.+': {
+            type: 'object',
+            patternProperties: {
+              '.+': {
+                type: ['boolean', 'array' ],
+                items: {
+                  type: 'string',
+                },
+                additionalProperties: false
+              }
+            }
+          },
+        },
+        additionalProperties: true,
+      },
       ignores: { type: 'array', items: { type: 'string' }, default: [] },
     },
     additionalProperties: false,
@@ -76,9 +94,49 @@ module.exports = {
 
       return d.join('/')
     })()
+    const targetPathRegexs = Object.keys(option?.allowedImports || {})
+    const targetAllowedImports = targetPathRegexs.filter((regex) => !!filename.match(new RegExp(regex)))
 
     return {
       ImportDeclaration: (node) => {
+        let isDenyPath = false
+        let deniedModules = []
+
+        targetAllowedImports.forEach((allowedKey) => {
+          const allowedOption = option.allowedImports[allowedKey]
+          const targetModules = Object.keys(allowedOption)
+
+          targetModules.forEach((targetModule) => {
+            const allowedModules = allowedOption[targetModule] || true
+            const actualTarget = targetModule[0] !== '.' ? targetModule : path.resolve(`${process.cwd()}/${targetModule}`)
+            let sourceValue = node.source.value
+
+            if (actualTarget[0] === '/') {
+              sourceValue = path.resolve(`${dir}/${sourceValue}`)
+            }
+
+            if (actualTarget !== sourceValue) {
+              return
+            }
+
+
+            if (!Array.isArray(allowedModules)) {
+              isDenyPath = true
+              deniedModules.push(true)
+            } else {
+              deniedModules.push(node.specifiers.map((s) => s.imported?.name).filter(i => allowedModules.indexOf(i) == -1))
+            }
+          })
+        })
+
+        if (isDenyPath && deniedModules[0] === true) {
+          return
+        }
+
+        if (!isDenyPath && deniedModules.length === 1 && deniedModules[0].length === 0) {
+          return
+        }
+
         let sourceValue = node.source.value
 
         if (sourceValue[0] === '.') {
@@ -120,12 +178,14 @@ module.exports = {
 
         if (barrel && !barrel.match(new RegExp(`^${rootPath}/index\.`))) {
           barrel = calculateReplacedImportPath(barrel)
+          const noExt = barrel.replace(/\/index\.(ts|js)x?$/, '')
+          deniedModules = [...new Set(deniedModules.flat())]
 
           context.report({
             node,
             messageId: 'require-barrel-import',
             data: {
-              message: `${barrel.replace(/\/index\.(ts|js)x?$/, '')} からimportするか、${barrel} を削除してください`,
+              message: deniedModules.length ? `${deniedModules.join(', ')} は ${noExt} からimportしてください` :  `${noExt} からimportするか、${barrel} のbarrelファイルを削除して直接import可能にしてください`,
             },
           });
         }

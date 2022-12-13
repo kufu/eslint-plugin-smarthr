@@ -13,6 +13,12 @@
     'smarthr/require-barrel-import': [
       'error',
       // ignores: ['\\/test\\/'], // 除外したいファイルの正規表現
+      // allowedImports: {
+      //   '/any/path/': { // 正規表現でチェックするファイルを指定
+      //     // import制御するファイル (相対パスを指定する場合、.eslintrc.js を基準とする)
+      //     '@/hoge/fuga': true // ['abc', 'def'] と指定すると個別に指定
+      //   }
+      // },
     ],
   },
 }
