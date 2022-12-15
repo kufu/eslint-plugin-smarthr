@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.15](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.12...v0.2.15) (2022-12-15)
+
+
+### Features
+
+* add prohibit-path-within-template-literal rule. ([#46](https://github.com/kufu/eslint-plugin-smarthr/issues/46)) ([1ea51a9](https://github.com/kufu/eslint-plugin-smarthr/commit/1ea51a95f0720e34729959dbc27b33a91ec2d73e))
+* ignores option for no-import-other-domain and require-barrel-import ([#45](https://github.com/kufu/eslint-plugin-smarthr/issues/45)) ([559fdcf](https://github.com/kufu/eslint-plugin-smarthr/commit/559fdcf9d075e5fe29a48ab2f2d4f1e5d1a33201))
+
+
+### Bug Fixes
+
+* redundant-nameのarrowedNameなどで利用するファイルパスが削られすぎていたため、指定が行いにくい問題を修正する ([#43](https://github.com/kufu/eslint-plugin-smarthr/issues/43)) ([6de9618](https://github.com/kufu/eslint-plugin-smarthr/commit/6de961831a9f9e0e93eeeebb80e56ecb60d9a2ff))
+
 ### [0.2.14](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.13...v0.2.14) (2022-12-13)
 
 ### Features
