@@ -29,8 +29,8 @@ ruleTester.run('a11y-radio-has-name-attribute', rule, {
     { code: 'const Hoge = styled.input``', errors: [ { message: `Hogeを正規表現 "/Input$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.Input``', errors: [ { message: `Hogeを正規表現 "/Input$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(RadioButton)``', errors: [ { message: `Hogeを正規表現 "/RadioButton$/" がmatchする名称に変更してください` } ] },
-    { code: '<input type="radio" />', errors: [ { message: 'ラジオボタンにはname属性を指定してください。' } ] },
-    { code: '<HogeInput type="radio" />', errors: [ { message: 'ラジオボタンにはname属性を指定してください。' } ] },
-    { code: '<HogeRadioButton />', errors: [ { message: 'ラジオボタンにはname属性を指定してください。' } ] },
+    { code: '<input type="radio" />', errors: [ { message: 'ラジオボタンにはname属性を指定してください。nameを適切に設定することでラジオグループが確立され、キーボード操作しやすくなる等のメリットがあります。' } ] },
+    { code: '<HogeInput type="radio" />', errors: [ { message: 'ラジオボタンにはname属性を指定してください。nameを適切に設定することでラジオグループが確立され、キーボード操作しやすくなる等のメリットがあります。' } ] },
+    { code: '<HogeRadioButton />', errors: [ { message: 'ラジオボタンにはname属性を指定してください。nameを適切に設定することでラジオグループが確立され、キーボード操作しやすくなる等のメリットがあります。' } ] },
   ],
 });
