@@ -13,8 +13,9 @@ const calculateDomainContext = (context) => {
     throw new Error('tsconfig.json の compilerOptions.paths に `"@/*": ["any_path/*"]` 形式でフロントエンドのroot dir を指定してください')
   }
 
+  const filename = context.getFilename()
   const parentDir = (() => {
-    const dir = context.getFilename().split('/')
+    const dir = filename.split('/')
     dir.pop()
     return dir.join('/')
   })()
@@ -23,6 +24,7 @@ const calculateDomainContext = (context) => {
   return {
     option: context.options[0],
     parentDir,
+    filename,
     humanizeParentDir,
     isTarget: humanizeParentDir !== parentDir,
   }
