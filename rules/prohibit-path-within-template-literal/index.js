@@ -1,6 +1,6 @@
 const recursiveFetchName = (obj, chained = '') => {
   const o = obj.callee || obj
-  const name = o.name || o.property.name || ''
+  const name = o?.name || o?.property?.name || ''
   const nextChained = chained ? `${name}.${chained}` : name
 
   if (o.property && o.object) {
