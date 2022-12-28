@@ -1,4 +1,4 @@
-# smarthr/a11y-radio-has-bane-attribute
+# smarthr/a11y-input-has-name-attribute
 
 - ラジオボタンに name 属性を設定することを強制するルールです。
   - name を適切に設定することでラジオグループが確立され、キーボード操作しやすくなる等のメリットがあります。
@@ -8,7 +8,7 @@
 ```js
 {
   rules: {
-    'smarthr/a11y-radio-has-name-attribute': 'error', // 'warn', 'off'
+    'smarthr/a11y-input-has-name-attribute': 'error', // 'warn', 'off'
   },
 }
 ```
