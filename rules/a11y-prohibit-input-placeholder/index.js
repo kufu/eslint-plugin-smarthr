@@ -12,10 +12,6 @@ const EXPECTED_NAMES = {
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'format-styled-components': '{{ message }}',
-      'a11y-prohibit-input-placeholder': '{{ message }}',
-    },
     schema: [],
   },
   create(context) {
@@ -41,10 +37,7 @@ module.exports = {
             if (!tooltipMessage) {
               context.report({
                 node: placeholder,
-                messageId: 'a11y-prohibit-input-placeholder',
-                data: {
-                  message: `${name} にはplaceholder属性を単独で利用せず、tooltipMessageオプションのみ、もしくはplaceholderとtooltipMessageの併用を検討してください。 (例: '<${name} tooltipMessage="ヒント" />', '<${name} tooltipMessage={hint} placeholder={hint} />')`,
-                },
+                message: `${name} にはplaceholder属性を単独で利用せず、tooltipMessageオプションのみ、もしくはplaceholderとtooltipMessageの併用を検討してください。 (例: '<${name} tooltipMessage="ヒント" />', '<${name} tooltipMessage={hint} placeholder={hint} />')`,
               })
             }
           } else if (name.match(/ComboBox$/)) {
@@ -53,10 +46,10 @@ module.exports = {
 
             node.attributes.forEach((a) => {
               switch(a.name?.name) {
-                case 'defaultItem': 
+                case 'defaultItem':
                   defaultItem = a
                   break
-                case 'dropdownHelpMessage': 
+                case 'dropdownHelpMessage':
                   dropdownHelpMessage = a
                   break
               }
@@ -65,30 +58,21 @@ module.exports = {
             if (defaultItem) {
               context.report({
                 node: placeholder,
-                messageId: 'a11y-prohibit-input-placeholder',
-                data: {
-                  message: `${name} にはdefaultItemが設定されているため、placeholder属性を閲覧出来ません。削除してください。`,
-                },
+                message: `${name} にはdefaultItemが設定されているため、placeholder属性を閲覧出来ません。削除してください。`,
               })
             } else if (!dropdownHelpMessage) {
               context.report({
                 node: placeholder,
-                messageId: 'a11y-prohibit-input-placeholder',
-                data: {
-                  message: `${name} にはplaceholder属性は設定せず、以下のいずれか、もしくは組み合わせての対応を検討してください。
+                message: `${name} にはplaceholder属性は設定せず、以下のいずれか、もしくは組み合わせての対応を検討してください。
  - 選択肢をどんな値で絞り込めるかの説明をしたい場合は dropdownHelpMessage 属性に変更してください。
  - 空の値の説明のためにplaceholderを利用している場合は defaultItem 属性に変更してください。
  - 上記以外の説明を行いたい場合、ヒント用要素を設置してください。(例: '<div><${name} /><Hint>ヒント</Hint></div>')`,
-                },
               })
             }
           } else {
             context.report({
               node: placeholder,
-              messageId: 'a11y-prohibit-input-placeholder',
-              data: {
-                message: `${name} にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。(例: '<div><${name} /><Hint>ヒント</Hint></div>')`,
-              },
+              message: `${name} にはplaceholder属性は設定せず、別途ヒント用要素の利用を検討してください。(例: '<div><${name} /><Hint>ヒント</Hint></div>')`,
             })
           }
         }

@@ -11,16 +11,13 @@ const SCHEMA = [
 module.exports = {
   meta: {
     type: 'problem',
-    messages: {
-      'jsx-start-with-spread-attributes': '{{ message }}',
-    },
     fixable: 'code',
     schema: SCHEMA,
   },
   create(context) {
     return {
       JSXSpreadAttribute: (node) => {
-        // HINT: -2: 計算中 -1: 見つからなかった >= 0: 見つかった 
+        // HINT: -2: 計算中 -1: 見つからなかった >= 0: 見つかった
         const insertIndex = node.parent.attributes.reduce((h, a, i) => {
           if (h === -2) {
             if (a === node) {
@@ -40,10 +37,7 @@ module.exports = {
 
           context.report({
             node,
-            messageId: 'jsx-start-with-spread-attributes',
-            data: {
-              message: `"${attributeCode}" は意図しない上書きを防ぐため、spread attributesでない属性より先に記述してください`,
-            },
+            message: `"${attributeCode}" は意図しない上書きを防ぐため、spread attributesでない属性より先に記述してください`,
             fix: option?.fix ? (fixer) => {
               const elementNode = node.parent
               const sortedAttributes = [...elementNode.attributes].reduce((p, a, i) => {

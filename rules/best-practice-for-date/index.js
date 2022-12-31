@@ -1,9 +1,6 @@
 module.exports = {
   meta: {
     type: 'problem',
-    messages: {
-      'best-practice-for-date': '{{ message }}',
-    },
     schema: [],
   },
   create(context) {
@@ -15,10 +12,7 @@ module.exports = {
         ) {
           context.report({
             node,
-            messageId: 'best-practice-for-date',
-            data: {
-              message: "'new Date(arg)' のように引数一つのみの指定方は実行環境により結果が変わる可能性があるため 'new Date(2022, 12 - 1, 31)' のようにparseするなど他の方法を検討してください。",
-            },
+            message: "'new Date(arg)' のように引数一つのみの指定方は実行環境により結果が変わる可能性があるため 'new Date(2022, 12 - 1, 31)' のようにparseするなど他の方法を検討してください。",
           });
         }
       },
@@ -29,10 +23,7 @@ module.exports = {
         ) {
           context.report({
             node,
-            messageId: 'best-practice-for-date',
-            data: {
-              message: 'Date.parse は日付形式の解釈がブラウザによって異なるため、他の手段を検討してください',
-            },
+            message: 'Date.parse は日付形式の解釈がブラウザによって異なるため、他の手段を検討してください',
           });
         }
       },

@@ -29,9 +29,6 @@ const SCHEMA = [
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'prohibit-path-within-template-literal': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -46,10 +43,7 @@ module.exports = {
           if (name) {
             context.report({
               node: exp,
-              messageId: 'prohibit-path-within-template-literal',
-              data: {
-                message: `${name}は \`\` で囲まないでください。queryStringを結合するなどのURL生成は ${name} 内で行います。 (例: ${name}({ query: { hoge: 'abc' } })`,
-              },
+              message: `${name}は \`\` で囲まないでください。queryStringを結合するなどのURL生成は ${name} 内で行います。 (例: ${name}({ query: { hoge: 'abc' } })`,
             });
           }
         })

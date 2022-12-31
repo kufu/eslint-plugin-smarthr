@@ -75,9 +75,6 @@ const SCHEMA = [
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'require-barrel-import': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -183,10 +180,7 @@ module.exports = {
 
           context.report({
             node,
-            messageId: 'require-barrel-import',
-            data: {
-              message: deniedModules.length ? `${deniedModules.join(', ')} は ${noExt} からimportしてください` :  `${noExt} からimportするか、${barrel} のbarrelファイルを削除して直接import可能にしてください`,
-            },
+            message: deniedModules.length ? `${deniedModules.join(', ')} は ${noExt} からimportしてください` :  `${noExt} からimportするか、${barrel} のbarrelファイルを削除して直接import可能にしてください`,
           });
         }
       },
