@@ -35,9 +35,6 @@ const defaultReportMessage = (moduleName, exportName) => `${moduleName}${typeof 
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'require_import': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -81,10 +78,7 @@ module.exports = {
             const reporter = (item) => {
               context.report({
                 node,
-                messageId: 'require_import',
-                data: {
-                  message: reportMessage ? reportMessage.replaceAll('{{module}}', actualTarget).replaceAll('{{export}}', item) : defaultReportMessage(actualTarget, item)
-                },
+                message: reportMessage ? reportMessage.replaceAll('{{module}}', actualTarget).replaceAll('{{export}}', item) : defaultReportMessage(actualTarget, item)
               })
             }
 

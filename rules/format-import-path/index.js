@@ -82,9 +82,6 @@ const calculateRelativeImportPath = ({ importPath, filteredDirs, filteredPaths }
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'format-import-path': '{{ message }}',
-    },
     fixable: 'code',
     schema: SCHEMA,
   },
@@ -122,10 +119,7 @@ module.exports = {
         if (importPath !== fixedImportPath) {
           context.report({
             node,
-            messageId: 'format-import-path',
-            data: {
-              message: `${fixedImportPath} に修正してください`,
-            },
+            message: `${fixedImportPath} に修正してください`,
             fix: (fixer) => fixer.replaceText(
               node,
               context.getSourceCode().getText(node).replace(new RegExp(`from '${importPath}'$`), `from '${fixedImportPath}'`)

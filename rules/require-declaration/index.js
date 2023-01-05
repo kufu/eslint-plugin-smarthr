@@ -43,9 +43,6 @@ const useRegex = (use) => {
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'require-declaration': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -102,10 +99,7 @@ module.exports = {
             if (!hit) {
               context.report({
                 node,
-                messageId: 'require-declaration',
-                data: {
-                  message: localOption.reportMessage || `${localOption.type} ${requireDeclaration}が宣言されていません`,
-                },
+                message: localOption.reportMessage || `${localOption.type} ${requireDeclaration}が宣言されていません`,
               })
             } else if (localOption.use) {
               const code = context.getSourceCode().getText(hit)
@@ -115,10 +109,7 @@ module.exports = {
                 if (!code.match(useRegex(u)) && (!localOption.reportMessage || !reported)) {
                   context.report({
                     node: hit,
-                    messageId: 'require-declaration',
-                    data: {
-                      message: localOption.reportMessage || `${localOption.type} ${requireDeclaration} では ${u} を利用してください`,
-                    },
+                    message: localOption.reportMessage || `${localOption.type} ${requireDeclaration} では ${u} を利用してください`,
                   })
                   reported = true
                 }

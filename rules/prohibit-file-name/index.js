@@ -12,9 +12,6 @@ const SCHEMA = [{
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'prohibit-file-name': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -48,10 +45,7 @@ module.exports = {
         messages.forEach((message) => {
           context.report({
             node,
-            messageId: 'prohibit-file-name',
-            data: {
-              message,
-            },
+            message,
           })
         })
       },

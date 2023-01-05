@@ -191,10 +191,7 @@ const handleReportBetterName = ({
     if (candidates.length > 0) {
       context.report({
         node,
-        messageId: `${key}-name`,
-        data: {
-          message: generateMessage({ name, betterName: candidates.join(', ') }),
-        },
+        message: generateMessage({ name, betterName: candidates.join(', ') }),
       });
     }
   }
@@ -226,10 +223,7 @@ const generateTypeRedundant = (args) => {
       SuffixedName = `${typeName}${suffix[0]}`
       report = {
         node,
-        messageId: 'type-name/invalid-suffix',
-        data: {
-          message: `type ${typeName} の名称の末尾に ${suffix.join(', ')} ${suffix.length > 1 ? 'のいずれか' : ''}を追加してください`,
-        },
+        message: `type ${typeName} の名称の末尾に ${suffix.join(', ')} ${suffix.length > 1 ? 'のいずれか' : ''}を追加してください`,
       }
     }
 
@@ -246,10 +240,7 @@ const generateTypeRedundant = (args) => {
     if (SuffixedName !== betterName) {
       report = {
         node,
-        messageId: 'type-name',
-        data: {
-          message: `type ${typeName} の名称からパスで推測できる箇所を取り除いてしてください (例: ${betterName})`,
-        },
+        message: `type ${typeName} の名称からパスで推測できる箇所を取り除いてしてください (例: ${betterName})`,
       }
     }
 
@@ -392,17 +383,6 @@ const generateMethodRedundant = (args) => {
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'file-name': ' {{ message }}',
-      'type-name': '{{ message }}',
-      'type-name/invalid-suffix': '{{ message }}',
-      'property-name': ' {{ message }}',
-      'function-name': ' {{ message }}',
-      'functionParams-name': ' {{ message }}',
-      'variable-name': ' {{ message }}',
-      'class-name': ' {{ message }}',
-      'method-name': ' {{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {

@@ -25,10 +25,6 @@ const filterFalsyJSXText = (cs) => cs.filter((c) => (
 module.exports = {
   meta: {
     type: 'problem',
-    messages: {
-      'format-styled-components': '{{ message }}',
-      'a11y-clickable-element-has-text': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -89,7 +85,7 @@ module.exports = {
 
               return (!!a.value.value || a.value.type === 'JSXExpressionContainer') ? a : prev
             }, null)
-            
+
             if (result || (existRole && existAriaLabel)) {
               return true
             }
@@ -107,10 +103,7 @@ module.exports = {
         if (!child) {
           context.report({
             node,
-            messageId: 'a11y-clickable-element-has-text',
-            data: {
-              message: 'a, button要素にはテキストを設定してください。要素内にアイコン、画像のみを設置する場合はSmartHR UIのvisuallyHiddenText、通常のHTML要素にはaltなどの代替テキスト用属性を指定してください',
-            },
+            message: 'a, button要素にはテキストを設定してください。要素内にアイコン、画像のみを設置する場合はSmartHR UIのvisuallyHiddenText、通常のHTML要素にはaltなどの代替テキスト用属性を指定してください',
           });
         }
       },

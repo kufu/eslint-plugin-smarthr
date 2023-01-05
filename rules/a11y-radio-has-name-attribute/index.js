@@ -8,10 +8,6 @@ const EXPECTED_NAMES = {
 module.exports = {
   meta: {
     type: 'problem',
-    messages: {
-      'format-styled-components': '{{ message }}',
-      'a11y-radio-has-name-attribute': '{{ message }}',
-    },
     schema: [],
   },
   create(context) {
@@ -35,11 +31,7 @@ module.exports = {
         if (!hasName) {
           context.report({
             node,
-            messageId: 'a11y-radio-has-name-attribute',
-            data: {
-              message:
-                'ラジオボタンにはname属性を指定してください。nameを適切に設定することでラジオグループが確立され、キーボード操作しやすくなる等のメリットがあります。',
-            },
+            message: 'ラジオボタンにはname属性を指定してください。nameを適切に設定することでラジオグループが確立され、キーボード操作しやすくなる等のメリットがあります。',
           });
         }
       },
