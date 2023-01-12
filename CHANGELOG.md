@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.17](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.15...v0.2.17) (2023-01-12)
+
+
+### Features
+
+* a11y-radio-has-name-attributeをinput, select, textareaに対してname属性を必須にするルール a11y-input-has-name-attribute に変更する ([#50](https://github.com/kufu/eslint-plugin-smarthr/issues/50)) ([f278bf8](https://github.com/kufu/eslint-plugin-smarthr/commit/f278bf8f094dab8b01b492ca24444f5ab3812b09))
+* ラジオボタンにnameを強制するルールを追加 ([97792cf](https://github.com/kufu/eslint-plugin-smarthr/commit/97792cf276e3400cb6e01a01ef4cf104de5db190))
+
+
+### Bug Fixes
+
+* no-import-other-domain、require-barrel-import でignoresオプションを指定するとエラーが発生する問題を修正する ([#49](https://github.com/kufu/eslint-plugin-smarthr/issues/49)) ([8526236](https://github.com/kufu/eslint-plugin-smarthr/commit/85262365d105c1afa4fd53662825c4c51cb84531))
+* prohibit-path-within-template-literalのpathオブジェクト名の解析の際、エラーになるパターンがあったため修正する ([#48](https://github.com/kufu/eslint-plugin-smarthr/issues/48)) ([715e485](https://github.com/kufu/eslint-plugin-smarthr/commit/715e485f3679e4ca2eb9675b67b8f452f9707096))
+
 ### [0.2.16](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.15...v0.2.16) (2022-12-21)
 
 
