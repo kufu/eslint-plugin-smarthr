@@ -16,9 +16,6 @@ const SCHEMA = [
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'format-translate-component': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -32,10 +29,7 @@ module.exports = {
         if (hit) {
           context.report({
             node,
-            messageId: 'format-translate-component',
-            data: {
-              message: `${hit} 属性は使用せず、 ${componentPath || componentName} コンポーネントを利用してください`,
-            },
+            message: `${hit} 属性は使用せず、 ${componentPath || componentName} コンポーネントを利用してください`,
           });
         }
       }
@@ -51,19 +45,19 @@ module.exports = {
 
           node.parent.children.forEach((c) => {
             switch (c.type) {
-              case 'JSXText': 
+              case 'JSXText':
                 // HINT: 空白と改行のみの場合はテキストが存在する扱いにはしない
                 if (c.value.replace(/(\s|\n)+/g, '')) {
                   existValidChild = true
                 }
 
                 break
-              case 'JSXExpressionContainer': 
+              case 'JSXExpressionContainer':
                 // TODO 変数がstringのみか判定できるなら対応したい
                 existValidChild = true
 
                 break
-              case 'JSXElement': 
+              case 'JSXElement':
                 if (c.openingElement.name.name !== 'br') {
                   existNotBrElement = true
                 }
@@ -77,16 +71,13 @@ module.exports = {
               return `${componentName} 内では <br /> 以外のタグは使えません`
             } else if (!existValidChild && !node.attributes.some((a) => a.name.name === 'dangerouslySetInnerHTML')) {
               return `${componentName} 内には必ずテキストを設置してください`
-            } 
+            }
           })()
 
           if (message) {
             context.report({
               node,
-              messageId: 'format-translate-component',
-              data: {
-                message,
-              },
+              message,
             });
           }
         }

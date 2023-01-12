@@ -9,7 +9,7 @@ const EXPECTED_NAMES = {
 
 const isWithinSvgJsxElement = (node) => {
   if (
-    node.type === 'JSXElement' && 
+    node.type === 'JSXElement' &&
     node.openingElement.name?.name === 'svg'
   ) {
     return true
@@ -25,10 +25,6 @@ const isWithinSvgJsxElement = (node) => {
 module.exports = {
   meta: {
     type: 'problem',
-    messages: {
-      'format-styled-components': '{{ message }}',
-      'a11y-image-has-alt-attribute': '{{ message }}',
-    },
     schema: [],
   },
   create(context) {
@@ -36,7 +32,7 @@ module.exports = {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
         const matcher = (node.name.name || '').match(/(img|image)$/i) // HINT: Iconは別途テキストが存在する場合が多いためチェックの対象外とする
-        if (matcher) { 
+        if (matcher) {
           const alt = node.attributes.find((a) => a.name?.name === 'alt')
 
           let message = ''
@@ -52,10 +48,7 @@ module.exports = {
           if (message) {
             context.report({
               node,
-              messageId: 'a11y-image-has-alt-attribute',
-              data: {
-                message,
-              },
+              message,
             });
           }
         }

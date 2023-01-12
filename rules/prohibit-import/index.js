@@ -35,9 +35,6 @@ const defaultReportMessage = (moduleName, exportName) => `${moduleName}${typeof 
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'prohibit_import': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -74,7 +71,7 @@ module.exports = {
             if (actualTarget !== sourceValue) {
               return
             }
-            
+
             const useImported = (() => {
               if (!Array.isArray(imported)) {
                 return !!imported
@@ -88,10 +85,7 @@ module.exports = {
             if (useImported) {
               context.report({
                 node,
-                messageId: 'prohibit_import',
-                data: {
-                  message: reportMessage ? reportMessage.replaceAll('{{module}}', node.source.value).replaceAll('{{export}}', useImported) : defaultReportMessage(node.source.value, useImported)
-                },
+                message: reportMessage ? reportMessage.replaceAll('{{module}}', node.source.value).replaceAll('{{export}}', useImported) : defaultReportMessage(node.source.value, useImported)
               });
             }
           })

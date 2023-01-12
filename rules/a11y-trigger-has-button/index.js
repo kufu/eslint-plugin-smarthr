@@ -18,10 +18,6 @@ const filterFalsyJSXText = (cs) => cs.filter((c) => (
 module.exports = {
   meta: {
     type: 'problem',
-    messages: {
-      'format-styled-components': '{{ message }}',
-      'a11y-trigger-has-button': '{{ message }}',
-    },
     schema: [],
   },
   create(context) {
@@ -52,10 +48,7 @@ module.exports = {
         if (children.length > 1) {
           context.report({
             node,
-            messageId: 'a11y-trigger-has-button',
-            data: {
-              message: `${match[1]}Trigger の直下には複数のコンポーネントを設置することは出来ません。buttonコンポーネントが一つだけ設置されている状態にしてください`,
-            },
+            message: `${match[1]}Trigger の直下には複数のコンポーネントを設置することは出来ません。buttonコンポーネントが一つだけ設置されている状態にしてください`,
           })
 
           return
@@ -74,10 +67,7 @@ module.exports = {
           ) {
             context.report({
               node: c,
-              messageId: 'a11y-trigger-has-button',
-              data: {
-                message: `${match[1]}Trigger の直下にはbuttonコンポーネントのみ設置してください`,
-              },
+              message: `${match[1]}Trigger の直下にはbuttonコンポーネントのみ設置してください`,
             })
           }
         })

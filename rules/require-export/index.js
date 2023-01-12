@@ -23,9 +23,6 @@ const fetchEdgeDeclaration = (node) => {
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'require-export': '{{ message }}',
-    },
     schema: SCHEMA,
   },
   create(context) {
@@ -76,10 +73,7 @@ module.exports = {
           if (notExistsExports.length) {
             context.report({
               node,
-              messageId: 'require-export',
-              data: {
-                message: `${notExistsExports.join(', ')} をexportしてください`,
-              },
+              message: `${notExistsExports.join(', ')} をexportしてください`,
             })
           }
         })

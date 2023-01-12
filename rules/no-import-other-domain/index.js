@@ -36,9 +36,6 @@ const SCHEMA = [
 module.exports = {
   meta: {
     type: 'suggestion',
-    messages: {
-      'no-import-other-domain': '{{ message }}',
-    },
     fixable: 'code',
     schema: SCHEMA,
   },
@@ -122,10 +119,7 @@ module.exports = {
 
           context.report({
             node,
-            messageId: 'no-import-other-domain',
-            data: {
-              message: `別ドメインから ${importPath}${deniedModules.length ? ` の ${deniedModules.join(', ')}` : ''} がimportされています。`,
-            },
+            message: `別ドメインから ${importPath}${deniedModules.length ? ` の ${deniedModules.join(', ')}` : ''} がimportされています。`,
           })
         }
       },
