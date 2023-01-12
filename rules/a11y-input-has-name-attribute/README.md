@@ -19,15 +19,12 @@
 
 ```jsx
 <RadioButton />
-```
-
-```jsx
 <Input type="radio" />
+<input type="text" />
+<Textarea />
+<Select />
 ```
 
-```jsx
-<input type="radio" />
-```
 
 ```jsx
 import styled from 'styled-components';
@@ -41,14 +38,10 @@ const StyledPiyo = styled(RadioButton)``;
 
 ```jsx
 <RadioButton name="hoge" />
-```
-
-```jsx
-<Input type="radio" name="hoge" />
-```
-
-```jsx
-<input type="radio" name="hoge" />
+<Input type="radio" name="fuga" />
+<input type="text" name="any" />
+<Textarea name="some" />
+<Select name="piyo" />
 ```
 
 ```jsx
