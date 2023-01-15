@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.18](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.17...v0.2.18) (2023-01-15)
+
+
+### Features
+
+* redundant-name にignores オプションを追加 ([#53](https://github.com/kufu/eslint-plugin-smarthr/issues/53)) ([638ed8f](https://github.com/kufu/eslint-plugin-smarthr/commit/638ed8fe6aad0b246ff13630359b60eb34ec4012))
+
+
+### Bug Fixes
+
+* ディレクトリの削除もれ対応 ([#52](https://github.com/kufu/eslint-plugin-smarthr/issues/52)) ([afefcae](https://github.com/kufu/eslint-plugin-smarthr/commit/afefcaef7dbd52daf6dac2c095d0c58c56cbbed5))
+
 ### [0.2.17](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.15...v0.2.17) (2023-01-12)
 
 
