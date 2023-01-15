@@ -9,6 +9,7 @@ const COMMON_DEFAULT_CONFIG = {
   IGNORE_KEYWORDS: ['redux', 'views', 'pages', 'parts'],
 }
 const DEFAULT_CONFIG = {
+  ignores: [],
   type: {
     IGNORE_KEYWORDS: [
       'redux', 'views', 'pages', 'parts',
@@ -57,6 +58,7 @@ const SCHEMA = [
   {
     type: 'object',
     properties: {
+      ignores: { type: 'array', items: { type: 'string' }, default: [] },
       type: {
         ...DEFAULT_SCHEMA_PROPERTY,
         suffix: { type: 'array', items: { type: 'string' } },
@@ -394,6 +396,11 @@ module.exports = {
 
     const option = context.options[0]
     let filename = context.getFilename()
+
+    if ((option.ignores || []).some((i) => !!filename.match(new RegExp(i)))) {
+      return {}
+    }
+
     const keywords = uniq((() => {
       const keywordMatcher = filename.match(new RegExp(`${rootPath}/(.+?)$`))
 

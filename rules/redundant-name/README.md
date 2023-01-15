@@ -53,6 +53,7 @@ const betterNames = {
     'smarthr/redundant-name': [
       'error', // 'warn', 'off'
       {
+        ignores: [ '\.stories\.' ], // ファイルパスに対して正規表現として一致する場合はチェック対象外にする
         type: { ignorekeywords, suffix: ['Props', 'Type'] },
         file: { ignorekeywords, betternames },
         // property: { ignorekeywords, allowedNames },
