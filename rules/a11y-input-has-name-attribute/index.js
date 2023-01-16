@@ -1,10 +1,14 @@
 const { generateTagFormatter } = require('../../libs/format_styled_components');
 
 const EXPECTED_NAMES = {
-  'RadioButton$': 'RadioButton$',
   '(i|I)nput$': 'Input$',
   '(t|T)extarea$': 'Textarea$',
   '(s|S)elect$': 'Select$',
+  'InputFile$': 'InputFile$',
+  'RadioButton$': 'RadioButton$',
+  'Check(b|B)ox$': 'CheckBox$',
+  'Combo(b|B)ox$': 'ComboBox$',
+  'DatePicker$': 'DatePicker$',
 }
 const TARGET_TAG_NAME_REGEX = new RegExp(`(${Object.keys(EXPECTED_NAMES).join('|')})`)
 const INPUT_NAME_REGEX = /^[a-zA-Z0-9_\[\]]+$/
