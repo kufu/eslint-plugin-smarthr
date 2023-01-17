@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.19](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.18...v0.2.19) (2023-01-17)
+
+
+### Features
+
+* a11y-input-has-name-attributeの対象となるコンポーネントを追加(InputFile, CheckBox, ComboBox, DatePicker) ([ed14952](https://github.com/kufu/eslint-plugin-smarthr/commit/ed14952996902e9d2e4c7deb7b5107e7a57b41d6))
+
 ### [0.2.18](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.17...v0.2.18) (2023-01-15)
 
 
