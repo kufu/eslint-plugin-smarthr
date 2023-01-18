@@ -9,6 +9,7 @@ const EXPECTED_NAMES = {
   'Check(b|B)ox$': 'CheckBox$',
   'Combo(b|B)ox$': 'ComboBox$',
   'DatePicker$': 'DatePicker$',
+  'DropZone$': 'DropZone$',
 }
 const TARGET_TAG_NAME_REGEX = new RegExp(`(${Object.keys(EXPECTED_NAMES).join('|')})`)
 const INPUT_NAME_REGEX = /^[a-zA-Z0-9_\[\]]+$/
