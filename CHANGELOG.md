@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.20](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.19...v0.2.20) (2023-01-18)
+
+
+### Features
+
+* a11y-input-has-name-attribute を DropZoneも対象になるように修正 ([#55](https://github.com/kufu/eslint-plugin-smarthr/issues/55)) ([73c30ce](https://github.com/kufu/eslint-plugin-smarthr/commit/73c30ce350e69c72e00112994a3cbe9cbbcfc52c))
+
 ### [0.2.19](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.18...v0.2.19) (2023-01-17)
 
 
