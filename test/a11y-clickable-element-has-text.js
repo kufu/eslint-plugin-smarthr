@@ -27,6 +27,9 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const HogeButton = styled(Button)``' },
     { code: 'const FugaAnchor = styled(HogeAnchor)``' },
     { code: 'const FugaSmartHRLogo = styled(SmartHRLogo)``' },
+    { code: 'const HogeAnchor = styled.a(() => ``)' },
+    { code: 'const HogeAnchor = styled("a")(() => ``)' },
+    { code: 'const HogeAnchor = styled(Anchor)(() => ``)' },
     {
       code: `<a>ほげ</a>`,
     },
@@ -110,7 +113,7 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     },
   ],
   invalid: [
-    { code: `import hoge from 'styled-components'`, errors: [ { message: "styled-components をimportする際は、名称が`styled` となるようにしてください。例: `import styled from 'styled-components'`" } ] },
+    { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
     { code: 'const Hoge = styled.a``', errors: [ { message: `Hogeを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.button``', errors: [ { message: `Hogeを正規表現 "/Button$/" がmatchする名称に変更してください` } ]  },
     { code: 'const Hoge = styled(Anchor)``', errors: [ { message: `Hogeを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ]  },
@@ -119,6 +122,10 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ]  },
     { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ]  },
     { code: 'const Fuga = styled(SmartHRLogo)``', errors: [ { message: `Fugaを正規表現 "/SmartHRLogo$/" がmatchする名称に変更してください` } ]  },
+    { code: 'const Piyo = styled.a(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
+    { code: 'const Piyo = styled("a")(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
+    { code: 'const Piyo = styled("a")``', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
+    { code: 'const Piyo = styled(Anchor)(() => ``)', errors: [ { message: `Piyoを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
     {
       code: `<a><img src="hoge.jpg" /></a>`,
       errors: [{ message: defaultErrorMessage }]

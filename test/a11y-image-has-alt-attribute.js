@@ -33,7 +33,7 @@ ruleTester.run('a11y-image-has-alt-attribute', rule, {
     { code: '<svg><image /></svg>' },
   ],
   invalid: [
-    { code: `import hoge from 'styled-components'`, errors: [ { message: "styled-components をimportする際は、名称が`styled` となるようにしてください。例: `import styled from 'styled-components'`" } ] },
+    { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
     { code: 'const Hoge = styled.img``', errors: [ { message: `Hogeを正規表現 "/(Img|Image|Icon)$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.svg``', errors: [ { message: `Hogeを正規表現 "/(Img|Image|Icon)$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(Icon)``', errors: [ { message: `Hogeを正規表現 "/Icon$/" がmatchする名称に変更してください` } ] },

@@ -43,14 +43,14 @@ ruleTester.run('a11y-prohibit-input-placeholder', rule, {
     { code: `<ComboBox placeholder="hoge" dropdownHelpMessage="fuga" />` },
   ],
   invalid: [
-    { code: `import hoge from 'styled-components'`, errors: [ { message: "styled-components をimportする際は、名称が`styled` となるようにしてください。例: `import styled from 'styled-components'`" } ] },
+    { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
     { code: 'const Hoge = styled.input``', errors: [ { message: `Hogeを正規表現 "/Input$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(StyledInput)``', errors: [ { message: `Hogeを正規表現 "/Input$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.textarea``', errors: [ { message: `Hogeを正規表現 "/Textarea$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(StyledTextarea)``', errors: [ { message: `Hogeを正規表現 "/Textarea$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(FieldSet)``', errors: [ { message: `Hogeを正規表現 "/FieldSet$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(ComboBox)``', errors: [ { message: `Hogeを正規表現 "/ComboBox$/" がmatchする名称に変更してください` } ] },
-    { 
+    {
       code: 'const Hoge = styled(SearchInput)``',
       errors: [
         { message: `Hogeを正規表現 "/Input$/" がmatchする名称に変更してください` },
