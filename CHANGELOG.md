@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.21](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.20...v0.2.21) (2023-01-19)
+
+
+### Features
+
+* a11y系ruleのコンポーネント名チェックが漏れているパターンが存在したため調整 ([#56](https://github.com/kufu/eslint-plugin-smarthr/issues/56)) ([e628426](https://github.com/kufu/eslint-plugin-smarthr/commit/e628426596e97548580780632046c2154583af3e))
+
 ### [0.2.20](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.19...v0.2.20) (2023-01-18)
 
 
