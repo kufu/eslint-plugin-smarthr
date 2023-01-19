@@ -1,68 +1,71 @@
-const getExtendedComponentName = (node) => {
-  if (!node.parent) {
-    return null
-  }
+const STYLED_COMPONENTS_METHOD = 'styled'
+const STYLED_COMPONENTS = `${STYLED_COMPONENTS_METHOD}-components`
 
-  return node.parent.id?.name || getExtendedComponentName(node.parent)
-}
-const getBaseComponentName = (node) => {
-  if (!node) {
-    return null
-  }
+const findInvalidImportNameNode = (s) => s.type === 'ImportDefaultSpecifier' && s.local.name !== STYLED_COMPONENTS_METHOD
 
-  if (node.type === 'CallExpression') {
-    if (node.callee.name === 'styled') {
-      return node.arguments[0].name
-    }
-    if (node.callee.object?.name === 'styled') {
-      return node.callee.property.name
-    }
-  }
+const generateTagFormatter = ({ context, EXPECTED_NAMES }) => {
+  const entriesesTagNames = Object.entries(EXPECTED_NAMES).map(([b, e]) => [ new RegExp(b), new RegExp(e) ])
 
-  if (node?.object?.name === 'styled') {
-    return node.property.name
-  }
+  return {
+    ImportDeclaration: (node) => {
+      if (node.source.value !== STYLED_COMPONENTS) {
+        return
+      }
 
-  return getBaseComponentName(node.parent)
-}
+      const invalidNameNode = node.specifiers.find(findInvalidImportNameNode)
 
-const generateTagFormatter = ({ context, EXPECTED_NAMES }) => ({
-  ImportDeclaration: (node) => {
-    if (node.source.value !== 'styled-components') {
-      return
-    }
+      if (invalidNameNode) {
+        context.report({
+          node: invalidNameNode,
+          message: `${STYLED_COMPONENTS} をimportする際は、名称が"${STYLED_COMPONENTS_METHOD}" となるようにしてください。例: "import ${STYLED_COMPONENTS_METHOD} from '${STYLED_COMPONENTS}'"`,
+        });
+      }
+    },
+    VariableDeclarator: (node) => {
+      if (!node.init) {
+        return
+      }
 
-    const invalidNameNode = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier' && s.local.name !== 'styled')
+      const tag = node.init.tag || node.init
 
-    if (invalidNameNode) {
-      context.report({
-        node: invalidNameNode,
-        message: "styled-components をimportする際は、名称が`styled` となるようにしてください。例: `import styled from 'styled-components'`",
-      });
-    }
-  },
-  TaggedTemplateExpression: (node) => {
-    const extended = getExtendedComponentName(node)
+      let base = null
 
-    if (extended) {
-      const base = getBaseComponentName(node.tag)
+      if (tag.object?.name === STYLED_COMPONENTS_METHOD) {
+        base = tag.property.name
+      } else if (tag.callee) {
+        const callee = tag.callee
+
+        switch (STYLED_COMPONENTS_METHOD) {
+          case callee.name: {
+            const arg = tag.arguments[0]
+            base = arg.name || arg.value
+            break
+          }
+          case callee.callee?.name: {
+            const arg = callee.arguments[0]
+            base = arg.name || arg.value
+            break
+          }
+          case callee.object?.name:
+            base = callee.property.name
+            break
+        }
+      }
 
       if (base) {
-        Object.entries(EXPECTED_NAMES).forEach(([b, e]) => {
-          if (base.match(new RegExp(b))) {
-            const extendedregex = new RegExp(e)
+        const extended = node.id.name
 
-            if (!extended.match(extendedregex)) {
-              context.report({
-                node: node.parent,
-                message: `${extended}を正規表現 "${extendedregex.toString()}" がmatchする名称に変更してください`,
-              });
-            }
+        entriesesTagNames.forEach(([b, e]) => {
+          if (base.match(b) && !extended.match(e)) {
+            context.report({
+              node,
+              message: `${extended}を正規表現 "${e.toString()}" がmatchする名称に変更してください`,
+            });
           }
         })
       }
-    }
-  },
-})
+    },
+  }
+}
 
 module.exports = { generateTagFormatter }
