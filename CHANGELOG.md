@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.22](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.21...v0.2.22) (2023-01-27)
+
+
+### Features
+
+* a11y-anchor-has-href-attribute を追加 ([#57](https://github.com/kufu/eslint-plugin-smarthr/issues/57)) ([83856b1](https://github.com/kufu/eslint-plugin-smarthr/commit/83856b18907772828b69de70c30315b3ff4986c1))
+
 ### [0.2.21](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.20...v0.2.21) (2023-01-19)
 
 
