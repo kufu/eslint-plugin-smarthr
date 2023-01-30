@@ -4,7 +4,7 @@
 - query-stringの生成やパスの一部などをtemplate-literalで結合することは責務を拡散させることになります
 - それらの責務を指定したオブジェクトに集中させたい場合などに利用出来ます
   - 例
-    - NG: `\`${path.xxx}?${queryString}\``
+    - NG: `\\`${path.xxx}?${queryString}\\``
       - pathオブジェクト外でqueryStringが生成されてしまっており、どのようなqueryStringが設定される可能性があるか？という情報が拡散してしまう
     - OK: `path.xxx({ xxxx: 'yyyyy' })`
       - path内でqueryStringを生成するため、URL生成の情報が集約される
