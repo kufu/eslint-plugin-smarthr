@@ -12,7 +12,13 @@
 ```js
 {
   rules: {
-    'smarthr/a11y-anchor-has-href-attribute': 'error', // 'warn', 'off'
+    'smarthr/a11y-anchor-has-href-attribute': [
+      'error', // 'warn', 'off'
+      // {
+      //   nextjs: true,
+      //   react_router: true,
+      // },
+    ]
   },
 }
 ```
@@ -32,4 +38,10 @@
 <a href="https://www.google.com/search">any</a>
 <XxxAnchor href={hoge}>any</XxxAnchor>
 <XxxLink href={undefined}>any</XxxLink>
+
+// nextjs: true
+<Link href={hoge}><a>any</a></Link>
+
+// react_router: true
+<Link to={hoge}>any</Link>
 ```

@@ -41,6 +41,14 @@ ruleTester.run('a11y-anchor-has-href-attribute', rule, {
     {
       code: `<Link href="hoge">ほげ</Link>`,
     },
+    {
+      code: `<Link href="hoge"><a>ほげ</a></Link>`,
+      options: [{ nextjs: true }],
+    },
+    {
+      code: `<Link to="hoge">ほげ</Link>`,
+      options: [{ react_router: true }],
+    },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
@@ -52,5 +60,8 @@ ruleTester.run('a11y-anchor-has-href-attribute', rule, {
     { code: `<Anchor>hoge</Anchor>`, errors: [{ message: generateErrorText('Anchor') }] },
     { code: `<HogeLink>hoge</HogeLink>`, errors: [{ message: generateErrorText('HogeLink') }] },
     { code: `<HogeLink href>hoge</HogeLink>`, errors: [{ message: generateErrorText('HogeLink') }] },
+    { code: `<HogeLink href="hoge"><a>hoge</a></HogeLink>`, errors: [{ message: generateErrorText('a') }] },
+    { code: `<HogeLink><a>hoge</a></HogeLink>`, options: [{ nextjs: true }], errors: [{ message: generateErrorText('a') }] },
+    { code: `<HogeLink to="hoge">hoge</HogeLink>`, errors: [{ message: generateErrorText('HogeLink') }] },
   ]
 })
