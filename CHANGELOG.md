@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.24](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.23...v0.2.24) (2023-03-10)
+
+
+### Features
+
+* next.js, react-routerのLinkコンポーネントに対応するオプションを追加 ([#59](https://github.com/kufu/eslint-plugin-smarthr/issues/59)) ([88996e8](https://github.com/kufu/eslint-plugin-smarthr/commit/88996e88dfd4c14bfaaa36594663737d47f1f029))
+
 ### [0.2.23](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.22...v0.2.23) (2023-03-09)
 
 ### [0.2.22](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.21...v0.2.22) (2023-01-27)
