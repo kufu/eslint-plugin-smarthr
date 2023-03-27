@@ -7,6 +7,7 @@
 - [a11y-prohibit-input-placeholder](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-input-placeholder)
 - [a11y-trigger-has-button](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-trigger-has-button)
 - [best-practice-for-date](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-date)
+- [best-practice-for-remote-trigger-action-dialog](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-remote-trigger-action-dialog)
 - [format-import-path](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-import-path)
 - [format-translate-component](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-translate-component)
 - [jsx-start-with-spread-attributes](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/jsx-start-with-spread-attributes)
