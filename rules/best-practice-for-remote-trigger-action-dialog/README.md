@@ -3,7 +3,7 @@
 - RemoteDialogTrigger, RemoteTriggerActionDialog のベストプラクティスをチェックするルールです
   - `id` もしくは `targetId` にリテラルな文字列以外が設定できなくなります
   - 変数なども使えません
-  - これは対応するTriggerとDialogをわかりやすくするためです（検索などが用意になります）
+  - これは対応するTriggerとDialogをわかりやすくするためです（検索などが容易になります）
 
 ## rules
 
