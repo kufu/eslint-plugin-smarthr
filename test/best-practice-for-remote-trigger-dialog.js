@@ -1,4 +1,4 @@
-const rule = require('../rules/best-practice-for-remote-trigger-action-dialog')
+const rule = require('../rules/best-practice-for-remote-trigger-dialog')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
@@ -12,7 +12,7 @@ const ruleTester = new RuleTester({
   },
 })
 
-ruleTester.run('best-practice-for-remote-trigger-action-dialog', rule, {
+ruleTester.run('best-practice-for-remote-trigger-dialog', rule, {
   valid: [
     { code: `import styled from 'styled-components'` },
     { code: 'const HogeRemoteDialogTrigger = styled(RemoteDialogTrigger)``' },
@@ -31,10 +31,6 @@ ruleTester.run('best-practice-for-remote-trigger-action-dialog', rule, {
   - RemoteTriggerActionDialogはループやDropdown内にTriggerが存在する場合に利用してください
   - ループやDropdown以外にTriggerが設定されている場合、TriggerAndActionDialogを利用してください` } ] },
     { code: '<StyledRemoteDialogTrigger targetId={"fuga"}>open.</StyledRemoteDialogTrigger>', errors: [ { message: `StyledRemoteDialogTriggerのtargetId属性には直接文字列を指定してください。
-  - 変数などは利用できません（これは関連するTriggerとDialogを検索しやすくするためです）
-  - RemoteTriggerActionDialogはループやDropdown内にTriggerが存在する場合に利用してください
-  - ループやDropdown以外にTriggerが設定されている場合、TriggerAndActionDialogを利用してください` } ] },
-    { code: '<RemoteTriggerHogeDialog {...args} id={hoge}>content.</RemoteTriggerHogeDialog>', errors: [ { message: `RemoteTriggerHogeDialogのid属性には直接文字列を指定してください。
   - 変数などは利用できません（これは関連するTriggerとDialogを検索しやすくするためです）
   - RemoteTriggerActionDialogはループやDropdown内にTriggerが存在する場合に利用してください
   - ループやDropdown以外にTriggerが設定されている場合、TriggerAndActionDialogを利用してください` } ] },
