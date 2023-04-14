@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.25...v0.3.0) (2023-04-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* best-practice-for-remote-trigger-dialog にリネーム & 特定パターンでバグが起きる問題を修正する (#61)
+
+### Bug Fixes
+
+* best-practice-for-remote-trigger-dialog にリネーム & 特定パターンでバグが起きる問題を修正する ([#61](https://github.com/kufu/eslint-plugin-smarthr/issues/61)) ([0ad3601](https://github.com/kufu/eslint-plugin-smarthr/commit/0ad3601caa941946a0f30aacc2f010cd478b6133))
+
 ### [0.2.25](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.24...v0.2.25) (2023-04-04)
 
 
