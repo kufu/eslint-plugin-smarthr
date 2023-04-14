@@ -1,6 +1,6 @@
-# smarthr/best-practice-for-remote-trigger-action-dialog
+# smarthr/best-practice-for-remote-trigger-dialog
 
-- RemoteDialogTrigger, RemoteTriggerActionDialog のベストプラクティスをチェックするルールです
+- RemoteDialogTrigger, RemoteTriggerXxxxDialog のベストプラクティスをチェックするルールです
   - `id` もしくは `targetId` にリテラルな文字列以外が設定できなくなります
   - 変数なども使えません
   - これは対応するTriggerとDialogをわかりやすくするためです（検索などが容易になります）
@@ -10,7 +10,7 @@
 ```js
 {
   rules: {
-    'smarthr/best-practice-for-remote-trigger-action-dialog': 'error', // 'warn', 'off'
+    'smarthr/best-practice-for-remote-trigger-dialog': 'error', // 'warn', 'off'
   },
 }
 ```

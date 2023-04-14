@@ -5,7 +5,7 @@ const EXPECTED_NAMES = {
   'RemoteTrigger(.+)Dialog$': 'RemoteTrigger(.+)Dialog$',
 }
 
-const REGEX_REMOTE_TRIGGER_DIALOG = /RemoteTrigger(.+)Dialog$/
+const REGEX_REMOTE_TRIGGER_DIALOG = /RemoteTrigger(Action|Message|Modeless)Dialog$/
 const REGEX_REMOTE_DIALOG_TRIGGER = /RemoteDialogTrigger$/
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
           const attrName = regexRemoteTriggerDialog ? 'id' : 'targetId'
           const id = node.attributes.find((a) => a.name?.name === attrName)
 
-          if (id.value.type !== 'Literal') {
+          if (id && id.value.type !== 'Literal') {
             context.report({
               node: id,
               message: `${nodeName}の${attrName}属性には直接文字列を指定してください。
