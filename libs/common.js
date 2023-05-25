@@ -6,13 +6,13 @@ const replacePaths = (() => {
   const tsconfig = fs.readFileSync(`${process.cwd()}/tsconfig.json`)
 
   if (!tsconfig) {
-    return null 
+    throw new Error('プロジェクトルートにtsconfig.json を設置してください')
   }
 
   const { compilerOptions } = JSON5.parse(tsconfig)
 
   if (!compilerOptions || !compilerOptions.paths) {
-    return null
+    throw new Error('tsconfig.json の compilerOptions.paths に `"@/*": ["any_path/*"]` 形式でフロントエンドのroot dir を指定してください')
   }
 
   const regexp = /\*$/
@@ -23,6 +23,7 @@ const replacePaths = (() => {
     }
   }, {})
 })()
+
 const rootPath = (() => {
   if (!replacePaths) {
     return ''
