@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.2](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.1...v0.3.2) (2023-07-07)
+
+
+### Features
+
+* a11y-heading-in-sectioning-contentを追加 ([#64](https://github.com/kufu/eslint-plugin-smarthr/issues/64)) ([49dc559](https://github.com/kufu/eslint-plugin-smarthr/commit/49dc5591e50ae4b3e496e69faca061c2ca2ca579))
+
+
+### Bug Fixes
+
+* replacePathsの生成時、tsconfigにcompilerOptions.pathsが設定されていなければエラーになるように修正 ([#63](https://github.com/kufu/eslint-plugin-smarthr/issues/63)) ([cbb4306](https://github.com/kufu/eslint-plugin-smarthr/commit/cbb43061482d5f363c20ca1316aae9e62f2359fa))
+
 ### [0.3.1](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.0...v0.3.1) (2023-05-12)
 
 ## [0.3.0](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.25...v0.3.0) (2023-04-14)
