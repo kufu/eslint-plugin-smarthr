@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.3](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.2...v0.3.3) (2023-07-10)
+
+
+### Bug Fixes
+
+* a11y-heading-in-sectioning-contentのHeadingアウトライン未指定の誤検知を修正する ([#65](https://github.com/kufu/eslint-plugin-smarthr/issues/65)) ([2cbf6aa](https://github.com/kufu/eslint-plugin-smarthr/commit/2cbf6aaff61f7846a80a895ed4e5e63ff9674c87))
+
 ### [0.3.2](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.1...v0.3.2) (2023-07-07)
 
 
