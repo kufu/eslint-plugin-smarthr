@@ -37,6 +37,7 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<><Heading>hoge</Heading><Article><Heading>hoge</Heading></Article></>' },
     { code: '<><Heading>hoge</Heading><Nav><Heading>hoge</Heading></Nav></>' },
     { code: '<><Heading>hoge</Heading><SectioningFragment><Heading>hoge</Heading></SectioningFragment></>' },
+    { code: 'const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>;const FugaHeading = () => <AbcHeading anyArg={abc}>hoge</AbcHeading>' },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
@@ -62,5 +63,6 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<aside>hoge</aside>', errors: [ { message: `"aside"を利用せず、smarthr-ui/Asideを拡張してください。Headingのレベルが自動計算されるようになります。` } ] },
     { code: '<nav>hoge</nav>', errors: [ { message: `"nav"を利用せず、smarthr-ui/Navを拡張してください。Headingのレベルが自動計算されるようになります。` } ] },
     { code: '<section>hoge</section>', errors: [ { message: `"section"を利用せず、smarthr-ui/Sectionを拡張してください。Headingのレベルが自動計算されるようになります。` } ] },
+    { code: 'const Hoge = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>;const Fuga = () => <AbcHeading anyArg={abc}>hoge</AbcHeading>', errors: [ { message: rootMessage }, { message: rootMessage } ] },
   ],
 });

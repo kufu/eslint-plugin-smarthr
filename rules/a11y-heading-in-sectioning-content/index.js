@@ -10,6 +10,7 @@ const EXPECTED_NAMES = {
 }
 
 const headingRegex = /((^h(1|2|3|4|5|6))|Heading)$/
+const declaratorHeadingRegex = /Heading$/
 const sectioningRegex = /((A(rticle|side))|Nav|Section|^SectioningFragment)$/
 const bareTagRegex = /^(article|aside|nav|section)$/
 const messagePrefix = 'Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。'
@@ -35,6 +36,11 @@ const searchBubbleUp = (node) => {
     node.type === 'JSXElement' && node.openingElement.name.name?.match(sectioningRegex)
   ) {
     return node
+  }
+
+  // Headingコンポーネントの拡張なので対象外
+  if (node.type === 'VariableDeclarator' && node.id.name.match(declaratorHeadingRegex)) {
+    return null
   }
 
   return searchBubbleUp(node.parent)
@@ -82,27 +88,30 @@ module.exports = {
           })
         } else if (elementName.match(headingRegex)) {
           const result = searchBubbleUp(node.parent)
-          const saved = sections.find((s) => s[0] === result)
 
-          // HINT: 最初の1つ目は通知しない（）
-          if (!saved) {
-            sections.push([result, node])
-          } else {
-            // HINT: 同じファイルで同じSectioningContent or トップノードを持つ場合
-            const [section, unreport] = saved
-            const targets = unreport ? [unreport, node] : [node]
+          if (result) {
+            const saved = sections.find((s) => s[0] === result)
 
-            saved[1] = undefined
+            // HINT: 最初の1つ目は通知しない（）
+            if (!saved) {
+              sections.push([result, node])
+            } else {
+              // HINT: 同じファイルで同じSectioningContent or トップノードを持つ場合
+              const [section, unreport] = saved
+              const targets = unreport ? [unreport, node] : [node]
 
-            targets.forEach((n) => {
-              context.report({
-                node: n,
-                message:
-                  section.type === 'Program'
-                  ? rootMessage
-                  : commonMessage,
+              saved[1] = undefined
+
+              targets.forEach((n) => {
+                context.report({
+                  node: n,
+                  message:
+                    section.type === 'Program'
+                    ? rootMessage
+                    : commonMessage,
+                })
               })
-            })
+            }
           }
         }
       },
