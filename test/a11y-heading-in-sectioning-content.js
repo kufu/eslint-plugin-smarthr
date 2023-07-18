@@ -12,13 +12,17 @@ const ruleTester = new RuleTester({
   },
 });
 
-const rootMessage = 'Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。コンポーネント全体に対するHeadingではない場合、Sectioning Content(Article, Aside, Nav, Section)でHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。現在のマークアップの構造を変更したくない場合はSectioningFragmentコンポーネントを利用してください。コンポーネント全体に対するHeadingの場合、他のHeadingのアウトラインが明確に指定されればエラーにならなくなります。'
-const message = 'Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。Sectioning Content(Article, Aside, Nav, Section)でHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。現在のマークアップの構造を変更したくない場合はSectioningFragmentコンポーネントを利用してください。'
+const lowerMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
+ - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。`
+const message = `${lowerMessage}
+ - Headingをh1にしたい場合(機能名、ページ名などこのページ内でもっとも重要な見出しの場合)、smarthr-ui/PageHeadingを利用してください。その場合はSectionなどでアウトラインを示す必要はありません。`
+const pageMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
+const pageInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
 
 ruleTester.run('a11y-heading-in-sectioning-content', rule, {
   valid: [
     { code: `import styled from 'styled-components'` },
-    { code: 'const HogeHeading = styled.h1``' },
+    { code: 'const HogePageHeading = styled.h1``' },
     { code: 'const HogeHeading = styled.h2``' },
     { code: 'const HogeHeading = styled.h3``' },
     { code: 'const HogeHeading = styled.h4``' },
@@ -30,18 +34,14 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: 'const FugaAside = styled(HogeAside)``' },
     { code: 'const FugaNav = styled(HogeNav)``' },
     { code: 'const FugaSection = styled(HogeSection)``' },
-    { code: '<Heading>hoge</Heading>' },
-    { code: '<HogeHeading>hoge</HogeHeading>' },
-    { code: '<><Heading>hoge</Heading><Section><Heading>hoge</Heading></Section></>' },
-    { code: '<><Heading>hoge</Heading><Aside><Heading>hoge</Heading></Aside></>' },
-    { code: '<><Heading>hoge</Heading><Article><Heading>hoge</Heading></Article></>' },
-    { code: '<><Heading>hoge</Heading><Nav><Heading>hoge</Heading></Nav></>' },
-    { code: '<><Heading>hoge</Heading><SectioningFragment><Heading>hoge</Heading></SectioningFragment></>' },
-    { code: 'const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>;const FugaHeading = () => <AbcHeading anyArg={abc}>hoge</AbcHeading>' },
+    { code: '<PageHeading>hoge</PageHeading>' },
+    { code: '<Section><Heading>hoge</Heading></Section>' },
+    { code: '<><Section><Heading>hoge</Heading></Section><Section><Heading>fuga</Heading></Section></>' },
+    { code: 'const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>' },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
-    { code: 'const Hoge = styled.h1``', errors: [ { message: `Hogeを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
+    { code: 'const Hoge = styled.h1``', errors: [ { message: `Hogeを正規表現 "/PageHeading$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.h2``', errors: [ { message: `Hogeを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.h3``', errors: [ { message: `Hogeを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.h4``', errors: [ { message: `Hogeを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
@@ -57,12 +57,11 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: 'const StyledAside = styled.aside``', errors: [ { message: `"aside"を利用せず、smarthr-ui/Asideを拡張してください。Headingのレベルが自動計算されるようになります。(例: "styled.aside" -> "styled(Aside)")` } ] },
     { code: 'const StyledNav = styled.nav``', errors: [ { message: `"nav"を利用せず、smarthr-ui/Navを拡張してください。Headingのレベルが自動計算されるようになります。(例: "styled.nav" -> "styled(Nav)")` } ] },
     { code: 'const StyledSection = styled.section``', errors: [ { message: `"section"を利用せず、smarthr-ui/Sectionを拡張してください。Headingのレベルが自動計算されるようになります。(例: "styled.section" -> "styled(Section)")` } ] },
-    { code: '<><Heading>hoge</Heading><Heading>hoge</Heading></>', errors: [ { message: rootMessage }, { message: rootMessage } ] },
-    { code: '<><Heading>hoge</Heading><Section><Heading>hoge</Heading><Heading>hoge</Heading></Section></>', errors: [ { message }, { message } ] },
-    { code: '<article>hoge</article>', errors: [ { message: `"article"を利用せず、smarthr-ui/Articleを拡張してください。Headingのレベルが自動計算されるようになります。` } ] },
-    { code: '<aside>hoge</aside>', errors: [ { message: `"aside"を利用せず、smarthr-ui/Asideを拡張してください。Headingのレベルが自動計算されるようになります。` } ] },
-    { code: '<nav>hoge</nav>', errors: [ { message: `"nav"を利用せず、smarthr-ui/Navを拡張してください。Headingのレベルが自動計算されるようになります。` } ] },
-    { code: '<section>hoge</section>', errors: [ { message: `"section"を利用せず、smarthr-ui/Sectionを拡張してください。Headingのレベルが自動計算されるようになります。` } ] },
-    { code: 'const Hoge = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>;const Fuga = () => <AbcHeading anyArg={abc}>hoge</AbcHeading>', errors: [ { message: rootMessage }, { message: rootMessage } ] },
+    { code: '<><PageHeading>hoge</PageHeading><PageHeading>fuga</PageHeading></>', errors: [ { message: pageMessage } ] },
+    { code: '<Heading>hoge</Heading>', errors: [ { message } ] },
+    { code: '<><Heading>hoge</Heading><Heading>fuga</Heading></>', errors: [ { message }, { message } ] },
+    { code: 'const Hoge = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>', errors: [ { message } ] },
+    { code: '<Section><Heading>hoge</Heading><Heading>fuga</Heading></Section>', errors: [ { message: lowerMessage } ] },
+    { code: '<Section><PageHeading>hoge</PageHeading></Section>', errors: [ { message: pageInSectionMessage } ] },
   ],
 });

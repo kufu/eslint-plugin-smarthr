@@ -39,13 +39,18 @@
 </section>
 ```
 
-## ✅ Correct
-
 ```jsx
-<div>
-  <Heading>hoge</Heading> // コンポーネント内にHeadingが一つのみの場合はOK
-</div>
+<>
+  <PageHeading> // 同じファイル内に複数のPageHeadingが存在するとNG
+    hoge
+  </PageHeading>
+  <PageHeading>
+    fuga
+  </PageHeading>
+</>
 ```
+
+## ✅ Correct
 
 ```jsx
 <Section>
@@ -57,14 +62,17 @@
 ```
 
 ```jsx
-<Section>
-  <Heading>
-    hoge
-  </Heading>
-</Section>
-<StyledSection>
-  <Heading>
-    fuga
-  </Heading>
-</StyledSection>
+<>
+  <PageHeading>Page Name.</PageHeading>
+  <Section>
+    <Heading>
+      hoge
+    </Heading>
+  </Section>
+  <StyledSection>
+    <Heading>
+      fuga
+    </Heading>
+  </StyledSection>
+</>
 ```

@@ -1,23 +1,31 @@
 const { generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
+  'PageHeading$': 'PageHeading$',
   'Heading$': 'Heading$',
-  '^h(1|2|3|4|5|6)$': 'Heading$',
+  '^h1$': 'PageHeading$',
+  '^h(|2|3|4|5|6)$': 'Heading$',
   'Article$': 'Article$',
   'Aside$': 'Aside$',
   'Nav$': 'Nav$',
   'Section$': 'Section$',
+  'ModelessDialog$': 'ModelessDialog$',
 }
 
 const headingRegex = /((^h(1|2|3|4|5|6))|Heading)$/
 const declaratorHeadingRegex = /Heading$/
 const sectioningRegex = /((A(rticle|side))|Nav|Section|^SectioningFragment)$/
 const bareTagRegex = /^(article|aside|nav|section)$/
-const messagePrefix = 'Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。'
-const messageSuffix = 'Sectioning Content(Article, Aside, Nav, Section)でHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。現在のマークアップの構造を変更したくない場合はSectioningFragmentコンポーネントを利用してください。'
+const modelessDialogRegex = /ModelessDialog$/
 
-const commonMessage = `${messagePrefix}${messageSuffix}`
-const rootMessage = `${messagePrefix}コンポーネント全体に対するHeadingではない場合、${messageSuffix}コンポーネント全体に対するHeadingの場合、他のHeadingのアウトラインが明確に指定されればエラーにならなくなります。`
+const noHeadingTagNames = ['span', 'legend']
+
+const headingMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
+ - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。`
+const rootHeadingMessage = `${headingMessage}
+ - Headingをh1にしたい場合(機能名、ページ名などこのページ内でもっとも重要な見出しの場合)、smarthr-ui/PageHeadingを利用してください。その場合はSectionなどでアウトラインを示す必要はありません。`
+const pageHeadingMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
+const pageHeadingInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
 
 const reportMessageBareToSHR = (tagName, visibleExample) => {
   const matcher = tagName.match(bareTagRegex)
@@ -38,8 +46,12 @@ const searchBubbleUp = (node) => {
     return node
   }
 
-  // Headingコンポーネントの拡張なので対象外
-  if (node.type === 'VariableDeclarator' && node.id.name.match(declaratorHeadingRegex)) {
+  if (
+    // Headingコンポーネントの拡張なので対象外
+    node.type === 'VariableDeclarator' && node.parent.parent?.type === 'Program' && node.id.name.match(declaratorHeadingRegex) ||
+    // ModelessDialogのheaderにHeadingを設定している場合も対象外
+    node.type === 'JSXAttribute' && node.name.name === 'header' && node.parent.name.name.match(modelessDialogRegex)
+  ) {
     return null
   }
 
@@ -52,6 +64,7 @@ module.exports = {
     schema: [],
   },
   create(context) {
+    let h1s = []
     let sections = []
     let { VariableDeclarator, ...formatter } = generateTagFormatter({ context, EXPECTED_NAMES })
 
@@ -86,31 +99,42 @@ module.exports = {
             node,
             message,
           })
-        } else if (elementName.match(headingRegex)) {
+        // Headingに明示的にtag属性が設定されており、それらが span or legend の場合はHeading扱いしない
+        } else if (
+          elementName.match(headingRegex) &&
+          !noHeadingTagNames.includes(node.attributes.find((a) => a.name?.name == 'tag')?.value.value)
+        ) {
           const result = searchBubbleUp(node.parent)
 
           if (result) {
-            const saved = sections.find((s) => s[0] === result)
+            if (elementName.match(/PageHeading$/)) {
+              h1s.push(node)
 
-            // HINT: 最初の1つ目は通知しない（）
-            if (!saved) {
-              sections.push([result, node])
-            } else {
-              // HINT: 同じファイルで同じSectioningContent or トップノードを持つ場合
-              const [section, unreport] = saved
-              const targets = unreport ? [unreport, node] : [node]
-
-              saved[1] = undefined
-
-              targets.forEach((n) => {
+              if (h1s.length > 1) {
                 context.report({
-                  node: n,
-                  message:
-                    section.type === 'Program'
-                    ? rootMessage
-                    : commonMessage,
+                  node,
+                  message: pageHeadingMessage,
                 })
+              } else if (result.type !== 'Program') {
+                context.report({
+                  node,
+                  message: pageHeadingInSectionMessage,
+                })
+              }
+            } else if (result.type === 'Program') {
+              context.report({
+                node,
+                message: rootHeadingMessage,
               })
+            } else {
+              if (sections.find((s) => s === result)) {
+                context.report({
+                  node,
+                  message: headingMessage,
+                })
+              } else {
+                sections.push(result)
+              }
             }
           }
         }
