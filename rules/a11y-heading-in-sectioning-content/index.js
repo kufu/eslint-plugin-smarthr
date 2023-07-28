@@ -19,6 +19,7 @@ const bareTagRegex = /^(article|aside|nav|section)$/
 const modelessDialogRegex = /ModelessDialog$/
 
 const noHeadingTagNames = ['span', 'legend']
+const ignoreHeadingCheckParentType = ['Program', 'ExportNamedDeclaration']
 
 const headingMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
  - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。`
@@ -48,7 +49,7 @@ const searchBubbleUp = (node) => {
 
   if (
     // Headingコンポーネントの拡張なので対象外
-    node.type === 'VariableDeclarator' && node.parent.parent?.type === 'Program' && node.id.name.match(declaratorHeadingRegex) ||
+    node.type === 'VariableDeclarator' && ignoreHeadingCheckParentType.includes(node.parent.parent?.type) && node.id.name.match(declaratorHeadingRegex) ||
     // ModelessDialogのheaderにHeadingを設定している場合も対象外
     node.type === 'JSXAttribute' && node.name.name === 'header' && node.parent.name.name.match(modelessDialogRegex)
   ) {
