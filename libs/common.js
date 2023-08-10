@@ -3,13 +3,29 @@ const path = require('path')
 const fs = require('fs')
 
 const replacePaths = (() => {
-  const tsconfig = fs.readFileSync(`${process.cwd()}/tsconfig.json`)
+  const cwd = process.cwd()
+  const eslintrc = (() => {
+    let file = `${cwd}/.eslintrc.js`
+    if (fs.existsSync(file)) {
+      return require(file)
+    }
 
-  if (!tsconfig) {
-    throw new Error('プロジェクトルートにtsconfig.json を設置してください')
+    file = `${cwd}/.eslintrc`
+
+    if (fs.existsSync(file)) {
+      return JSON5.parse(fs.readFileSync(file))
+    }
+
+    return {}
+  })()
+
+  const tsconfigFile = `${cwd}/${eslintrc.parserOptions?.project || 'tsconfig.json'}`
+
+  if (!fs.existsSync(tsconfigFile)) {
+    throw new Error(`${tsconfigFile} を設置してください`)
   }
 
-  const { compilerOptions } = JSON5.parse(tsconfig)
+  const { compilerOptions } = JSON5.parse(fs.readFileSync(tsconfigFile))
 
   if (!compilerOptions || !compilerOptions.paths) {
     throw new Error('tsconfig.json の compilerOptions.paths に `"@/*": ["any_path/*"]` 形式でフロントエンドのroot dir を指定してください')
