@@ -1,6 +1,8 @@
 # smarthr/require-barrel-import
 
 - tsconfig.json の compilerOptions.pathsに '@/*', もしくは '~/*' としてroot path を指定する必要があります
+  - tsconfig.json はデフォルトではコマンド実行をしたディレクトリから読み込みます
+  - tsconfig.json の設置ディレクトリを変更したい場合、 `.eslintrc` などのeslint設定ファイルに `parserOptions.project` を設定してください
 - importした対象が本来exportされているべきであるbarrel(index.tsなど)が有る場合、import pathの変更を促します
   - 例: Page/parts/Menu/Item の import は Page/parts/Menu から行わせたい
 - ディレクトリ内のindexファイルを捜査し、対象を決定します

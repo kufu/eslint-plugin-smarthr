@@ -6,6 +6,8 @@
 ## config
 
 - tsconfig.json の compilerOptions.pathsに '@/*', もしくは '~/*' としてroot path を指定する必要があります
+  - tsconfig.json はデフォルトではコマンド実行をしたディレクトリから読み込みます
+  - tsconfig.json の設置ディレクトリを変更したい場合、 `.eslintrc` などのeslint設定ファイルに `parserOptions.project` を設定してください
 - 以下の設定を行えます。全て省略可能です。
   - ignoreKeywords
     - ディレクトリ名から生成されるキーワードに含めたくない文字列を指定します
