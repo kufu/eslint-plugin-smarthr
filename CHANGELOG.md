@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.6](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.5...v0.3.6) (2023-08-20)
+
+
+### Features
+
+* .eslintrc.js などの設定からparserOptions.project が設定されている場合、tsconfig.jsonの読み込み先を変更する ([#68](https://github.com/kufu/eslint-plugin-smarthr/issues/68)) ([3897faf](https://github.com/kufu/eslint-plugin-smarthr/commit/3897fafbf3bf8ccdc42a06700ff832ec97dc7ff1))
+
 ### [0.3.5](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.4...v0.3.5) (2023-07-28)
 
 
