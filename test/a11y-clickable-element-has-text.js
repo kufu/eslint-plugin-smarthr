@@ -12,7 +12,9 @@ const ruleTester = new RuleTester({
   },
 })
 
-const defaultErrorMessage = 'a, button要素にはテキストを設定してください。要素内にアイコン、画像のみを設置する場合はSmartHR UIのvisuallyHiddenText、通常のHTML要素にはaltなどの代替テキスト用属性を指定してください'
+const defaultErrorMessage = `a, buttonなどのクリッカブルな要素内にはテキストを設定してください。
+ - 要素内にアイコン、画像のみを設置する場合はaltなどの代替テキスト用属性を指定してください
+ - クリッカブルな要素内に設置しているコンポーネントがテキストを含んでいる場合、"XxxxText" のように末尾に "Text" もしくは "Message" という名称を設定してください`
 
 ruleTester.run('a11y-clickable-element-has-text', rule, {
   valid: [
@@ -30,6 +32,8 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const HogeAnchor = styled.a(() => ``)' },
     { code: 'const HogeAnchor = styled("a")(() => ``)' },
     { code: 'const HogeAnchor = styled(Anchor)(() => ``)' },
+    { code: 'const FugaText = styled(HogeText)(() => ``)' },
+    { code: 'const FugaMessage = styled(HogeMessage)(() => ``)' },
     {
       code: `<a>ほげ</a>`,
     },
@@ -106,6 +110,15 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
       code: `<a><svg role="img" aria-label="hoge" /></a>`,
     },
     {
+      code: `<a><Text /></a>`,
+    },
+    {
+      code: `<a><HogeText /></a>`,
+    },
+    {
+      code: `<a><FormattedMessage /></a>`,
+    },
+    {
       code: `<a><AnyComponent /></a>`,
       options: [{
         componentsWithText: ['AnyComponent']
@@ -126,6 +139,8 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const Piyo = styled("a")(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
     { code: 'const Piyo = styled("a")``', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
     { code: 'const Piyo = styled(Anchor)(() => ``)', errors: [ { message: `Piyoを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
+    { code: 'const Hoge = styled(Text)``', errors: [ { message: `Hogeを正規表現 "/Text$/" がmatchする名称に変更してください` } ]  },
+    { code: 'const Hoge = styled(HogeMessage)``', errors: [ { message: `Hogeを正規表現 "/Message$/" がmatchする名称に変更してください` } ]  },
     {
       code: `<a><img src="hoge.jpg" /></a>`,
       errors: [{ message: defaultErrorMessage }]
@@ -172,6 +187,10 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     },
     {
       code: `<a><div role="article" aria-label="hoge" /></a>`,
+      errors: [{ message: defaultErrorMessage }]
+    },
+    {
+      code: `<a><TextWithHoge /></a>`,
       errors: [{ message: defaultErrorMessage }]
     },
     {
