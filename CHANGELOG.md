@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.7](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.6...v0.3.7) (2023-08-24)
+
+
+### Features
+
+* a11y-clickable-element-has-text のチェック時、リンク内部に名称の末尾がTextがつくコンポーネントがある場合、チェックを通過するように修正 ([#69](https://github.com/kufu/eslint-plugin-smarthr/issues/69)) ([182b5d5](https://github.com/kufu/eslint-plugin-smarthr/commit/182b5d5e52c1faee26011572c48271e4c03512e1))
+
 ### [0.3.6](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.5...v0.3.6) (2023-08-20)
 
 
