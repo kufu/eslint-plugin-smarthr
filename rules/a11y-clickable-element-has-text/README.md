@@ -37,6 +37,12 @@
 </XxxButton>
 ```
 
+```jsx
+<XxxAnchor>>
+  <XxxTextYyyy />
+</XxxAnchor>
+```
+
 ## ✅ Correct
 
 ```jsx
@@ -66,18 +72,24 @@
 ```
 
 ```jsx
+<XxxAnchor>>
+  <XxxText />
+</XxxAnchor>
+```
+
+```jsx
 /*
 rules: {
   'smarthr/a11y-clickable-element-has-text': [
     'error',
     {
-      componentsWithText: ['AnyComponent'],
+      componentsWithText: ['Hoge'],
     },
   ]
 },
 */
 
 <XxxButton>
-  <AnyComponent />
+  <Hoge />
 </XxxButton>
 ```
