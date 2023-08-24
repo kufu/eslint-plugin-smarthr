@@ -12,13 +12,7 @@
 ```js
 {
   rules: {
-    'smarthr/a11y-anchor-has-href-attribute': [
-      'error', // 'warn', 'off'
-      // {
-      //   nextjs: true,
-      //   react_router: true,
-      // },
-    ]
+    'smarthr/a11y-anchor-has-href-attribute': 'error', // 'warn', 'off'
   },
 }
 ```
@@ -39,9 +33,9 @@
 <XxxAnchor href={hoge}>any</XxxAnchor>
 <XxxLink href={undefined}>any</XxxLink>
 
-// nextjs: true
+// nextを利用している場合
 <Link href={hoge}><a>any</a></Link>
 
-// react_router: true
+// react-router-domを利用している場合
 <Link to={hoge}>any</Link>
 ```

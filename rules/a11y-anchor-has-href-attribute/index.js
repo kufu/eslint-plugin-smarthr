@@ -1,4 +1,27 @@
+const JSON5 = require('json5')
+const fs = require('fs')
+
 const { generateTagFormatter } = require('../../libs/format_styled_components')
+
+const OPTION = (() => {
+  const result = {}
+  let file = `${process.cwd()}/package.json`
+
+  if (!fs.existsSync(file)) {
+    return result
+  }
+
+  const json = JSON5.parse(fs.readFileSync(file))
+  const dependencies = [
+    ...Object.keys(json.dependencies || result),
+    ...Object.keys(json.devDependencies || result),
+  ]
+
+  result.nextjs = dependencies.includes('next')
+  result.react_router = dependencies.includes('react-router-dom')
+
+  return result
+})()
 
 const EXPECTED_NAMES = {
   'Anchor$': 'Anchor$',
@@ -7,59 +30,33 @@ const EXPECTED_NAMES = {
 }
 
 const REGEX_TARGET = /(Anchor|Link|^a)$/
-const check = (node, option) => {
-  let result = baseCheck(node)
+const check = (node) => {
+  const result = baseCheck(node)
 
-  if (
-    result && (
-      (option.nextjs && !nextCheck(node)) ||
-      (option.react_router && !reactRouterCheck(node))
-    )
-  ) {
-    result = null
-  }
-
-  return result
+  return result && ((OPTION.nextjs && !nextCheck(node)) || (OPTION.react_router && !reactRouterCheck(node))) ? null : result
 }
 const baseCheck = (node) => {
   const nodeName = node.name.name || ''
 
-  if (nodeName.match(REGEX_TARGET)) {
-    const href = node.attributes.find((a) => a.name?.name == 'href')
-
-    if (!href || !href.value) {
-      return nodeName
-    }
-  }
-
-  return false
+  return nodeName.match(REGEX_TARGET) && checkExistAttribute(node, findHrefAttribute) ? nodeName : false
 }
 const nextCheck = (node) => {
   // HINT: next/link で `Link>a` という構造がありえるので直上のJSXElementを調べる
   const target = node.parent.parent.openingElement
 
-  if (target) {
-    return baseCheck(target)
-  }
-
-  return false
+  return target ? baseCheck(target) : false
 }
-const reactRouterCheck = (node) => {
-  const href = node.attributes.find((a) => a.name?.name == 'to')
+const reactRouterCheck = (node) => checkExistAttribute(node, findToAttribute)
 
-  return !href || !href.value
+const checkExistAttribute = (node, find) => {
+  const attr = node.attributes.find(find)
+
+  return !attr || !attr.value
 }
+const findHrefAttribute = (a) => a.name?.name == 'href'
+const findToAttribute = (a) => a.name?.name == 'to'
 
-const SCHEMA = [
-  {
-    type: 'object',
-    properties: {
-      nextjs: { type: 'boolean' },
-      react_router: { type: 'boolean' },
-    },
-    additionalProperties: false,
-  }
-]
+const SCHEMA = []
 
 module.exports = {
   meta: {
@@ -67,12 +64,10 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
-    const option = context.options[0] || {}
-
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const nodeName = check(node, option)
+        const nodeName = check(node)
 
         if (nodeName) {
           context.report({
@@ -80,7 +75,7 @@ module.exports = {
             message: `${nodeName} に href 属性を設定してください。
  - onClickなどでページ遷移する場合、href属性に遷移先のURIを設定してください。Cmd + clickなどのキーボードショートカットに対応出来ます。
  - onClickなどの動作がURLの変更を行わない場合、リンクではなくbuttonでマークアップすることを検討してください。
- - リンクを無効化することを表したい場合、href属性に undefined を設定してください。`,
+ - リンクが無効化されていることを表したい場合、href属性に undefined を設定してください。`,
           })
         }
       },
