@@ -54,4 +54,20 @@ const rootPath = (() => {
   return path.resolve(`${process.cwd()}/${p.replace(/\/\*$/, '')}`)
 })()
 
-module.exports = { replacePaths, rootPath }
+const dependencies = (() => {
+  const result = []
+  let file = `${process.cwd()}/package.json`
+
+  if (!fs.existsSync(file)) {
+    return []
+  }
+
+  const json = JSON5.parse(fs.readFileSync(file))
+
+  return [
+    ...(json.dependencies ? Object.keys(json.dependencies) : null),
+    ...(json.devDependencies ? Object.keys(json.devDependencies) : null),
+  ]
+})()
+
+module.exports = { replacePaths, rootPath, dependencies }
