@@ -13,15 +13,26 @@ const EXPECTED_NAMES = {
 }
 const TARGET_TAG_NAME_REGEX = new RegExp(`(${Object.keys(EXPECTED_NAMES).join('|')})`)
 const INPUT_NAME_REGEX = /^[a-zA-Z0-9_\[\]]+$/
+const INPUT_TAG_REGEX = /(i|I)nput$/
+
+const findNameAttr = (a) => a?.name?.name === 'name'
+const findRadioInput = (a) => a.name?.name === 'type' && a.value.value === 'radio'
+
+const MESSAGE_PART_FORMAT = `"${INPUT_NAME_REGEX.toString()}"にmatchするフォーマットで命名してください`
+const MESSAGE_UNDEFINED_NAME_PART = `
+ - ブラウザの自動補完が有効化されるなどのメリットがあります
+ - より多くのブラウザが自動補完を行える可能性を上げるため、${MESSAGE_PART_FORMAT}`
+const MESSAGE_UNDEFINED_FOR_RADIO = `にグループとなる他のinput[radio]と同じname属性を指定してください
+ - 適切に指定することで同じname属性を指定したinput[radio]とグループが確立され、適切なキーボード操作を行えるようになります${MESSAGE_UNDEFINED_NAME_PART}`
+const MESSAGE_UNDEFINED_FOR_NOT_RADIO = `にname属性を指定してください${MESSAGE_UNDEFINED_NAME_PART}`
+const MESSAGE_NAME_FORMAT_SUFFIX = `はブラウザの自動補完が適切に行えない可能性があるため${MESSAGE_PART_FORMAT}`
+
+const SCHEMA = []
 
 module.exports = {
   meta: {
     type: 'problem',
-    messages: {
-      'format-styled-components': '{{ message }}',
-      'a11y-input-has-name-attribute': '{{ message }}',
-    },
-    schema: [],
+    schema: SCHEMA,
   },
   create(context) {
     return {
@@ -29,41 +40,31 @@ module.exports = {
       JSXOpeningElement: (node) => {
         const nodeName = node.name.name || '';
 
-        if (!nodeName.match(TARGET_TAG_NAME_REGEX)) {
-          return
-        }
+        if (nodeName.match(TARGET_TAG_NAME_REGEX)) {
+          const nameAttr = node.attributes.find(findNameAttr)
 
-        const nameAttr = node.attributes.find((a) => a?.name?.name === 'name')
+          if (!nameAttr) {
+            const isRadio =
+              nodeName.match(/RadioButton$/) ||
+              (nodeName.match(INPUT_TAG_REGEX) && node.attributes.some(findRadioInput));
 
-        if (!nameAttr) {
-          const isRadio =
-            nodeName.match(/RadioButton$/) ||
-            (nodeName.match(/(i|I)nput$/) && node.attributes.some(
-              (a) => a.name?.name === 'type' && a.value.value === 'radio'
-            ));
-
-          context.report({
-            node,
-            messageId: 'a11y-input-has-name-attribute',
-            data: {
-              message: `${nodeName} にname属性を指定してください。適切に指定することで${isRadio ? 'グループが確立され、キーボード操作しやすくなる' : 'ブラウザの自動補完が有効化される'}などのメリットがあります。`,
-            },
-          });
-        } else {
-          const nameValue = nameAttr.value?.value || ''
-
-          if (nameValue && !nameValue.match(INPUT_NAME_REGEX)) {
             context.report({
               node,
-              messageId: 'a11y-input-has-name-attribute',
-              data: {
-                message: `${nodeName} のname属性の値(${nameValue})はブラウザの自動補完が適切に行えない可能性があるため ${INPUT_NAME_REGEX.toString()} にmatchするフォーマットで命名してください。`,
-              },
+              message: `${nodeName} ${isRadio ? MESSAGE_UNDEFINED_FOR_RADIO : MESSAGE_UNDEFINED_FOR_NOT_RADIO}`,
             });
+          } else {
+            const nameValue = nameAttr.value?.value || ''
+
+            if (nameValue && !nameValue.match(INPUT_NAME_REGEX)) {
+              context.report({
+                node,
+                message: `${nodeName} のname属性の値(${nameValue})${MESSAGE_NAME_FORMAT_SUFFIX}`,
+              });
+            }
           }
         }
       },
     };
   },
 };
-module.exports.schema = [];
+module.exports.schema = SCHEMA;
