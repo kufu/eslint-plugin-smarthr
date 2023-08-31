@@ -49,12 +49,26 @@ const nextCheck = (node) => {
 const reactRouterCheck = (node) => checkExistAttribute(node, findToAttribute)
 
 const checkExistAttribute = (node, find) => {
-  const attr = node.attributes.find(find)
+  const attr = node.attributes.find(find)?.value
 
-  return !attr || !attr.value
+  return (
+    !attr ||
+    isNullTextHref(attr) ||
+    (attr.type === 'JSXExpressionContainer' && isNullTextHref(attr.expression))
+  )
 }
+const isNullTextHref = (attr) => attr.type === 'Literal' && (attr.value === '' || attr.value === '#')
+
 const findHrefAttribute = (a) => a.name?.name == 'href'
 const findToAttribute = (a) => a.name?.name == 'to'
+
+const MESSAGE_SUFFIX = ` に href 属性を正しく設定してください
+ - onClickなどでページ遷移する場合でもhref属性に遷移先のURIを設定してください
+   - Cmd + clickなどのキーボードショートカットに対応出来ます
+ - onClickなどの動作がURLの変更を行わない場合、button要素でマークアップすることを検討してください
+   - href属性に空文字(""など)や '#' が設定されている場合、実質画面遷移を行わないため、同様にbutton要素でマークアップすることを検討してください
+ - リンクが存在せず無効化されていることを表したい場合、href属性に undefined を設定してください
+   - button要素のdisabled属性が設定された場合に相当します`
 
 const SCHEMA = []
 
@@ -72,10 +86,7 @@ module.exports = {
         if (nodeName) {
           context.report({
             node,
-            message: `${nodeName} に href 属性を設定してください。
- - onClickなどでページ遷移する場合、href属性に遷移先のURIを設定してください。Cmd + clickなどのキーボードショートカットに対応出来ます。
- - onClickなどの動作がURLの変更を行わない場合、リンクではなくbuttonでマークアップすることを検討してください。
- - リンクが無効化されていることを表したい場合、href属性に undefined を設定してください。`,
+            message: `${nodeName}${MESSAGE_SUFFIX}`,
           })
         }
       },
