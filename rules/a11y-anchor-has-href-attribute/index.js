@@ -4,23 +4,22 @@ const fs = require('fs')
 const { generateTagFormatter } = require('../../libs/format_styled_components')
 
 const OPTION = (() => {
-  const result = {}
-  let file = `${process.cwd()}/package.json`
+  const file = `${process.cwd()}/package.json`
 
   if (!fs.existsSync(file)) {
-    return result
+    return {}
   }
 
   const json = JSON5.parse(fs.readFileSync(file))
   const dependencies = [
-    ...Object.keys(json.dependencies || result),
-    ...Object.keys(json.devDependencies || result),
+    ...Object.keys(json.dependencies || {}),
+    ...Object.keys(json.devDependencies || {}),
   ]
 
-  result.nextjs = dependencies.includes('next')
-  result.react_router = dependencies.includes('react-router-dom')
-
-  return result
+  return {
+    nextjs: dependencies.includes('next'),
+    react_router: dependencies.includes('react-router-dom'),
+  }
 })()
 
 const EXPECTED_NAMES = {
