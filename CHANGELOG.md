@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.8](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.7...v0.3.8) (2023-09-01)
+
+
+### Features
+
+* a11y-anchor-has-href-attribute の next, react-router-dom用オプションをpackage.jsonを解析して自動設定するように修正 ([#71](https://github.com/kufu/eslint-plugin-smarthr/issues/71)) ([8321433](https://github.com/kufu/eslint-plugin-smarthr/commit/832143385dd92bfd6fe45acd959038deea5cd1fe))
+* a11y-anchor-has-href-attributeをhref="" や href="#" の場合、エラーとなるように修正 ([#75](https://github.com/kufu/eslint-plugin-smarthr/issues/75)) ([738ab65](https://github.com/kufu/eslint-plugin-smarthr/commit/738ab6598111dcf573a35d24f9d1baeda0506b4f))
+
 ### [0.3.7](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.6...v0.3.7) (2023-08-24)
 
 
