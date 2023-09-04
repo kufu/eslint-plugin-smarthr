@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.9](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.8...v0.3.9) (2023-09-04)
+
+
+### Features
+
+* `new Date("YYYY/MM/DD")` のように日付文字列を直接設定している場合 `new Date(YYYY, MM - 1, DD)` に置き換えるfixerを追加 ([#76](https://github.com/kufu/eslint-plugin-smarthr/issues/76)) ([16a689a](https://github.com/kufu/eslint-plugin-smarthr/commit/16a689a6fe9ef240baaf66bcac08992328a64c4e))
+
 ### [0.3.8](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.7...v0.3.8) (2023-09-01)
 
 
