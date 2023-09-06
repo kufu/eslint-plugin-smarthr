@@ -27,9 +27,9 @@ ruleTester.run('best-practice-for-date', rule, {
     { code: `const year = 2022; const month = 11; const date = 31; new Date(year, month, date)` },
   ],
   invalid: [
-    { code: 'new Date("2022/12/31")', errors: [ { message: errorNewDate } ] },
+    { code: 'new Date("2022/12/31")', errors: [ { message: errorNewDate } ], output: 'new Date(2022, 12 - 1, 31)' },
     { code: 'const arg = "2022/12/31"; new Date(arg)', errors: [ { message: errorNewDate } ] },
-    { code: 'Date.parse("2022/12/31")', errors: [ { message: errorDateParse } ] },
+    { code: 'Date.parse("2022/12/31")', errors: [ { message: errorDateParse } ], output: 'new Date(2022, 12 - 1, 31).getTime()' },
     { code: 'const arg = "2022/12/31"; Date.parse(arg)', errors: [ { message: errorDateParse } ] },
   ]
 })
