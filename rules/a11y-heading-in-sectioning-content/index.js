@@ -11,16 +11,30 @@ const EXPECTED_NAMES = {
   'Section$': 'Section$',
   'ModelessDialog$': 'ModelessDialog$',
 }
-const UNEXPECTED_NAMES = {
-  '(A|^a)rticle$': '(Article)$',
-  '(A|^a)side$': '(Aside)$',
-  '(N|^n)av$': '(Nav)$',
-  '(S|^s)ection$': '(Section)$',
-}
+
 const unexpectedMessageTemplate = `{{extended}} は smarthr-ui/{{expected}} をextendすることを期待する名称になっています
  - childrenにHeadingを含まない場合、コンポーネントの名称から"{{expected}}"を取り除いてください
  - childrenにHeadingを含み、アウトラインの範囲を指定するためのコンポーネントならば、smarthr-ui/{{expected}}をexendしてください
    - "styled(Xxxx)" 形式の場合、拡張元であるXxxxコンポーネントの名称の末尾に"{{expected}}"を設定し、そのコンポーネント内でsmarthr-ui/{{expected}}を利用してください`
+const UNEXPECTED_NAMES = {
+  '(Heading|^h(1|2|3|4|5|6))$': '(Heading)$',
+  '(A|^a)rticle$': [
+    '(Article)$',
+    unexpectedMessageTemplate,
+  ],
+  '(A|^a)side$': [
+    '(Aside)$',
+    unexpectedMessageTemplate,
+  ],
+  '(N|^n)av$': [
+    '(Nav)$',
+    unexpectedMessageTemplate,
+  ],
+  '(S|^s)ection$': [
+    '(Section)$',
+    unexpectedMessageTemplate,
+  ],
+}
 
 const headingRegex = /((^h(1|2|3|4|5|6))|Heading)$/
 const declaratorHeadingRegex = /Heading$/
@@ -100,7 +114,6 @@ module.exports = {
     formatter.VariableDeclarator = (node) => {
       VariableDeclarator(node)
       VariableDeclaratorBareToSHR(context, node)
-
     }
 
     return {

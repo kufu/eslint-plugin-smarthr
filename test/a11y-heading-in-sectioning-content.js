@@ -66,6 +66,12 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
  - childrenにHeadingを含まない場合、コンポーネントの名称から"Article"を取り除いてください
  - childrenにHeadingを含み、アウトラインの範囲を指定するためのコンポーネントならば、smarthr-ui/Articleをexendしてください
    - "styled(Xxxx)" 形式の場合、拡張元であるXxxxコンポーネントの名称の末尾に"Article"を設定し、そのコンポーネント内でsmarthr-ui/Articleを利用してください` } ] },
+    { code: 'const StyledHeading = styled(Hoge)``', errors: [ { message: `StyledHeading は /(Heading|^h(1|2|3|4|5|6))$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
+ - StyledHeading の名称を Hoge を継承していることをわかるような名称に変更してください
+ - もしくは Hoge の名称を StyledHeading の継承元であることがわかるような名称に変更してください
+   - エラー例: const XxxTitle = styled(YyyHeading)
+   - 成功例1: const XxxHeading = styled(YyyHeading)
+   - 成功例2: const XxxTitle = styled(YyyTitle)` } ] },
     { code: '<><PageHeading>hoge</PageHeading><PageHeading>fuga</PageHeading></>', errors: [ { message: pageMessage } ] },
     { code: '<Heading>hoge</Heading>', errors: [ { message } ] },
     { code: '<><Heading>hoge</Heading><Heading>fuga</Heading></>', errors: [ { message }, { message } ] },
