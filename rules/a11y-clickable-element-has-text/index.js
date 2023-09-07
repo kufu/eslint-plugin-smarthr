@@ -20,6 +20,12 @@ const EXPECTED_NAMES = {
   '^a$': '(Anchor|Link)$',
 }
 
+const UNEXPECTED_NAMES = {
+  '(B|^b)utton$': '(Button)$',
+  '(Anchor|^a)$': '(Anchor)$',
+  '(Link|^a)$': '(Link)$',
+}
+
 const REGEX_NLSP = /^\s*\n+\s*$/
 const REGEX_CLICKABLE_ELEMENT = /^(a|(.*?)Anchor(Button)?|(.*?)Link|(b|B)utton)$/
 const REGEX_SMARTHR_LOGO = /SmartHRLogo$/
@@ -47,7 +53,7 @@ module.exports = {
     const componentsWithText = option.componentsWithText || []
 
     return {
-      ...generateTagFormatter({ context, EXPECTED_NAMES }),
+      ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXElement: (parentNode) => {
         // HINT: 閉じタグが存在しない === テキストノードが存在しない
         if (!parentNode.closingElement) {

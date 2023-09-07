@@ -67,11 +67,17 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
  - childrenにHeadingを含み、アウトラインの範囲を指定するためのコンポーネントならば、smarthr-ui/Articleをexendしてください
    - "styled(Xxxx)" 形式の場合、拡張元であるXxxxコンポーネントの名称の末尾に"Article"を設定し、そのコンポーネント内でsmarthr-ui/Articleを利用してください` } ] },
     { code: 'const StyledHeading = styled(Hoge)``', errors: [ { message: `StyledHeading は /(Heading|^h(1|2|3|4|5|6))$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
- - StyledHeading の名称を Hoge を継承していることをわかるような名称に変更してください
- - もしくは Hoge の名称を StyledHeading の継承元であることがわかるような名称に変更してください
-   - エラー例: const XxxTitle = styled(YyyHeading)
-   - 成功例1: const XxxHeading = styled(YyyHeading)
-   - 成功例2: const XxxTitle = styled(YyyTitle)` } ] },
+ - StyledHeading の名称の末尾が"Heading" という文字列ではない状態にしつつ、"Hoge"を継承していることをわかる名称に変更してください
+ - もしくは"Hoge"を"StyledHeading"の継承元であることがわかるような名称に変更するか、適切な別コンポーネントに差し替えてください
+   - 修正例1: const StyledXxxx = styled(Hoge)
+   - 修正例2: const StyledHeadingXxxx = styled(Hoge)
+   - 修正例3: const StyledHeading = styled(XxxxHeading)` } ] },
+    { code: 'const StyledHeading = styled.div``', errors: [ { message: `StyledHeading は /(Heading|^h(1|2|3|4|5|6))$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
+ - StyledHeading の名称の末尾が"Heading" という文字列ではない状態にしつつ、"div"を継承していることをわかる名称に変更してください
+ - もしくは"div"を"StyledHeading"の継承元であることがわかるような適切なタグや別コンポーネントに差し替えてください
+   - 修正例1: const StyledXxxx = styled.div
+   - 修正例2: const StyledHeadingXxxx = styled.div
+   - 修正例3: const StyledHeading = styled(XxxxHeading)` } ] },
     { code: '<><PageHeading>hoge</PageHeading><PageHeading>fuga</PageHeading></>', errors: [ { message: pageMessage } ] },
     { code: '<Heading>hoge</Heading>', errors: [ { message } ] },
     { code: '<><Heading>hoge</Heading><Heading>fuga</Heading></>', errors: [ { message }, { message } ] },
