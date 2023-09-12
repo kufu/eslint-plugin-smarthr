@@ -58,6 +58,24 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: 'const StyledAside = styled.aside``', errors: [ { message: `"aside"を利用せず、smarthr-ui/Asideを拡張してください。Headingのレベルが自動計算されるようになります。(例: "styled.aside" -> "styled(Aside)")` } ] },
     { code: 'const StyledNav = styled.nav``', errors: [ { message: `"nav"を利用せず、smarthr-ui/Navを拡張してください。Headingのレベルが自動計算されるようになります。(例: "styled.nav" -> "styled(Nav)")` } ] },
     { code: 'const StyledSection = styled.section``', errors: [ { message: `"section"を利用せず、smarthr-ui/Sectionを拡張してください。Headingのレベルが自動計算されるようになります。(例: "styled.section" -> "styled(Section)")` } ] },
+    { code: 'const StyledSection = styled.div``', errors: [ { message: `StyledSection は smarthr-ui/Section をextendすることを期待する名称になっています
+ - childrenにHeadingを含まない場合、コンポーネントの名称から"Section"を取り除いてください
+ - childrenにHeadingを含み、アウトラインの範囲を指定するためのコンポーネントならば、smarthr-ui/Sectionをexendしてください
+   - "styled(Xxxx)" 形式の場合、拡張元であるXxxxコンポーネントの名称の末尾に"Section"を設定し、そのコンポーネント内でsmarthr-ui/Sectionを利用してください` } ] },
+    { code: 'const StyledArticle = styled(Hoge)``', errors: [ { message: `StyledArticle は smarthr-ui/Article をextendすることを期待する名称になっています
+ - childrenにHeadingを含まない場合、コンポーネントの名称から"Article"を取り除いてください
+ - childrenにHeadingを含み、アウトラインの範囲を指定するためのコンポーネントならば、smarthr-ui/Articleをexendしてください
+   - "styled(Xxxx)" 形式の場合、拡張元であるXxxxコンポーネントの名称の末尾に"Article"を設定し、そのコンポーネント内でsmarthr-ui/Articleを利用してください` } ] },
+    { code: 'const StyledAside = styled(AsideXxxx)``', errors: [ { message: `StyledAside は smarthr-ui/Aside をextendすることを期待する名称になっています
+ - childrenにHeadingを含まない場合、コンポーネントの名称から"Aside"を取り除いてください
+ - childrenにHeadingを含み、アウトラインの範囲を指定するためのコンポーネントならば、smarthr-ui/Asideをexendしてください
+   - "styled(Xxxx)" 形式の場合、拡張元であるXxxxコンポーネントの名称の末尾に"Aside"を設定し、そのコンポーネント内でsmarthr-ui/Asideを利用してください` } ] },
+    { code: 'const StyledHeading = styled(Hoge)``', errors: [ { message: `StyledHeading は /(Heading|^h(1|2|3|4|5|6))$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
+ - StyledHeading の名称を Hoge を継承していることをわかるような名称に変更してください
+ - もしくは Hoge の名称を StyledHeading の継承元であることがわかるような名称に変更してください
+   - エラー例: const XxxTitle = styled(YyyHeading)
+   - 成功例1: const XxxHeading = styled(YyyHeading)
+   - 成功例2: const XxxTitle = styled(YyyTitle)` } ] },
     { code: '<><PageHeading>hoge</PageHeading><PageHeading>fuga</PageHeading></>', errors: [ { message: pageMessage } ] },
     { code: '<Heading>hoge</Heading>', errors: [ { message } ] },
     { code: '<><Heading>hoge</Heading><Heading>fuga</Heading></>', errors: [ { message }, { message } ] },

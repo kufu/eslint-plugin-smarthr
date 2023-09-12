@@ -12,6 +12,30 @@ const EXPECTED_NAMES = {
   'ModelessDialog$': 'ModelessDialog$',
 }
 
+const unexpectedMessageTemplate = `{{extended}} は smarthr-ui/{{expected}} をextendすることを期待する名称になっています
+ - childrenにHeadingを含まない場合、コンポーネントの名称から"{{expected}}"を取り除いてください
+ - childrenにHeadingを含み、アウトラインの範囲を指定するためのコンポーネントならば、smarthr-ui/{{expected}}をexendしてください
+   - "styled(Xxxx)" 形式の場合、拡張元であるXxxxコンポーネントの名称の末尾に"{{expected}}"を設定し、そのコンポーネント内でsmarthr-ui/{{expected}}を利用してください`
+const UNEXPECTED_NAMES = {
+  '(Heading|^h(1|2|3|4|5|6))$': '(Heading)$',
+  '(A|^a)rticle$': [
+    '(Article)$',
+    unexpectedMessageTemplate,
+  ],
+  '(A|^a)side$': [
+    '(Aside)$',
+    unexpectedMessageTemplate,
+  ],
+  '(N|^n)av$': [
+    '(Nav)$',
+    unexpectedMessageTemplate,
+  ],
+  '(S|^s)ection$': [
+    '(Section)$',
+    unexpectedMessageTemplate,
+  ],
+}
+
 const headingRegex = /((^h(1|2|3|4|5|6))|Heading)$/
 const declaratorHeadingRegex = /Heading$/
 const sectioningRegex = /((A(rticle|side))|Nav|Section|^SectioningFragment)$/
@@ -28,6 +52,24 @@ const rootHeadingMessage = `${headingMessage}
 const pageHeadingMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
 const pageHeadingInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
 
+const VariableDeclaratorBareToSHR = (context, node) => {
+  if (!node.init) {
+    return
+  }
+
+  const tag = node.init.tag || node.init
+
+  if (tag.object?.name === 'styled') {
+    const message = reportMessageBareToSHR(tag.property.name, true)
+
+    if (message) {
+      context.report({
+        node,
+        message,
+      });
+    }
+  }
+}
 const reportMessageBareToSHR = (tagName, visibleExample) => {
   const matcher = tagName.match(bareTagRegex)
 
@@ -67,26 +109,11 @@ module.exports = {
   create(context) {
     let h1s = []
     let sections = []
-    let { VariableDeclarator, ...formatter } = generateTagFormatter({ context, EXPECTED_NAMES })
+    let { VariableDeclarator, ...formatter } = generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES, unexpectedMessageTemplate })
 
     formatter.VariableDeclarator = (node) => {
       VariableDeclarator(node)
-      if (!node.init) {
-        return
-      }
-
-      const tag = node.init.tag || node.init
-
-      if (tag.object?.name === 'styled') {
-        const message = reportMessageBareToSHR(tag.property.name, true)
-
-        if (message) {
-          context.report({
-            node,
-            message,
-          });
-        }
-      }
+      VariableDeclaratorBareToSHR(context, node)
     }
 
     return {
