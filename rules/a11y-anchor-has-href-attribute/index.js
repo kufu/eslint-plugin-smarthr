@@ -29,21 +29,29 @@ const EXPECTED_NAMES = {
 }
 
 const REGEX_TARGET = /(Anchor|Link|^a)$/
-const check = (node) => {
-  const result = baseCheck(node)
+const check = (node, checkType) => {
+  const result = baseCheck(node, checkType)
 
-  return result && ((OPTION.nextjs && !nextCheck(node)) || (OPTION.react_router && !reactRouterCheck(node))) ? null : result
+  return result && ((OPTION.nextjs && !nextCheck(node, checkType)) || (OPTION.react_router && !reactRouterCheck(node))) ? null : result
 }
-const baseCheck = (node) => {
+const baseCheck = (node, checkType) => {
   const nodeName = node.name.name || ''
 
-  return nodeName.match(REGEX_TARGET) && checkExistAttribute(node, findHrefAttribute) ? nodeName : false
+  if (
+    nodeName.match(REGEX_TARGET) &&
+    checkExistAttribute(node, findHrefAttribute) &&
+    (checkType !== 'smart' || !node.attributes.some(findSpreadAttr))
+  ) {
+    return nodeName
+  }
+
+  return false
 }
-const nextCheck = (node) => {
+const nextCheck = (node, checkType) => {
   // HINT: next/link で `Link>a` という構造がありえるので直上のJSXElementを調べる
   const target = node.parent.parent.openingElement
 
-  return target ? baseCheck(target) : false
+  return target ? baseCheck(target, checkType) : false
 }
 const reactRouterCheck = (node) => checkExistAttribute(node, findToAttribute)
 
@@ -57,6 +65,7 @@ const checkExistAttribute = (node, find) => {
   )
 }
 const isNullTextHref = (attr) => attr.type === 'Literal' && (attr.value === '' || attr.value === '#')
+const findSpreadAttr = (a) => a.type === 'JSXSpreadAttribute'
 
 const findHrefAttribute = (a) => a.name?.name == 'href'
 const findToAttribute = (a) => a.name?.name == 'to'
@@ -69,7 +78,15 @@ const MESSAGE_SUFFIX = ` に href 属性を正しく設定してください
  - リンクが存在せず無効化されていることを表したい場合、href属性に undefined を設定してください
    - button要素のdisabled属性が設定された場合に相当します`
 
-const SCHEMA = []
+const SCHEMA = [
+  {
+    type: 'object',
+    properties: {
+      checkType: { type: 'string', enum: ['always', 'smart'], default: 'always' },
+    },
+    additionalProperties: false,
+  }
+]
 
 module.exports = {
   meta: {
@@ -77,10 +94,13 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
+    const option = context.options[0] || {}
+    const checkType = option.checkType || 'always'
+
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const nodeName = check(node)
+        const nodeName = check(node, checkType)
 
         if (nodeName) {
           context.report({

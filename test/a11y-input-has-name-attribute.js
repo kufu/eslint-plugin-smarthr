@@ -37,6 +37,9 @@ ruleTester.run('a11y-input-has-name-attribute', rule, {
     { code: '<HogeTextarea name="hoge" />' },
     { code: '<select name="hoge" />' },
     { code: '<Select name="hoge[0][Fuga]" />' },
+    { code: '<Input {...hoge} />', options: [{ checkType: 'smart' }] },
+    { code: '<Input {...args1} {...args2} />', options: [{ checkType: 'smart' }] },
+    { code: '<Input {...args} hoge="fuga" />', options: [{ checkType: 'smart' }] },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
@@ -56,5 +59,11 @@ ruleTester.run('a11y-input-has-name-attribute', rule, {
     { code: '<HogeTextarea />', errors: [ { message: `HogeTextarea にname属性を指定してください${MESSAGE_SUFFIX}` } ] },
     { code: '<input type="radio" name="ほげ" />', errors: [ { message: 'input のname属性の値(ほげ)はブラウザの自動補完が適切に行えない可能性があるため"/^[a-zA-Z0-9_\\[\\]]+$/"にmatchするフォーマットで命名してください' } ] },
     { code: '<select name="hoge[fuga][0][あいうえお]" />', errors: [ { message: 'select のname属性の値(hoge[fuga][0][あいうえお])はブラウザの自動補完が適切に行えない可能性があるため"/^[a-zA-Z0-9_\\[\\]]+$/"にmatchするフォーマットで命名してください' } ] },
+    { code: '<Input {...hoge} />', errors: [ { message: `Input にname属性を指定してください
+ - ブラウザの自動補完が有効化されるなどのメリットがあります
+ - より多くのブラウザが自動補完を行える可能性を上げるため、\"/^[a-zA-Z0-9_\\[\\]]+$/\"にmatchするフォーマットで命名してください` } ] },
+    { code: '<Input {...hoge} hoge="fuga" />', options: [{ checkType: 'always' }], errors: [ { message: `Input にname属性を指定してください
+ - ブラウザの自動補完が有効化されるなどのメリットがあります
+ - より多くのブラウザが自動補完を行える可能性を上げるため、\"/^[a-zA-Z0-9_\\[\\]]+$/\"にmatchするフォーマットで命名してください` } ] },
   ],
 });

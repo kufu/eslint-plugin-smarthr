@@ -6,13 +6,17 @@
   - URL遷移を行う場合、hrefが設定されていないとキーボード操作やコンテキストメニューからの遷移ができなくなります
     - これらの操作は href属性を参照します
   - 無効化されたリンクであることを表したい場合 `href={undefined}` を設定してください
+- checkTypeオプションに 'smart' を指定することで spread attributeが設定されている場合はcorrectに出来ます。
 
 ## rules
 
 ```js
 {
   rules: {
-    'smarthr/a11y-anchor-has-href-attribute': 'error', // 'warn', 'off'
+    'smarthr/a11y-anchor-has-href-attribute': [
+      'error', // 'warn', 'off'
+      // { checkType: 'always' } /* 'always' || 'smart' */
+    ]
   },
 }
 ```
@@ -24,6 +28,10 @@
 <XxxAnchor>any</XxxAnchor>
 <XxxLink>any</XxxLink>
 <XxxLink href>any</XxxLink>
+
+// checkType: 'always'
+<XxxAnchor {...args} />
+<XxxLink {...args} any="any" />
 ```
 
 ## ✅ Correct
@@ -38,4 +46,8 @@
 
 // react-router-domを利用している場合
 <Link to={hoge}>any</Link>
+
+// checkType: 'smart'
+<XxxAnchor {...args} />
+<XxxLink {...args} any="any" />
 ```

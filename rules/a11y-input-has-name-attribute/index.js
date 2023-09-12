@@ -14,8 +14,10 @@ const EXPECTED_NAMES = {
 const TARGET_TAG_NAME_REGEX = new RegExp(`(${Object.keys(EXPECTED_NAMES).join('|')})`)
 const INPUT_NAME_REGEX = /^[a-zA-Z0-9_\[\]]+$/
 const INPUT_TAG_REGEX = /(i|I)nput$/
+const RADIO_BUTTON_REGEX = /RadioButton$/
 
 const findNameAttr = (a) => a?.name?.name === 'name'
+const findSpreadAttr = (a) => a.type === 'JSXSpreadAttribute'
 const findRadioInput = (a) => a.name?.name === 'type' && a.value.value === 'radio'
 
 const MESSAGE_PART_FORMAT = `"${INPUT_NAME_REGEX.toString()}"にmatchするフォーマットで命名してください`
@@ -27,7 +29,15 @@ const MESSAGE_UNDEFINED_FOR_RADIO = `にグループとなる他のinput[radio]�
 const MESSAGE_UNDEFINED_FOR_NOT_RADIO = `にname属性を指定してください${MESSAGE_UNDEFINED_NAME_PART}`
 const MESSAGE_NAME_FORMAT_SUFFIX = `はブラウザの自動補完が適切に行えない可能性があるため${MESSAGE_PART_FORMAT}`
 
-const SCHEMA = []
+const SCHEMA = [
+  {
+    type: 'object',
+    properties: {
+      checkType: { type: 'string', enum: ['always', 'smart'], default: 'always' },
+    },
+    additionalProperties: false,
+  }
+]
 
 module.exports = {
   meta: {
@@ -35,6 +45,9 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
+    const option = context.options[0] || {}
+    const checkType = option.checkType || 'always'
+
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
@@ -44,14 +57,20 @@ module.exports = {
           const nameAttr = node.attributes.find(findNameAttr)
 
           if (!nameAttr) {
-            const isRadio =
-              nodeName.match(/RadioButton$/) ||
-              (nodeName.match(INPUT_TAG_REGEX) && node.attributes.some(findRadioInput));
+            if (
+              node.attributes.length === 0 ||
+              checkType !== 'smart' ||
+              !node.attributes.some(findSpreadAttr)
+            ) {
+              const isRadio =
+                nodeName.match(RADIO_BUTTON_REGEX) ||
+                (nodeName.match(INPUT_TAG_REGEX) && node.attributes.some(findRadioInput));
 
-            context.report({
-              node,
-              message: `${nodeName} ${isRadio ? MESSAGE_UNDEFINED_FOR_RADIO : MESSAGE_UNDEFINED_FOR_NOT_RADIO}`,
-            });
+              context.report({
+                node,
+                message: `${nodeName} ${isRadio ? MESSAGE_UNDEFINED_FOR_RADIO : MESSAGE_UNDEFINED_FOR_NOT_RADIO}`,
+              });
+            }
           } else {
             const nameValue = nameAttr.value?.value || ''
 
