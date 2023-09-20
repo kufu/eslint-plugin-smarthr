@@ -10,6 +10,7 @@ const EXPECTED_NAMES = {
 const REGEX_IMG = /(img|image)$/i // HINT: Iconは別途テキストが存在する場合が多いためチェックの対象外とする
 
 const findAltAttr = (a) => a.name?.name === 'alt'
+const findSpreadAttr = (a) => a.type === 'JSXSpreadAttribute'
 const isWithinSvgJsxElement = (node) => {
   if (
     node.type === 'JSXElement' &&
@@ -28,12 +29,25 @@ const MESSAGE_NOT_EXIST_ALT = `画像にはalt属性を指定してください�
 const MESSAGE_NULL_ALT = `画像の情報をテキストにした代替テキスト（'alt'）を設定してください。
  - 装飾目的の画像など、alt属性に指定すべき文字がない場合は背景画像にすることを検討してください。`
 
+const SCHEMA = [
+  {
+    type: 'object',
+    properties: {
+      checkType: { type: 'string', enum: ['always', 'smart'], default: 'always' },
+    },
+    additionalProperties: false,
+  }
+]
+
 module.exports = {
   meta: {
     type: 'problem',
-    schema: [],
+    schema: SCHEMA,
   },
   create(context) {
+    const option = context.options[0] || {}
+    const checkType = option.checkType || 'always'
+
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
@@ -46,7 +60,16 @@ module.exports = {
             let message = ''
 
             if (!alt) {
-              if (matcher.input !== 'image' || !isWithinSvgJsxElement(node.parent)) {
+              if (
+                (
+                  matcher.input !== 'image' ||
+                  !isWithinSvgJsxElement(node.parent)
+                ) &&
+                (
+                  checkType !== 'smart' ||
+                  !node.attributes.some(findSpreadAttr)
+                )
+              ) {
                 message = MESSAGE_NOT_EXIST_ALT
               }
             } else if (alt.value.value === '') {
@@ -65,4 +88,4 @@ module.exports = {
     }
   },
 }
-module.exports.schema = []
+module.exports.schema = SCHEMA

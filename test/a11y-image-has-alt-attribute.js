@@ -38,6 +38,7 @@ ruleTester.run('a11y-image-has-alt-attribute', rule, {
     { code: '<HogeImage alt="hoge" />' },
     { code: '<HogeIcon />' },
     { code: '<svg><image /></svg>' },
+    { code: '<AnyImg {...hoge} />', options: [{ checkType: 'smart' }] },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
@@ -49,5 +50,7 @@ ruleTester.run('a11y-image-has-alt-attribute', rule, {
     { code: '<img />', errors: [ { message: messageNotExistAlt } ] },
     { code: '<HogeImage alt="" />', errors: [ { message: messageNullAlt } ] },
     { code: '<hoge><image /></hoge>', errors: [ { message: messageNotExistAlt } ] },
+    { code: '<AnyImg {...hoge} />', errors: [ { message: messageNotExistAlt } ]  },
+    { code: '<AnyImg {...hoge} />', options: [{ checkType: 'always' }], errors: [ { message: messageNotExistAlt } ] },
   ]
 })

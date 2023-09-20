@@ -29,24 +29,13 @@ ruleTester.run('a11y-anchor-has-href-attribute', rule, {
     { code: 'const HogeLink = styled.a``' },
     { code: 'const HogeAnchor = styled(Anchor)``' },
     { code: 'const HogeLink = styled(Link)``' },
-    {
-      code: `<a href="hoge">ほげ</a>`,
-    },
-    {
-      code: `<a href={hoge}>ほげ</a>`,
-    },
-    {
-      code: `<a href={undefined}>ほげ</a>`,
-    },
-    {
-      code: `<HogeAnchor href={hoge}>ほげ</HogeAnchor>`,
-    },
-    {
-      code: `<Link href="hoge">ほげ</Link>`,
-    },
-    {
-      code: `<Link href="#fuga">ほげ</Link>`,
-    },
+    { code: `<a href="hoge">ほげ</a>` },
+    { code: `<a href={hoge}>ほげ</a>` },
+    { code: `<a href={undefined}>ほげ</a>` },
+    { code: `<HogeAnchor href={hoge}>ほげ</HogeAnchor>` },
+    { code: `<Link href="hoge">ほげ</Link>` },
+    { code: `<Link href="#fuga">ほげ</Link>` },
+    { code: '<AnyAnchor {...args1} />', options: [{ checkType: 'smart' }] },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
@@ -65,5 +54,7 @@ ruleTester.run('a11y-anchor-has-href-attribute', rule, {
     { code: `<HogeLink href={''}>hoge</HogeLink>`, errors: [{ message: generateErrorText('HogeLink') }] },
     { code: `<HogeLink href="#">hoge</HogeLink>`, errors: [{ message: generateErrorText('HogeLink') }] },
     { code: `<HogeLink href={'#'}>hoge</HogeLink>`, errors: [{ message: generateErrorText('HogeLink') }] },
+    { code: '<AnyAnchor {...args1} />', errors: [{ message: generateErrorText('AnyAnchor') }] },
+    { code: '<AnyAnchor {...args1} />', options: [{ checkType: 'always' }], errors: [{ message: generateErrorText('AnyAnchor') }] },
   ]
 })
