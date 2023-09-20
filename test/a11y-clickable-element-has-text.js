@@ -141,6 +141,24 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const Piyo = styled(Anchor)(() => ``)', errors: [ { message: `Piyoを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(Text)``', errors: [ { message: `Hogeを正規表現 "/Text$/" がmatchする名称に変更してください` } ]  },
     { code: 'const Hoge = styled(HogeMessage)``', errors: [ { message: `Hogeを正規表現 "/Message$/" がmatchする名称に変更してください` } ]  },
+    { code: 'const StyledButton = styled.div``', errors: [ { message: `StyledButton は /(B|^b)utton$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
+ - StyledButton の名称の末尾が"Button" という文字列ではない状態にしつつ、"div"を継承していることをわかる名称に変更してください
+ - もしくは"div"を"StyledButton"の継承元であることがわかるような適切なタグや別コンポーネントに差し替えてください
+   - 修正例1: const StyledXxxx = styled.div
+   - 修正例2: const StyledButtonXxxx = styled.div
+   - 修正例3: const StyledButton = styled(XxxxButton)` } ]  },
+    { code: 'const HogeAnchor = styled(Fuga)``', errors: [ { message: `HogeAnchor は /(Anchor|^a)$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
+ - HogeAnchor の名称の末尾が"Anchor" という文字列ではない状態にしつつ、"Fuga"を継承していることをわかる名称に変更してください
+ - もしくは"Fuga"を"HogeAnchor"の継承元であることがわかるような名称に変更するか、適切な別コンポーネントに差し替えてください
+   - 修正例1: const HogeXxxx = styled(Fuga)
+   - 修正例2: const HogeAnchorXxxx = styled(Fuga)
+   - 修正例3: const HogeAnchor = styled(XxxxAnchor)` } ]  },
+    { code: 'const HogeLink = styled.p``', errors: [ { message: `HogeLink は /(Link|^a)$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
+ - HogeLink の名称の末尾が"Link" という文字列ではない状態にしつつ、"p"を継承していることをわかる名称に変更してください
+ - もしくは"p"を"HogeLink"の継承元であることがわかるような適切なタグや別コンポーネントに差し替えてください
+   - 修正例1: const HogeXxxx = styled.p
+   - 修正例2: const HogeLinkXxxx = styled.p
+   - 修正例3: const HogeLink = styled(XxxxLink)` } ]  },
     {
       code: `<a><img src="hoge.jpg" /></a>`,
       errors: [{ message: defaultErrorMessage }]

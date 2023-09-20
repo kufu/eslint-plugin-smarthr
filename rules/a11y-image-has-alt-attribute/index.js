@@ -7,6 +7,12 @@ const EXPECTED_NAMES = {
   '^(img|svg)$': '(Img|Image|Icon)$',
 }
 
+const UNEXPECTED_NAMES = {
+  '(Img|^(img|svg))$': '(Img)$',
+  '(Image|^(img|svg))$': '(Image)$',
+  '(Icon|^(img|svg))$': '(Icon)$',
+}
+
 const REGEX_IMG = /(img|image)$/i // HINT: Iconは別途テキストが存在する場合が多いためチェックの対象外とする
 
 const findAltAttr = (a) => a.name?.name === 'alt'
@@ -49,7 +55,7 @@ module.exports = {
     const checkType = option.checkType || 'always'
 
     return {
-      ...generateTagFormatter({ context, EXPECTED_NAMES }),
+      ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
         if (node.name.name) {
           const matcher = node.name.name.match(REGEX_IMG)

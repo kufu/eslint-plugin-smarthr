@@ -73,16 +73,20 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
           const matcher = extended.match(e)
 
           if (matcher && !base.match(b)) {
+            const expected = matcher[1]
+            const isBareTag = base === base.toLowerCase()
+            const sampleFixBase = `styled${isBareTag ? `.${base}` : `(${base})`}`
+
             context.report({
               node,
               message: m ? m
               .replaceAll('{{extended}}', extended)
-              .replaceAll('{{expected}}', matcher[1]) : `${extended} は ${b} にmatchする名前のコンポーネントを拡張することを期待している名称になっています
- - ${extended} の名称を ${base} を継承していることをわかるような名称に変更してください
- - もしくは ${base} の名称を ${extended} の継承元であることがわかるような名称に変更してください
-   - エラー例: const XxxTitle = styled(YyyHeading)
-   - 成功例1: const XxxHeading = styled(YyyHeading)
-   - 成功例2: const XxxTitle = styled(YyyTitle)`
+              .replaceAll('{{expected}}', expected) : `${extended} は ${b.toString()} にmatchする名前のコンポーネントを拡張することを期待している名称になっています
+ - ${extended} の名称の末尾が"${expected}" という文字列ではない状態にしつつ、"${base}"を継承していることをわかる名称に変更してください
+ - もしくは"${base}"を"${extended}"の継承元であることがわかるような${isBareTag ? '適切なタグや別コンポーネントに差し替えてください' : '名称に変更するか、適切な別コンポーネントに差し替えてください'}
+   - 修正例1: const ${extended.replace(expected, '')}Xxxx = ${sampleFixBase}
+   - 修正例2: const ${extended}Xxxx = ${sampleFixBase}
+   - 修正例3: const ${extended} = styled(Xxxx${expected})`
             })
           }
         })

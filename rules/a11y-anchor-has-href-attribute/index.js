@@ -28,6 +28,11 @@ const EXPECTED_NAMES = {
   '^a$': '(Anchor|Link)$',
 }
 
+const UNEXPECTED_NAMES = {
+  '(Anchor|^a)$': '(Anchor)$',
+  '(Link|^a)$': '(Link)$',
+}
+
 const REGEX_TARGET = /(Anchor|Link|^a)$/
 const check = (node, checkType) => {
   const result = baseCheck(node, checkType)
@@ -98,7 +103,7 @@ module.exports = {
     const checkType = option.checkType || 'always'
 
     return {
-      ...generateTagFormatter({ context, EXPECTED_NAMES }),
+      ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
         const nodeName = check(node, checkType)
 
