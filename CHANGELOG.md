@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.10](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.9...v0.3.10) (2023-09-20)
+
+
+### Features
+
+* a11y-heading-in-sectioning-contentでSectioningContentと予想される名前だがそれらの拡張ではないコンポーネントはエラーとする ([#77](https://github.com/kufu/eslint-plugin-smarthr/issues/77)) ([f7248d5](https://github.com/kufu/eslint-plugin-smarthr/commit/f7248d597cb06ba0bab1d3f0d51956efefd04aac))
+* a11y-xxx-has-yyy-attributeにcheckTypeオプションを追加 ([#81](https://github.com/kufu/eslint-plugin-smarthr/issues/81)) ([94a511a](https://github.com/kufu/eslint-plugin-smarthr/commit/94a511a412e62431282eb1980941862313dfb777))
+* a11y系ruleにstyled-componentsで既存のコンポーネントなどを拡張する際、誤検知が発生しそうな名称が設定されている場合はエラーにする機能を追加 ([#80](https://github.com/kufu/eslint-plugin-smarthr/issues/80)) ([727ff3f](https://github.com/kufu/eslint-plugin-smarthr/commit/727ff3fc6116fca017f8c3a3e62af569b76863da))
+
 ### [0.3.9](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.8...v0.3.9) (2023-09-04)
 
 
