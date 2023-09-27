@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.11](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.10...v0.3.11) (2023-09-27)
+
 ### [0.3.10](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.9...v0.3.10) (2023-09-20)
 
 
