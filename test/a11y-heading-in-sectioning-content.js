@@ -13,7 +13,9 @@ const ruleTester = new RuleTester({
 });
 
 const lowerMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
- - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。`
+ - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。
+ - 'as=\"section\"' などでアウトラインを示している場合、as属性を指定した要素をsmarthr-ui/SectioningFragmentでラップしてください。
+  - 要素内のHeadingのレベルが自動計算されるようになります。`
 const message = `${lowerMessage}
  - Headingをh1にしたい場合(機能名、ページ名などこのページ内でもっとも重要な見出しの場合)、smarthr-ui/PageHeadingを利用してください。その場合はSectionなどでアウトラインを示す必要はありません。`
 const pageMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
