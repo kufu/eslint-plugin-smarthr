@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.12](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.11...v0.3.12) (2023-10-12)
+
+
+### Features
+
+* a11y-heading-in-sectioning-contentに"SectioningContent内のsmarthr-ui/Heading系コンポーネントにtag属性が設定されている場合エラー"になる機能を追加 ([#85](https://github.com/kufu/eslint-plugin-smarthr/issues/85)) ([c34b4f4](https://github.com/kufu/eslint-plugin-smarthr/commit/c34b4f43da89d7baf48c2536dcd381327064ef75))
+* a11y-image-has-alt-attributeでaria-describedbyが設定されている場合、エラーにならないように修正 ([#84](https://github.com/kufu/eslint-plugin-smarthr/issues/84)) ([046ee0f](https://github.com/kufu/eslint-plugin-smarthr/commit/046ee0f082381627343371235102304a3f2a0938))
+
 ### [0.3.11](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.10...v0.3.11) (2023-09-27)
 
 ### [0.3.10](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.9...v0.3.10) (2023-09-20)
