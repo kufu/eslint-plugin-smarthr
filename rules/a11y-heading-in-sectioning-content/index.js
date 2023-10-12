@@ -37,6 +37,7 @@ const UNEXPECTED_NAMES = {
 }
 
 const headingRegex = /((^h(1|2|3|4|5|6))|Heading)$/
+const pageHeadingRegex = /PageHeading$/
 const declaratorHeadingRegex = /Heading$/
 const sectioningRegex = /((A(rticle|side))|Nav|Section|^SectioningFragment)$/
 const bareTagRegex = /^(article|aside|nav|section)$/
@@ -53,6 +54,8 @@ const rootHeadingMessage = `${headingMessage}
  - Headingをh1にしたい場合(機能名、ページ名などこのページ内でもっとも重要な見出しの場合)、smarthr-ui/PageHeadingを利用してください。その場合はSectionなどでアウトラインを示す必要はありません。`
 const pageHeadingMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
 const pageHeadingInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
+const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside, Nav, Section, SectioningFragmentのいずれかの自動レベル計算に任せるよう、tag属性を削除してください。
+ - tag属性を指定することで意図しないレベルに固定されてしまう可能性があります。`
 
 const VariableDeclaratorBareToSHR = (context, node) => {
   if (!node.init) {
@@ -103,6 +106,8 @@ const searchBubbleUp = (node) => {
   return searchBubbleUp(node.parent)
 }
 
+const findTagAttr = (a) => a.name?.name == 'tag'
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -130,34 +135,38 @@ module.exports = {
             message,
           })
         // Headingに明示的にtag属性が設定されており、それらが span or legend の場合はHeading扱いしない
-        } else if (
-          elementName.match(headingRegex) &&
-          !noHeadingTagNames.includes(node.attributes.find((a) => a.name?.name == 'tag')?.value.value)
-        ) {
-          const result = searchBubbleUp(node.parent)
+        } else if (elementName.match(headingRegex)) {
+          const tagAttr = node.attributes.find(findTagAttr)
 
-          if (result) {
-            if (elementName.match(/PageHeading$/)) {
-              h1s.push(node)
+          if (!noHeadingTagNames.includes(tagAttr?.value.value)) {
+            const result = searchBubbleUp(node.parent)
+            let hit = false
 
-              if (h1s.length > 1) {
+            if (result) {
+              if (elementName.match(pageHeadingRegex)) {
+                h1s.push(node)
+
+                if (h1s.length > 1) {
+                  hit = true
+                  context.report({
+                    node,
+                    message: pageHeadingMessage,
+                  })
+                } else if (result.type !== 'Program') {
+                  hit = true
+                  context.report({
+                    node,
+                    message: pageHeadingInSectionMessage,
+                  })
+                }
+              } else if (result.type === 'Program') {
+                hit = true
                 context.report({
                   node,
-                  message: pageHeadingMessage,
+                  message: rootHeadingMessage,
                 })
-              } else if (result.type !== 'Program') {
-                context.report({
-                  node,
-                  message: pageHeadingInSectionMessage,
-                })
-              }
-            } else if (result.type === 'Program') {
-              context.report({
-                node,
-                message: rootHeadingMessage,
-              })
-            } else {
-              if (sections.find((s) => s === result)) {
+              } else if (sections.find((s) => s === result)) {
+                hit = true
                 context.report({
                   node,
                   message: headingMessage,
@@ -165,6 +174,13 @@ module.exports = {
               } else {
                 sections.push(result)
               }
+            }
+
+            if (!hit && tagAttr) {
+              context.report({
+                node,
+                message: noTagAttrMessage,
+              })
             }
           }
         }
