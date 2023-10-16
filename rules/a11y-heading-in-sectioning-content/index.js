@@ -178,7 +178,7 @@ module.exports = {
 
             if (!hit && tagAttr) {
               context.report({
-                node,
+                node: tagAttr,
                 message: noTagAttrMessage,
               })
             }
