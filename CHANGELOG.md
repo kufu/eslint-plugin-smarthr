@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.13](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.12...v0.3.13) (2023-10-16)
+
+
+### Features
+
+* a11-heading-in-sectioning-contentのtag属性不要チェックのエラー位置を、タグの開始行ではなく属性の記述されている行に変更する ([#86](https://github.com/kufu/eslint-plugin-smarthr/issues/86)) ([e25080a](https://github.com/kufu/eslint-plugin-smarthr/commit/e25080a461ddce87eaaf20cd0c7ef290fd321836))
+
 ### [0.3.12](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.11...v0.3.12) (2023-10-12)
 
 
