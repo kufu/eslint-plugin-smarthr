@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { generateTagFormatter, STYLED_COMPONENTS_METHOD } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   'PageHeading$': 'PageHeading$',
@@ -43,25 +43,25 @@ const sectioningRegex = /((A(rticle|side))|Nav|Section|^SectioningFragment)$/
 const bareTagRegex = /^(article|aside|nav|section)$/
 const modelessDialogRegex = /ModelessDialog$/
 
-const noHeadingTagNames = ['span', 'legend']
 const ignoreHeadingCheckParentType = ['Program', 'ExportNamedDeclaration']
 
-const headingMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
+const headingMessage = `Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
  - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。
  - 'as="section"' などでアウトラインを示している場合、as属性を指定した要素をsmarthr-ui/SectioningFragmentでラップしてください。
   - 要素内のHeadingのレベルが自動計算されるようになります。`
 const rootHeadingMessage = `${headingMessage}
  - Headingをh1にしたい場合(機能名、ページ名などこのページ内でもっとも重要な見出しの場合)、smarthr-ui/PageHeadingを利用してください。その場合はSectionなどでアウトラインを示す必要はありません。`
-const pageHeadingMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
-const pageHeadingInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
+const pageHeadingMessage = 'PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
+const pageHeadingInSectionMessage = 'PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
 const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside, Nav, Section, SectioningFragmentのいずれかの自動レベル計算に任せるよう、tag属性を削除してください。
  - tag属性を指定することで意図しないレベルに固定されてしまう可能性があります。`
+const noHeadingMessage = (tagValue) => `Headingに tag="${tagValue}" を直接指定しないでください
+ - ${tagValue}は見出しとして扱われなくなるため、非推奨です
+ - 見た目のためHeadingを使いたい場合、styled-componentsのattrsメソッドで拡張してください
+  - 例: const Xxx = styled(Heading).attrs(() => ({ tag: '${tagValue}' }))\`\`
+  - この場合、拡張後のコンポーネントは "${declaratorHeadingRegex.toString()}" にマッチしない名称にしてください`
 
 const VariableDeclaratorBareToSHR = (context, node) => {
-  if (!node.init) {
-    return
-  }
-
   const tag = node.init.tag || node.init
 
   if (tag.object?.name === 'styled') {
@@ -107,6 +107,7 @@ const searchBubbleUp = (node) => {
 }
 
 const findTagAttr = (a) => a.name?.name == 'tag'
+const findNoHeadingTagAttr = (p) => p.key.name === 'tag' && (p.value.value === 'span' || p.value.value === 'legend')
 
 module.exports = {
   meta: {
@@ -119,8 +120,42 @@ module.exports = {
     let { VariableDeclarator, ...formatter } = generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES, unexpectedMessageTemplate })
 
     formatter.VariableDeclarator = (node) => {
-      VariableDeclarator(node)
-      VariableDeclaratorBareToSHR(context, node)
+      if (!node.init) {
+        return
+      }
+
+      let hit = false
+      const tag = node.init.tag || node.init
+
+      if (tag.callee) {
+        const callee = tag.callee
+
+        if (callee.object?.callee && callee.object.callee.name === STYLED_COMPONENTS_METHOD && callee.property?.name === 'attrs') {
+          const arg = callee.object.arguments[0]
+
+          if (arg && (arg.name || arg.value).match(declaratorHeadingRegex)) {
+            const funcBody = tag.arguments[0].body
+            const tagAttr = (funcBody.properties || funcBody.argument?.properties)?.find(findNoHeadingTagAttr)
+
+            if (tagAttr) {
+              hit = true
+
+              if (node.id.name.match(declaratorHeadingRegex)) {
+                context.report({
+                  node,
+                  message: `${node.id.name}を正規表現 "${declaratorHeadingRegex.toString()}" がmatchしない名称に変更してください
+ - tag属性に"${tagAttr.value.value}"が指定されているため、Headingではないことがわかる名称をつける必要があります`,
+                });
+              }
+            }
+          }
+        }
+      }
+
+      if (!hit) {
+        VariableDeclarator(node)
+        VariableDeclaratorBareToSHR(context, node)
+      }
     }
 
     return {
@@ -134,54 +169,68 @@ module.exports = {
             node,
             message,
           })
-        // Headingに明示的にtag属性が設定されており、それらが span or legend の場合はHeading扱いしない
         } else if (elementName.match(headingRegex)) {
           const tagAttr = node.attributes.find(findTagAttr)
 
-          if (!noHeadingTagNames.includes(tagAttr?.value.value)) {
-            const result = searchBubbleUp(node.parent)
-            let hit = false
-
-            if (result) {
-              if (elementName.match(pageHeadingRegex)) {
-                h1s.push(node)
-
-                if (h1s.length > 1) {
-                  hit = true
-                  context.report({
-                    node,
-                    message: pageHeadingMessage,
-                  })
-                } else if (result.type !== 'Program') {
-                  hit = true
-                  context.report({
-                    node,
-                    message: pageHeadingInSectionMessage,
-                  })
-                }
-              } else if (result.type === 'Program') {
-                hit = true
-                context.report({
-                  node,
-                  message: rootHeadingMessage,
-                })
-              } else if (sections.find((s) => s === result)) {
-                hit = true
-                context.report({
-                  node,
-                  message: headingMessage,
-                })
-              } else {
-                sections.push(result)
-              }
-            }
-
-            if (!hit && tagAttr) {
+          switch (tagAttr?.value.value) {
+            // Headingに明示的にtag属性が設定されており、それらが span or legend の場合はHeading扱いしない
+            case 'legend':
               context.report({
                 node: tagAttr,
-                message: noTagAttrMessage,
+                message: noHeadingMessage('legend'),
               })
+              return
+            case 'span':
+              context.report({
+                node: tagAttr,
+                message: noHeadingMessage('span'),
+              })
+
+              return
+          }
+
+          const result = searchBubbleUp(node.parent)
+          let hit = false
+
+          if (result) {
+            if (elementName.match(pageHeadingRegex)) {
+              h1s.push(node)
+
+              if (h1s.length > 1) {
+                hit = true
+                context.report({
+                  node,
+                  message: pageHeadingMessage,
+                })
+              } else if (result.type !== 'Program') {
+                hit = true
+                context.report({
+                  node,
+                  message: pageHeadingInSectionMessage,
+                })
+              }
+            } else if (result.type === 'Program') {
+              hit = true
+              context.report({
+                node,
+                message: rootHeadingMessage,
+              })
+            } else if (sections.find((s) => s === result)) {
+              hit = true
+              context.report({
+                node,
+                message: headingMessage,
+              })
+            } else {
+              sections.push(result)
             }
+          }
+
+          if (!hit && tagAttr) {
+            context.report({
+              node: tagAttr,
+              message: noTagAttrMessage,
+            })
           }
         }
       },

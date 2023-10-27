@@ -12,16 +12,21 @@ const ruleTester = new RuleTester({
   },
 });
 
-const lowerMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
+const lowerMessage = `Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
  - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。
  - 'as=\"section\"' などでアウトラインを示している場合、as属性を指定した要素をsmarthr-ui/SectioningFragmentでラップしてください。
   - 要素内のHeadingのレベルが自動計算されるようになります。`
 const message = `${lowerMessage}
  - Headingをh1にしたい場合(機能名、ページ名などこのページ内でもっとも重要な見出しの場合)、smarthr-ui/PageHeadingを利用してください。その場合はSectionなどでアウトラインを示す必要はありません。`
-const pageMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
-const pageInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
+const pageMessage = 'PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
+const pageInSectionMessage = 'PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
 const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside, Nav, Section, SectioningFragmentのいずれかの自動レベル計算に任せるよう、tag属性を削除してください。
  - tag属性を指定することで意図しないレベルに固定されてしまう可能性があります。`
+const noHeadingMessage = (tagValue) => `Headingに tag="${tagValue}" を直接指定しないでください
+ - ${tagValue}は見出しとして扱われなくなるため、非推奨です
+ - 見た目のためHeadingを使いたい場合、styled-componentsのattrsメソッドで拡張してください
+  - 例: const Xxx = styled(Heading).attrs(() => ({ tag: '${tagValue}' }))\`\`
+  - この場合、拡張後のコンポーネントは "/Heading$/" にマッチしない名称にしてください`
 
 ruleTester.run('a11y-heading-in-sectioning-content', rule, {
   valid: [
@@ -34,6 +39,9 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: 'const HogeHeading = styled.h6``' },
     { code: 'const FugaHeading = styled(Heading)``' },
     { code: 'const FugaHeading = styled(HogeHeading)``' },
+    { code: "const FugaHeading = styled(Heading).attrs(() => ({ tag: 'h3' }))``" },
+    { code: "const Xxxx = styled(Heading).attrs(() => ({ tag: 'span' }))``" },
+    { code: "const Xxxx = styled(Heading).attrs(() => ({ tag: 'legend' }))``" },
     { code: 'const FugaArticle = styled(HogeArticle)``' },
     { code: 'const FugaAside = styled(HogeAside)``' },
     { code: 'const FugaNav = styled(HogeNav)``' },
@@ -54,6 +62,11 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: 'const Hoge = styled.h6``', errors: [ { message: `Hogeを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
     { code: 'const Fuga = styled(Heading)``', errors: [ { message: `Fugaを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
     { code: 'const Fuga = styled(HogeHeading)``', errors: [ { message: `Fugaを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
+    { code: "const Xxxx = styled(Heading).attrs(() => ({ tag: 'h3' }))``", errors: [ { message: `Xxxxを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
+    { code: "const XxxxHeading = styled(Heading).attrs(() => ({ tag: 'span' }))``", errors: [ { message: `XxxxHeadingを正規表現 "/Heading$/" がmatchしない名称に変更してください
+ - tag属性に"span"が指定されているため、Headingではないことがわかる名称をつける必要があります` } ] },
+    { code: "const XxxxHeading = styled(Heading).attrs(() => ({ tag: 'legend' }))``", errors: [ { message: `XxxxHeadingを正規表現 "/Heading$/" がmatchしない名称に変更してください
+ - tag属性に"legend"が指定されているため、Headingではないことがわかる名称をつける必要があります` } ] },
     { code: 'const Fuga = styled(HogeArticle)``', errors: [ { message: `Fugaを正規表現 "/Article$/" がmatchする名称に変更してください` } ] },
     { code: 'const Fuga = styled(HogeAside)``', errors: [ { message: `Fugaを正規表現 "/Aside$/" がmatchする名称に変更してください` } ] },
     { code: 'const Fuga = styled(HogeNav)``', errors: [ { message: `Fugaを正規表現 "/Nav$/" がmatchする名称に変更してください` } ] },
@@ -93,5 +106,7 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<Section><Heading>hoge</Heading><Heading>fuga</Heading></Section>', errors: [ { message: lowerMessage } ] },
     { code: '<Section><PageHeading>hoge</PageHeading></Section>', errors: [ { message: pageInSectionMessage } ] },
     { code: '<Section><Heading tag="h2">hoge</Heading></Section>', errors: [ { message: noTagAttrMessage } ] },
+    { code: '<Heading tag="span">hoge</Heading>', errors: [ { message: noHeadingMessage('span') } ] },
+    { code: '<Heading tag="legend">hoge</Heading>', errors: [ { message: noHeadingMessage('legend') } ] },
   ],
 });

@@ -54,6 +54,10 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
           case callee.object?.name:
             base = callee.property.name
             break
+          case callee.object?.callee?.name:
+            const arg = callee.object.arguments[0]
+            base = arg.name || arg.value
+            break
         }
       }
 
@@ -95,4 +99,4 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
   }
 }
 
-module.exports = { generateTagFormatter }
+module.exports = { generateTagFormatter, STYLED_COMPONENTS_METHOD }
