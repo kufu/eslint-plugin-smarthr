@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.14](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.13...v0.3.14) (2023-11-05)
+
+
+### Bug Fixes
+
+* styled-components/attrsメソッドを利用している場合、継承時の名称チェック対象外になっていたため修正 ([#89](https://github.com/kufu/eslint-plugin-smarthr/issues/89)) ([93b72f2](https://github.com/kufu/eslint-plugin-smarthr/commit/93b72f23f0bcc507976793c63955cff13313e79f))
+
 ### [0.3.13](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.12...v0.3.13) (2023-10-16)
 
 
