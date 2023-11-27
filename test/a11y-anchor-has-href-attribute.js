@@ -25,6 +25,8 @@ ruleTester.run('a11y-anchor-has-href-attribute', rule, {
     { code: `import styled from 'styled-components'` },
     { code: `import styled, { css } from 'styled-components'` },
     { code: `import { css } from 'styled-components'` },
+    { code: `import { HogeAnchor as FugaAnchor } from './hoge'` },
+    { code: `import { Link as FugaLink } from './hoge'` },
     { code: 'const HogeAnchor = styled.a``' },
     { code: 'const HogeLink = styled.a``' },
     { code: 'const HogeAnchor = styled(Anchor)``' },
@@ -39,6 +41,8 @@ ruleTester.run('a11y-anchor-has-href-attribute', rule, {
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
+    { code: `import { Anchor as AnchorHoge } from './hoge'`, errors: [ { message: `AnchorHogeを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
+    { code: `import { HogeLink as HogeLinkFuga } from './hoge'`, errors: [ { message: `HogeLinkFugaを正規表現 "/Link$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.a``', errors: [ { message: `Hogeを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(Anchor)``', errors: [ { message: `Hogeを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled(Link)``', errors: [ { message: `Hogeを正規表現 "/Link$/" がmatchする名称に変更してください` } ] },

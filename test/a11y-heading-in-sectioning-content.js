@@ -26,6 +26,13 @@ const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside
 ruleTester.run('a11y-heading-in-sectioning-content', rule, {
   valid: [
     { code: `import styled from 'styled-components'` },
+    { code: `import { PageHeading as HogePageHeading } from './hoge'` },
+    { code: `import { HogeHeading as FugaHeading } from './hoge'` },
+    { code: `import { HogeArticle as FugaArticle } from './hoge'` },
+    { code: `import { HogeAside as FugaAside } from './hoge'` },
+    { code: `import { HogeNav as FugaNav } from './hoge'` },
+    { code: `import { HogeSection as FugaSection } from './hoge'` },
+    { code: `import { ModelessDialog as FugaModelessDialog } from './hoge'` },
     { code: 'const HogePageHeading = styled.h1``' },
     { code: 'const HogeHeading = styled.h2``' },
     { code: 'const HogeHeading = styled.h3``' },
@@ -47,6 +54,13 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
+    { code: `import { HogePageHeading as PageHeadingAbc } from './hoge'`, errors: [ { message: `PageHeadingAbcを正規表現 "/PageHeading$/" がmatchする名称に変更してください` }, { message: `PageHeadingAbcを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
+    { code: `import { Heading as HeadingHoge } from './hoge'`, errors: [ { message: `HeadingHogeを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
+    { code: `import { HogeArticle as HogeArticleFuga } from './hoge'`, errors: [ { message: `HogeArticleFugaを正規表現 "/Article$/" がmatchする名称に変更してください` } ] },
+    { code: `import { HogeAside as HogeAsideFuga } from './hoge'`, errors: [ { message: `HogeAsideFugaを正規表現 "/Aside$/" がmatchする名称に変更してください` } ] },
+    { code: `import { HogeNav as HogeNavFuga } from './hoge'`, errors: [ { message: `HogeNavFugaを正規表現 "/Nav$/" がmatchする名称に変更してください` } ] },
+    { code: `import { HogeSection as HogeSectionFuga } from './hoge'`, errors: [ { message: `HogeSectionFugaを正規表現 "/Section$/" がmatchする名称に変更してください` } ] },
+    { code: `import { HogeModelessDialog as HogeModelessDialogFuga } from './hoge'`, errors: [ { message: `HogeModelessDialogFugaを正規表現 "/ModelessDialog$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.h1``', errors: [ { message: `Hogeを正規表現 "/PageHeading$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.h2``', errors: [ { message: `Hogeを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
     { code: 'const Hoge = styled.h3``', errors: [ { message: `Hogeを正規表現 "/Heading$/" がmatchする名称に変更してください` } ] },
