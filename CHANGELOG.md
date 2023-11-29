@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.15](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.14...v0.3.15) (2023-11-29)
+
+
+### Features
+
+* a11y系ruleに "import時のasでのrename内容をチェックする" 処理を追加 ([#90](https://github.com/kufu/eslint-plugin-smarthr/issues/90)) ([2eab779](https://github.com/kufu/eslint-plugin-smarthr/commit/2eab77960985e7c52bd262ff674ae31cb2c6008e))
+
 ### [0.3.14](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.13...v0.3.14) (2023-11-05)
 
 
