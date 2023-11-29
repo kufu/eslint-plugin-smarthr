@@ -3,6 +3,21 @@ const STYLED_COMPONENTS = `${STYLED_COMPONENTS_METHOD}-components`
 
 const findInvalidImportNameNode = (s) => s.type === 'ImportDefaultSpecifier' && s.local.name !== STYLED_COMPONENTS_METHOD
 
+const checkImportStyledComponents = (node, context) => {
+  if (node.source.value !== STYLED_COMPONENTS) {
+    return
+  }
+
+  const invalidNameNode = node.specifiers.find(findInvalidImportNameNode)
+
+  if (invalidNameNode) {
+    context.report({
+      node: invalidNameNode,
+      message: `${STYLED_COMPONENTS} をimportする際は、名称が"${STYLED_COMPONENTS_METHOD}" となるようにしてください。例: "import ${STYLED_COMPONENTS_METHOD} from '${STYLED_COMPONENTS}'"`,
+    });
+  }
+}
+
 const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => {
   const entriesesTagNames = Object.entries(EXPECTED_NAMES).map(([b, e]) => [ new RegExp(b), new RegExp(e) ])
   const entriesesUnTagNames = UNEXPECTED_NAMES ? Object.entries(UNEXPECTED_NAMES).map(([b, e]) => {
@@ -11,20 +26,27 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
     return [ new RegExp(b), new RegExp(auctualE), messageTemplate ]
   }) : []
 
-  return {
-    ImportDeclaration: (node) => {
-      if (node.source.value !== STYLED_COMPONENTS) {
-        return
-      }
 
-      const invalidNameNode = node.specifiers.find(findInvalidImportNameNode)
-
-      if (invalidNameNode) {
+  const checkImportedNameToLocalName = (node, base, extended) => {
+    entriesesTagNames.forEach(([b, e]) => {
+      if (base.match(b) && !extended.match(e)) {
         context.report({
-          node: invalidNameNode,
-          message: `${STYLED_COMPONENTS} をimportする際は、名称が"${STYLED_COMPONENTS_METHOD}" となるようにしてください。例: "import ${STYLED_COMPONENTS_METHOD} from '${STYLED_COMPONENTS}'"`,
+          node,
+          message: `${extended}を正規表現 "${e.toString()}" がmatchする名称に変更してください`,
         });
       }
+    })
+  }
+
+  return {
+    ImportDeclaration: (node) => {
+      checkImportStyledComponents(node, context)
+
+      node.specifiers.forEach((s) => {
+        if (s.imported && s.imported.name !== s.local.name) {
+          checkImportedNameToLocalName(node, s.imported.name, s.local.name)
+        }
+      })
     },
     VariableDeclarator: (node) => {
       if (!node.init) {
@@ -64,14 +86,7 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
       if (base) {
         const extended = node.id.name
 
-        entriesesTagNames.forEach(([b, e]) => {
-          if (base.match(b) && !extended.match(e)) {
-            context.report({
-              node,
-              message: `${extended}を正規表現 "${e.toString()}" がmatchする名称に変更してください`,
-            });
-          }
-        })
+        checkImportedNameToLocalName(node, base, extended)
 
         entriesesUnTagNames.forEach(([b, e, m]) => {
           const matcher = extended.match(e)
