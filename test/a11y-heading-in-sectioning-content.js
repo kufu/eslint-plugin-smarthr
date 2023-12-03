@@ -51,6 +51,12 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<><Section><Heading>hoge</Heading></Section><Section><Heading>fuga</Heading></Section></>' },
     { code: 'const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>' },
     { code: 'export const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>' },
+    { code: '<Center as="section"><div><Heading>hoge</Heading></div></Center>' },
+    { code: '<Cluster as="section"><div><Heading>hoge</Heading></div></Cluster>' },
+    { code: '<Reel as="aside"><div><Heading>hoge</Heading></div></Reel>' },
+    { code: '<Sidebar as="nav"><div><Heading>hoge</Heading></div></Sidebar>' },
+    { code: '<Stack as="section"><div><Heading>hoge</Heading></div></Stack>' },
+    { code: '<Base as="article"><div><Heading>hoge</Heading></div></Base>' },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
