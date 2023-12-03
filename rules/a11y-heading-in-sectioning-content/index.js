@@ -10,6 +10,10 @@ const EXPECTED_NAMES = {
   'Nav$': 'Nav$',
   'Section$': 'Section$',
   'ModelessDialog$': 'ModelessDialog$',
+  'Center$': 'Center$',
+  'Reel$': 'Reel$',
+  'Sidebar$': 'Sidebar$',
+  'Stack$': 'Stack$',
 }
 
 const unexpectedMessageTemplate = `{{extended}} は smarthr-ui/{{expected}} をextendすることを期待する名称になっています
@@ -34,6 +38,10 @@ const UNEXPECTED_NAMES = {
     '(Section)$',
     unexpectedMessageTemplate,
   ],
+  'Center$': '(Center)$',
+  'Reel$': '(Reel)$',
+  'Sidebar$': '(Sidebar)$',
+  'Stack$': '(Stack)$',
 }
 
 const headingRegex = /((^h(1|2|3|4|5|6))|Heading)$/
@@ -42,6 +50,9 @@ const declaratorHeadingRegex = /Heading$/
 const sectioningRegex = /((A(rticle|side))|Nav|Section|^SectioningFragment)$/
 const bareTagRegex = /^(article|aside|nav|section)$/
 const modelessDialogRegex = /ModelessDialog$/
+const layoutComponentRegex = /((C(ent|lust)er)|Reel|Sidebar|Stack)$/
+
+const includeSectioningAsAttr = ({name: { name }, value: { value }}) => name === 'as' && value.match(bareTagRegex)
 
 const noHeadingTagNames = ['span', 'legend']
 const ignoreHeadingCheckParentType = ['Program', 'ExportNamedDeclaration']
@@ -89,7 +100,10 @@ const reportMessageBareToSHR = (tagName, visibleExample) => {
 const searchBubbleUp = (node) => {
   if (
     node.type === 'Program' ||
-    node.type === 'JSXElement' && node.openingElement.name.name?.match(sectioningRegex)
+    node.type === 'JSXElement' && node.openingElement.name.name && (
+      node.openingElement.name.name.match(sectioningRegex) ||
+      node.openingElement.name.name.match(layoutComponentRegex) && node.openingElement.attributes.some(includeSectioningAsAttr)
+    )
   ) {
     return node
   }
