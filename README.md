@@ -2,6 +2,7 @@
 
 - [a11y-anchor-has-href-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-anchor-has-href-attribute)
 - [a11y-clickable-element-has-text](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-clickable-element-has-text)
+- [a11y-delegate-element-has-role-presentation](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-delegate-element-has-role-presentation)
 - [a11y-heading-in-sectioning-content](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-heading-in-sectioning-content)
 - [a11y-image-has-alt-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-image-has-alt-attribute)
 - [a11y-input-has-name-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-input-has-name-attribute)
