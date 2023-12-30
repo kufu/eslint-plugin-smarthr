@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.17](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.16...v0.3.17) (2023-12-30)
+
+
+### Bug Fixes
+
+* a11y-delegate-element-has-role-presentationのインタラクティブなコンポーネントであることの判定で、小文字始まりのコンポーネントの場合判定ミスされるバグを修正 ([#94](https://github.com/kufu/eslint-plugin-smarthr/issues/94)) ([50a8296](https://github.com/kufu/eslint-plugin-smarthr/commit/50a8296b6d22c5a6475469b1ed2ea1a46234f6fd))
+
 ### [0.3.16](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.15...v0.3.16) (2023-12-30)
 
 
