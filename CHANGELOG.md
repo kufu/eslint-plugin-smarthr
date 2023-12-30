@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.16](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.15...v0.3.16) (2023-12-30)
+
+
+### Features
+
+* a11y-delegate-element-has-role-presantation を追加 ([#92](https://github.com/kufu/eslint-plugin-smarthr/issues/92)) ([c211ffb](https://github.com/kufu/eslint-plugin-smarthr/commit/c211ffb7e698d010ca639d0bdda9ea82cb31033a))
+
 ### [0.3.15](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.14...v0.3.15) (2023-11-29)
 
 
