@@ -6,6 +6,7 @@ const EXPECTED_NAMES = {
   '(s|S)elect$': 'Select$',
   'InputFile$': 'InputFile$',
   'RadioButton$': 'RadioButton$',
+  'RadioButtonPanel$': 'RadioButtonPanel$',
   'Check(b|B)ox$': 'CheckBox$',
   'Combo(b|B)ox$': 'ComboBox$',
   'DatePicker$': 'DatePicker$',
