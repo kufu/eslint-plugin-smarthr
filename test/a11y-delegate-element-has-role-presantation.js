@@ -12,7 +12,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const defaultInteractiveRegex = '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|DropZone$|FieldSet$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|Pagination$|SideNav$|AccordionPanel$)/'
+const defaultInteractiveRegex = '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|DropZone$|Switch$|SegmentedControl$|RightFixedNote$|FieldSet$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|FormDialog$|Pagination$|SideNav$|AccordionPanel$)/'
 const messageNonInteractiveEventHandler = (nodeName, onAttrs, interactiveComponentRegex = defaultInteractiveRegex) => {
   const onAttrsText = onAttrs.join(', ')
 
@@ -21,7 +21,9 @@ const messageNonInteractiveEventHandler = (nodeName, onAttrs, interactiveCompone
    - "${interactiveComponentRegex}" の正規表現にmatchするコンポーネントに差し替える、もしくは名称を変更してください
  - 方法2: インタラクティブな親要素、もしくは子要素が存在する場合、直接${onAttrsText}を設定することを検討してください
  - 方法3: インタラクティブな親要素、もしくは子要素が存在しない場合、インタラクティブな要素を必ず持つようにマークアップを修正後、${onAttrsText}の設定要素を検討してください
- - 方法4: インタラクティブな子要素から発生したイベントをキャッチすることが目的で${onAttrsText}を設定している場合、'role="presentation"' を設定してください`
+ - 方法4: インタラクティブな子要素から発生したイベントをキャッチすることが目的で${onAttrsText}を設定している場合、'role="presentation"' を設定してください
+   - 'role="presentation"' を設定した要素はマークアップとしての意味がなくなるため、div・span などマークアップとしての意味を持たない要素に設定してください
+   - 'role="presentation"' を設定する適切な要素が存在しない場合、div、またはspanでイベントが発生する要素を囲んだ上でrole属性を設定してください`
 }
 const messageRolePresentationNotHasInteractive = (nodeName, onAttrs, interactiveComponentRegex = defaultInteractiveRegex) => `${nodeName}に 'role="presentation"' が設定されているにも関わらず、子要素にinput、buttonやaなどのインタラクティブな要素が見つからないため、ブラウザが正しく解釈が行えず、ユーザーが利用することが出来ない場合があるため、以下のいずれかの対応をおこなってください。
  - 方法1: 子要素にインタラクティブな要素が存在するにも関わらずこのエラーが表示されている場合、子要素の名称を変更してください
@@ -44,6 +46,12 @@ ruleTester.run('smarthr/a11y-delegate-element-has-role-presentation', rule, {
     { code: '<Wrapper onClick={any} role="presentation"><Link /></Wrapper>' },
     { code: '<Wrapper onClick={any} role="presentation"><Hoge /></Wrapper>', options: [{ additionalInteractiveComponentRegex: ['^Hoge$'] }] },
     { code: '<Wrapper onClick={any} role="presentation"><any><Link /></any></Wrapper>' },
+    { code: '<Wrapper onClick={any} role="presentation">{any && <AnyButton />}</Wrapper>' },
+    { code: '<Wrapper onClick={any} role="presentation">{any || <AnyButton />}</Wrapper>' },
+    { code: '<Wrapper onClick={any} role="presentation">{any1 && (any2 || any3) && <AnyButton />}</Wrapper>' },
+    { code: '<Wrapper onClick={any} role="presentation">{any ? <AnyButton /> : null}</Wrapper>' },
+    { code: '<Wrapper onClick={any} role="presentation">{any1 ? (any2 ? <HogeLink /> : null) : null}</Wrapper>' },
+    { code: '<Wrapper onClick={any} role="presentation">{any ? null : (hoge ? <AnyLink /> : null)}</Wrapper>' },
   ],
   invalid: [
     { code: '<Input role="presentation" />', errors: [ { message: messageInteractiveHasRolePresentation('Input') } ] },
@@ -53,7 +61,8 @@ ruleTester.run('smarthr/a11y-delegate-element-has-role-presentation', rule, {
     { code: '<div onClick={any} onSubmit={any2} role="presentation"><Hoge /></div>', errors: [ { message: messageRolePresentationNotHasInteractive('div', ['onClick', 'onSubmit']) } ] },
     { code: '<div onClick={any}><Link /></div>', errors: [ { message: messageNonInteractiveEventHandler('div', ['onClick']) } ] },
     { code: '<Wrapper onClick={any}><Link /></Wrapper>', errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onClick']) } ] },
-    { code: '<Wrapper onSubmit={any}><Hoge /></Wrapper>', options: [{ additionalInteractiveComponentRegex: ['^Hoge$'] }], errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onSubmit'], '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|DropZone$|FieldSet$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|Pagination$|SideNav$|AccordionPanel$|^Hoge$)/') } ] },
+    { code: '<Wrapper onSubmit={any}><Hoge /></Wrapper>', options: [{ additionalInteractiveComponentRegex: ['^Hoge$'] }], errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onSubmit'], '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|DropZone$|Switch$|SegmentedControl$|RightFixedNote$|FieldSet$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|FormDialog$|Pagination$|SideNav$|AccordionPanel$|^Hoge$)/') } ] },
     { code: '<Wrapper onClick={any} onChange={anyany}><any><Link /></any></Wrapper>', errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onClick', 'onChange']) } ] },
+    { code: '<Wrapper onClick={any}>{any ? null : (hoge ? <AnyLink /> : null)}</Wrapper>', errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onClick']) } ] },
   ],
 });
