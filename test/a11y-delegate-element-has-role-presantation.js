@@ -19,9 +19,12 @@ const messageNonInteractiveEventHandler = (nodeName, onAttrs, interactiveCompone
   return `${nodeName} に${onAttrsText}を設定するとブラウザが正しく解釈が行えず、ユーザーが利用することが出来ない場合があるため、以下のいずれかの対応をおこなってください。
  - 方法1:  ${nodeName}がinput、buttonやaなどのインタラクティブな要素の場合、コンポーネント名の末尾をインタラクティブなコンポーネントであることがわかる名称に変更してください
    - "${interactiveComponentRegex}" の正規表現にmatchするコンポーネントに差し替える、もしくは名称を変更してください
- - 方法2: インタラクティブな親要素、もしくは子要素が存在する場合、直接${onAttrsText}を設定することを検討してください
- - 方法3: インタラクティブな親要素、もしくは子要素が存在しない場合、インタラクティブな要素を必ず持つようにマークアップを修正後、${onAttrsText}の設定要素を検討してください
- - 方法4: インタラクティブな子要素から発生したイベントをキャッチすることが目的で${onAttrsText}を設定している場合、'role="presentation"' を設定してください
+ - 方法2: ${onAttrsText} がコンポーネント内の特定のインタラクティブな要素に設定される場合、名称を具体的なものに変更してください
+   - 属性名を"/^on(Change|Input|Focus|Blur|(Double)?Click|Key(Down|Up|Press)|Mouse(Enter|Over|Down|Up|Leave)|Select|Submit)$/"に一致しないものに変更してください
+   - 例: 対象コンポーネント内に '追加ボタン' が存在する場合、'onClick' という属性名を 'onClickAddButton' に変更する
+ - 方法3: インタラクティブな親要素、もしくは子要素が存在する場合、直接${onAttrsText}を設定することを検討してください
+ - 方法4: インタラクティブな親要素、もしくは子要素が存在しない場合、インタラクティブな要素を必ず持つようにマークアップを修正後、${onAttrsText}の設定要素を検討してください
+ - 方法5: インタラクティブな子要素から発生したイベントをキャッチすることが目的で${onAttrsText}を設定している場合、'role="presentation"' を設定してください
    - 'role="presentation"' を設定した要素はマークアップとしての意味がなくなるため、div・span などマークアップとしての意味を持たない要素に設定してください
    - 'role="presentation"' を設定する適切な要素が存在しない場合、div、またはspanでイベントが発生する要素を囲んだ上でrole属性を設定してください`
 }
