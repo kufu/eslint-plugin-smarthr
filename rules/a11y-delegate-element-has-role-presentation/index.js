@@ -36,11 +36,10 @@ const UNEXPECTED_NAMES = {
   '(Link|^a)$': '(Link)$',
 }
 
-const INTERACTIVE_COMPONENT_NAMES = Object.keys(EXPECTED_NAMES)
+const INTERACTIVE_COMPONENT_NAMES = Object.keys(EXPECTED_NAMES).join('|')
 const INTERACTIVE_ON_REGEX = /^on(Change|Input|Focus|Blur|(Double)?Click|Key(Down|Up|Press)|Mouse(Enter|Over|Down|Up|Leave)|Select|Submit)$/
 const MEANED_ROLE_REGEX = /^(combobox|group|slider|toolbar)$/
-
-const INTERACTIVE_NODE_TYPE = ['JSXElement', 'JSXExpressionContainer', 'ConditionalExpression']
+const INTERACTIVE_NODE_TYPE_REGEX = /^(JSXElement|JSXExpressionContainer|ConditionalExpression)$/
 
 const messageNonInteractiveEventHandler = (nodeName, interactiveComponentRegex, onAttrs) => {
   const onAttrsText = onAttrs.join(', ')
@@ -48,9 +47,12 @@ const messageNonInteractiveEventHandler = (nodeName, interactiveComponentRegex, 
   return `${nodeName} に${onAttrsText}を設定するとブラウザが正しく解釈が行えず、ユーザーが利用することが出来ない場合があるため、以下のいずれかの対応をおこなってください。
  - 方法1:  ${nodeName}がinput、buttonやaなどのインタラクティブな要素の場合、コンポーネント名の末尾をインタラクティブなコンポーネントであることがわかる名称に変更してください
    - "${interactiveComponentRegex}" の正規表現にmatchするコンポーネントに差し替える、もしくは名称を変更してください
- - 方法2: インタラクティブな親要素、もしくは子要素が存在する場合、直接${onAttrsText}を設定することを検討してください
- - 方法3: インタラクティブな親要素、もしくは子要素が存在しない場合、インタラクティブな要素を必ず持つようにマークアップを修正後、${onAttrsText}の設定要素を検討してください
- - 方法4: インタラクティブな子要素から発生したイベントをキャッチすることが目的で${onAttrsText}を設定している場合、'role="presentation"' を設定してください
+ - 方法2: ${onAttrsText} がコンポーネント内の特定のインタラクティブな要素に設定される場合、名称を具体的なものに変更してください
+   - 属性名を"${INTERACTIVE_ON_REGEX}"に一致しないものに変更してください
+   - 例: 対象コンポーネント内に '追加ボタン' が存在する場合、'onClick' という属性名を 'onClickAddButton' に変更する
+ - 方法3: インタラクティブな親要素、もしくは子要素が存在する場合、直接${onAttrsText}を設定することを検討してください
+ - 方法4: インタラクティブな親要素、もしくは子要素が存在しない場合、インタラクティブな要素を必ず持つようにマークアップを修正後、${onAttrsText}の設定要素を検討してください
+ - 方法5: インタラクティブな子要素から発生したイベントをキャッチすることが目的で${onAttrsText}を設定している場合、'role="presentation"' を設定してください
    - 'role="presentation"' を設定した要素はマークアップとしての意味がなくなるため、div・span などマークアップとしての意味を持たない要素に設定してください
    - 'role="presentation"' を設定する適切な要素が存在しない場合、div、またはspanでイベントが発生する要素を囲んだ上でrole属性を設定してください`
 }
@@ -81,27 +83,28 @@ module.exports = {
   },
   create(context) {
     const options = context.options[0]
-    const interactiveComponentRegex = new RegExp(`(${INTERACTIVE_COMPONENT_NAMES.join('|')}${options?.additionalInteractiveComponentRegex ? `|${options.additionalInteractiveComponentRegex.join('|')}` : ''})`)
+    const interactiveComponentRegex = new RegExp(`(${INTERACTIVE_COMPONENT_NAMES}${options?.additionalInteractiveComponentRegex ? `|${options.additionalInteractiveComponentRegex.join('|')}` : ''})`)
+    const findInteractiveNode = (ec) => ec && ec.type.match(INTERACTIVE_NODE_TYPE_REGEX) && isHasInteractive(ec)
     const isHasInteractive = (c) => {
       switch (c.type) {
         case 'JSXElement': {
-          if ((c.openingElement.name.name || '').match(interactiveComponentRegex)) {
-            return true
-          }
+          const name = c.openingElement.name.name
 
-          if (c.children.length > 0) {
+          if (name && name.match(interactiveComponentRegex)) {
+            return true
+          } else if (c.children.length > 0) {
             return !!c.children.find(isHasInteractive)
           }
         }
         case 'JSXExpressionContainer':
         case 'ConditionalExpression': {
-          let expression = c
+          let e = c
 
           if (c.expression) {
-            expression = c.expression
+            e = c.expression
           }
 
-          return !![expression.right, expression.consequent, expression.alternate].find((ec) => INTERACTIVE_NODE_TYPE.includes(ec?.type) && isHasInteractive(ec))
+          return !![e.right, e.consequent, e.alternate].find(findInteractiveNode)
         }
       }
 
@@ -127,36 +130,34 @@ module.exports = {
 
             if (v === 'presentation') {
               isMeanedRole = isRolePresentation = true
-            } else if  (v.match(MEANED_ROLE_REGEX)) {
+            } else if (v.match(MEANED_ROLE_REGEX)) {
               isMeanedRole = true
             }
           }
         })
 
-        if (!nodeName.match(interactiveComponentRegex)) {
-          if (onAttrs.length > 0) {
-            if (!isRolePresentation) {
-              // HINT: role="presentation"以外で意味があるroleが設定されている場合はエラーにしない
-              // 基本的にsmarthr-uiでroleの設定などは巻き取る &&　そもそもroleを設定するよりタグを適切にマークアップすることが優先されるため
-              // エラーなどには表示しない
-              if (!isMeanedRole) {
-                context.report({
-                  node,
-                  message: messageNonInteractiveEventHandler(nodeName, interactiveComponentRegex, onAttrs),
-                });
-              }
-            } else if (!node.parent.children.find(isHasInteractive)) {
-              context.report({
-                node,
-                message: messageRolePresentationNotHasInteractive(nodeName, interactiveComponentRegex, onAttrs)
-              })
-            }
+        if (nodeName.match(interactiveComponentRegex)) {
+          if (isRolePresentation) {
+            context.report({
+              node,
+              message: messageInteractiveHasRolePresentation(nodeName, interactiveComponentRegex)
+            })
           }
-        } else if (isRolePresentation) {
-          context.report({
-            node,
-            message: messageInteractiveHasRolePresentation(nodeName, interactiveComponentRegex)
-          })
+        } else if (onAttrs.length > 0) {
+          // HINT: role="presentation"以外で意味があるroleが設定されている場合はエラーにしない
+          // 基本的にsmarthr-uiでroleの設定などは巻き取る &&　そもそもroleを設定するよりタグを適切にマークアップすることが優先されるため
+          // エラーなどには表示しない
+          if (!isMeanedRole) {
+            context.report({
+              node,
+              message: messageNonInteractiveEventHandler(nodeName, interactiveComponentRegex, onAttrs),
+            });
+          } else if (!node.parent.children.find(isHasInteractive)) {
+            context.report({
+              node,
+              message: messageRolePresentationNotHasInteractive(nodeName, interactiveComponentRegex, onAttrs)
+            })
+          }
         }
       },
     };
