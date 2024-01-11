@@ -27,12 +27,13 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
   }) : []
 
 
-  const checkImportedNameToLocalName = (node, base, extended) => {
+  const checkImportedNameToLocalName = (node, base, extended, mode) => {
     entriesesTagNames.forEach(([b, e]) => {
       if (base.match(b) && !extended.match(e)) {
         context.report({
           node,
-          message: `${extended}を正規表現 "${e.toString()}" がmatchする名称に変更してください`,
+          message: `${extended}を正規表現 "${e.toString()}" がmatchする名称に変更してください。
+ - ${base}が型の場合、'${mode} type { ${base} as ${extended} }' もしくは '${mode} { type ${base} as ${extended} }' のように明示的に型であることを宣言してください。名称変更が不要になります`,
         });
       }
     })
@@ -42,11 +43,13 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
     ImportDeclaration: (node) => {
       checkImportStyledComponents(node, context)
 
-      node.specifiers.forEach((s) => {
-        if (s.imported && s.imported.name !== s.local.name) {
-          checkImportedNameToLocalName(node, s.imported.name, s.local.name)
-        }
-      })
+      if (node.importKind !== 'type') {
+        node.specifiers.forEach((s) => {
+          if (s.importKind !== 'type' && s.imported && s.imported.name !== s.local.name) {
+            checkImportedNameToLocalName(node, s.imported.name, s.local.name, 'import')
+          }
+        })
+      }
     },
     VariableDeclarator: (node) => {
       if (!node.init) {
