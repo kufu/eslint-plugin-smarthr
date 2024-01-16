@@ -52,7 +52,7 @@ const bareTagRegex = /^(article|aside|nav|section)$/
 const modelessDialogRegex = /ModelessDialog$/
 const layoutComponentRegex = /((C(ent|lust)er)|Reel|Sidebar|Stack)$/
 
-const includeSectioningAsAttr = ({name: { name }, value: { value }}) => name === 'as' && value.match(bareTagRegex)
+const includeSectioningAsAttr = (a) => a.name?.name === 'as' && a.value.value.match(bareTagRegex)
 
 const noHeadingTagNames = ['span', 'legend']
 const ignoreHeadingCheckParentType = ['Program', 'ExportNamedDeclaration']
