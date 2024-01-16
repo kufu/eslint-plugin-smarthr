@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.23](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.22...v0.3.23) (2024-01-16)
+
+
+### Bug Fixes
+
+* import内で型の場合はtype kindを設定することでasでの命名縛りを回避できるように修正 ([#102](https://github.com/kufu/eslint-plugin-smarthr/issues/102)) ([689d7da](https://github.com/kufu/eslint-plugin-smarthr/commit/689d7da9e899b2801ae2dfdfd465f6cfcc277e85))
+
 ### [0.3.22](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.21...v0.3.22) (2024-01-16)
 
 
