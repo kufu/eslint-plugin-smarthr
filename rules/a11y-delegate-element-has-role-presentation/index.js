@@ -14,6 +14,9 @@ const EXPECTED_NAMES = {
   'SegmentedControl$': 'SegmentedControl$',
   'RightFixedNote$': 'RightFixedNote$',
   'FieldSet$': 'FieldSet$',
+  'Fieldset$': 'Fieldset$',
+  'FormControl$': 'FormControl$',
+  'FormGroup$': 'FormGroup$',
   '(b|B)utton$': 'Button$',
   'Anchor$': 'Anchor$',
   'Link$': 'Link$',
@@ -56,7 +59,7 @@ const messageNonInteractiveEventHandler = (nodeName, interactiveComponentRegex, 
    - 'role="presentation"' を設定した要素はマークアップとしての意味がなくなるため、div・span などマークアップとしての意味を持たない要素に設定してください
    - 'role="presentation"' を設定する適切な要素が存在しない場合、div、またはspanでイベントが発生する要素を囲んだ上でrole属性を設定してください`
 }
-const messageRolePresentationNotHasInteractive = (nodeName, interactiveComponentRegex, onAttrs) => `${nodeName}に 'role="presentation"' が設定されているにも関わらず、子要素にinput、buttonやaなどのインタラクティブな要素が見つからないため、ブラウザが正しく解釈が行えず、ユーザーが利用することが出来ない場合があるため、以下のいずれかの対応をおこなってください。
+const messageRolePresentationNotHasInteractive = (nodeName, interactiveComponentRegex, onAttrs, roleMean) => `${nodeName}に 'role="${roleMean}"' が設定されているにも関わらず、子要素にinput、buttonやaなどのインタラクティブな要素が見つからないため、ブラウザが正しく解釈が行えず、ユーザーが利用することが出来ない場合があるため、以下のいずれかの対応をおこなってください。
  - 方法1: 子要素にインタラクティブな要素が存在するにも関わらずこのエラーが表示されている場合、子要素の名称を変更してください
    - "${interactiveComponentRegex}" の正規表現にmatchするよう、インタラクティブな子要素全てを差し替える、もしくは名称を変更してください
  - 方法2: ${nodeName}自体がインタラクティブな要素の場合、'role="presentation"'を削除した上で名称を変更してください
@@ -117,7 +120,7 @@ module.exports = {
         const nodeName = node.name.name || '';
 
         let onAttrs = []
-        let isMeanedRole = false
+        let roleMean = undefined
         let isRolePresentation = false
 
         node.attributes.forEach((a) => {
@@ -129,9 +132,10 @@ module.exports = {
             const v = a.value?.value || ''
 
             if (v === 'presentation') {
-              isMeanedRole = isRolePresentation = true
+              isRolePresentation = true
+              roleMean = v
             } else if (v.match(MEANED_ROLE_REGEX)) {
-              isMeanedRole = true
+              roleMean = v
             }
           }
         })
@@ -147,16 +151,80 @@ module.exports = {
           // HINT: role="presentation"以外で意味があるroleが設定されている場合はエラーにしない
           // 基本的にsmarthr-uiでroleの設定などは巻き取る &&　そもそもroleを設定するよりタグを適切にマークアップすることが優先されるため
           // エラーなどには表示しない
-          if (!isMeanedRole) {
+          if (!roleMean) {
             context.report({
               node,
               message: messageNonInteractiveEventHandler(nodeName, interactiveComponentRegex, onAttrs),
             });
-          } else if (!node.parent.children.find(isHasInteractive)) {
-            context.report({
-              node,
-              message: messageRolePresentationNotHasInteractive(nodeName, interactiveComponentRegex, onAttrs)
-            })
+          // HINT: role='slider' はインタラクティブな要素扱いとするため除外する
+          } else if (roleMean !== 'slider') {
+            const searchChildren = (n) => {
+              switch (n.type) {
+                case 'BinaryExpression':
+                case 'Identifier':
+                case 'JSXEmptyExpression':
+                case 'JSXText':
+                case 'Literal':
+                case 'VariableDeclaration':
+                  // これ以上childrenが存在しないため終了
+                  return false
+                case 'JSXAttribute':
+                  return n.value ? searchChildren(n.value) : false
+                case 'LogicalExpression':
+                  return searchChildren(n.right)
+                case 'ArrowFunctionExpression':
+                  return searchChildren(n.body)
+                case 'MemberExpression':
+                  return searchChildren(n.property)
+                case 'ReturnStatement':
+                case 'UnaryExpression':
+                  return searchChildren(n.argument)
+                case 'ChainExpression':
+                case 'JSXExpressionContainer':
+                  return searchChildren(n.expression)
+                case 'BlockStatement':
+                  return forInSearchChildren(n.body)
+                case 'ConditionalExpression':
+                  return searchChildren(n.consequent) || searchChildren(n.alternate)
+                case 'CallExpression': {
+                  return forInSearchChildren(n.arguments)
+                }
+                case 'JSXFragment':
+                  break
+                case 'JSXElement': {
+                  const name = n.openingElement.name.name || ''
+
+                  if (name.match(interactiveComponentRegex)) {
+                    return true
+                  }
+
+                  if (forInSearchChildren(n.openingElement.attributes)) {
+                    return true
+                  }
+
+                  break
+                }
+              }
+
+              return n.children ? forInSearchChildren(n.children) : false
+            }
+
+            const forInSearchChildren = (ary) => {
+              for (const i in ary) {
+                if (searchChildren(ary[i])) {
+                  return true
+                }
+              }
+
+              return false
+            }
+
+            if (!forInSearchChildren(node.parent.children)) {
+              context.report({
+                node,
+                message: messageRolePresentationNotHasInteractive(nodeName, interactiveComponentRegex, onAttrs, roleMean)
+              })
+            }
           }
         }
       },

@@ -24,8 +24,8 @@ ruleTester.run('best-practice-for-remote-trigger-dialog', rule, {
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
-    { code: 'const Hoge = styled(RemoteDialogTrigger)``', errors: [ { message: 'Hogeを正規表現 "/RemoteDialogTrigger$/" がmatchする名称に変更してください' } ] },
-    { code: 'const Fuga = styled(RemoteTriggerActionDialog)``', errors: [ { message: 'Fugaを正規表現 "/RemoteTrigger(.+)Dialog$/" がmatchする名称に変更してください' } ] },
+    { code: 'const Hoge = styled(RemoteDialogTrigger)``', errors: [ { message: 'Hogeを正規表現 "/RemoteDialogTrigger$/" がmatchする名称に変更してください。' } ] },
+    { code: 'const Fuga = styled(RemoteTriggerActionDialog)``', errors: [ { message: 'Fugaを正規表現 "/RemoteTrigger(.+)Dialog$/" がmatchする名称に変更してください。' } ] },
     { code: '<RemoteDialogTrigger targetId={hoge}>open.</RemoteDialogTrigger>', errors: [ { message: `RemoteDialogTriggerのtargetId属性には直接文字列を指定してください。
   - 変数などは利用できません（これは関連するTriggerとDialogを検索しやすくするためです）
   - RemoteTriggerActionDialogはループやDropdown内にTriggerが存在する場合に利用してください

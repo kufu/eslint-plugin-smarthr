@@ -7,6 +7,7 @@ const EXPECTED_LABELED_INPUT_NAMES = {
 }
 const EXPECTED_INPUT_NAMES = {
   '(I|^i)nput$': '(Input)$',
+  'SearchInput$': '(SearchInput)$',
   '(T|^t)extarea$': '(Textarea)$',
   '(S|^s)elect$': '(Select)$',
   'InputFile$': '(InputFile)$',
@@ -51,14 +52,12 @@ const DIALOG_REGEX = /Dialog(WithTrigger)?$/
 const SECTIONING_REGEX = /(((A|^a)(rticle|side))|(N|^n)av|(S|^s)ection|^SectioningFragment)$/
 const BARE_SECTIONING_TAG_REGEX = /^(article|aside|nav|section)$/
 const LAYOUT_COMPONENT_REGEX = /((C(ent|lust)er)|Reel|Sidebar|Stack)$/
+const AS_REGEX = /^(as|forwardedAs)$/
 
 const IGNORE_INPUT_CHECK_PARENT_TYPE = /^(Program|ExportNamedDeclaration)$/
 
-const findTitle = (a) => a.name?.name === 'title'
-const findRadioInput = (a) => a.name?.name === 'type' && a.value.value === 'radio'
-const findCheckbox = (a) => a.name?.name === 'type' && a.value.value === 'checkbox'
 const findRoleGroup = (a) => a.name?.name === 'role' && a.value.value === 'group'
-const findAsSectioning = (a) => a.name?.name === 'as' && a.value.value.match(BARE_SECTIONING_TAG_REGEX)
+const findAsSectioning = (a) => a.name?.name.match(AS_REGEX) && a.value.value.match(BARE_SECTIONING_TAG_REGEX)
 
 const SCHEMA = [
   {
@@ -103,14 +102,37 @@ module.exports = {
           }
 
           const isPureInput = nodeName.match(INPUT_REGEX)
-          const isRadio = (isPureInput && node.attributes.find(findRadioInput)) || nodeName.match(RADIO_BUTTONS_REGEX);
-          const isCheckbox = !isRadio && (isPureInput && node.attributes.find(findCheckbox) || nodeName.match(CHECKBOX_REGEX));
-          const isSelect = !isRadio && !isCheckbox && nodeName.match(CHECKBOX_REGEX)
+          let isPseudoLabel = false
+          let isTypeRadio = false
+          let isTypeCheck = false
 
-          // HINT: title属性が設定されている場合、なんの入力要素かはわかるため無視 (https://waic.jp/translations/WCAG-TECHS/H65
-          if (isFormControlInput && node.attributes.some(findTitle) && !isRadio && !isCheckbox) {
-            return
+          if (isFormControlInput) {
+            for (const i of node.attributes) {
+              if (i.name) {
+                // HINT: idが設定されている場合、htmlForでlabelと紐づく可能性が高いため無視する
+                // HINT: titleが設定されている場合、なんの入力要素かはわかるため無視する
+                switch (i.name.name) {
+                  case 'id':
+                  case 'title':
+                    isPseudoLabel = true
+                    break
+                  case 'type':
+                    switch (i.value.value) {
+                      case 'radio':
+                        isTypeRadio = true
+                        break
+                      case 'checkbox':
+                        isTypeCheck = true
+                        break
+                    }
+
+                    break
+                }
+              }
+            }
           }
+          const isRadio = (isPureInput && isTypeRadio) || nodeName.match(RADIO_BUTTONS_REGEX);
+          const isCheckbox = !isRadio && (isPureInput && isTypeCheck || nodeName.match(CHECKBOX_REGEX));
 
           const wrapComponentName = isRadio ? 'Fieldset' : 'FormControl'
           const search = (n) => {
@@ -155,7 +177,8 @@ module.exports = {
  - 方法4: 上記方法のいずれも対応出来ない場合、${name} に 'role="group"' 属性を設定してください`,
                         });
                       }
-                    } else if (!isRadio && !isCheckbox) {
+                    // HINT: 擬似的にラベルが設定されている場合、無視する
+                    } else if (!isRadio && !isCheckbox && !isPseudoLabel) {
                       context.report({
                         node: n,
                         message: `${name} が ラベルを持たない入力要素(${nodeName})を含んでいます。入力要素が何であるかを正しく伝えるため、以下の方法のいずれかで修正してください。
@@ -175,8 +198,9 @@ module.exports = {
 
                     if (isSection || layoutSectionAttribute) {
                       // HINT: smarthr-ui/CheckBoxはlabelを単独で持つため、FormControl系でラップをする必要はない
-                      if (!isCheckbox) {
-                        const actualName = isSection ? name : `<${name} as="${layoutSectionAttribute.value.value}">`
+                      // HINT: 擬似的にラベルが設定されている場合、無視する
+                      if (!isCheckbox && !isPseudoLabel) {
+                        const actualName = isSection ? name : `<${name} ${layoutSectionAttribute.name.name}="${layoutSectionAttribute.value.value}">`
                         const isSelect = !isRadio && nodeName.match(SELECT_REGEX)
 
                         context.report({
@@ -211,7 +235,8 @@ module.exports = {
               }
               case 'Program': {
                 // HINT: smarthr-ui/CheckBoxはlabelを単独で持つため、FormControl系でラップをする必要はない
-                if (!isCheckbox) {
+                // HINT: 擬似的にラベルが設定されている場合、無視する
+                if (!isCheckbox && !isPseudoLabel) {
                   const isSelect = !isRadio && nodeName.match(SELECT_REGEX)
 
                   context.report({
@@ -219,7 +244,8 @@ module.exports = {
                     message: `${nodeName} を、smarthr-ui/${wrapComponentName} もしくはそれを拡張したコンポーネントが囲むようマークアップを変更してください。
  - ${wrapComponentName}で入力要素を囲むことでラベルと入力要素が適切に紐づき、操作性が高まります${isRadio ? `
  - FieldsetでRadioButtonを囲むことでグループ化された入力要素に対して適切なタイトル・説明を追加出来ます` : ``}
- - ${nodeName}が入力要素とラベル・タイトル・説明など含む概念を表示するコンポーネントの場合、コンポーネント名を${FROM_CONTROLS_REGEX}とマッチするように修正してください${isRadio ? '' : `
+ - ${nodeName}が入力要素とラベル・タイトル・説明など含む概念を表示するコンポーネントの場合、コンポーネント名を${FROM_CONTROLS_REGEX}とマッチするように修正してください
+ - ${nodeName}が入力要素自体を表現するコンポーネントの一部である場合、ルートとなるコンポーネントの名称を${FORM_CONTROL_INPUTS_REGEX}とマッチするように修正してください${isRadio ? '' : `
  - 上記のいずれの方法も適切では場合、${nodeName}のtitle属性に "どんな値を${isSelect ? '選択' : '入力'}すれば良いのか" の説明を設定してください
    - 例: <${nodeName} title="${isSelect ? '検索対象を選択してください' : '姓を全角カタカナのみで入力してください'}" />`}`,
                   });
@@ -244,7 +270,9 @@ module.exports = {
         const formControlMatcher = nodeName.match(FROM_CONTROLS_REGEX)
 
         if (formControlMatcher) {
-          if (!nodeName.match(FORM_CONTROL_REGEX) && node.attributes.find(findRoleGroup)) {
+          const isRoleGrouop = node.attributes.find(findRoleGroup)
+
+          if (!nodeName.match(FORM_CONTROL_REGEX) && isRoleGrouop) {
             const component = formControlMatcher[1]
             const actualComponent = component[0].match(/[a-z]/) ? component : `smarthr-ui/${component}`
 
@@ -261,7 +289,7 @@ module.exports = {
           const searchParent = (n) => {
             switch (n.type) {
               case 'JSXElement': {
-                const name = n.openingElement.name.name
+                const name = n.openingElement.name.name || ''
 
                 // Fieldset > Dialog > Fieldset のようにDialogを挟んだFormControl系のネストは許容する(Portalで実際にはネストしていないため)
                 if (name.match(DIALOG_REGEX)) {
@@ -297,7 +325,7 @@ module.exports = {
 
           searchParent(node.parent.parent)
 
-          if (!node.selfClosing && nodeName.match(FORM_CONTROL_REGEX) && node.attributes.find(findRoleGroup)) {
+          if (!node.selfClosing && nodeName.match(FORM_CONTROL_REGEX) && isRoleGrouop) {
             const searchChildren = (n, count = 0) => {
               switch (n.type) {
                 case 'BinaryExpression':

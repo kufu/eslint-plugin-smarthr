@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.23](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.22...v0.3.23) (2024-01-16)
+
+
+### Bug Fixes
+
+* import内で型の場合はtype kindを設定することでasでの命名縛りを回避できるように修正 ([#102](https://github.com/kufu/eslint-plugin-smarthr/issues/102)) ([689d7da](https://github.com/kufu/eslint-plugin-smarthr/commit/689d7da9e899b2801ae2dfdfd465f6cfcc277e85))
+
+### [0.3.22](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.21...v0.3.22) (2024-01-16)
+
+
+### Bug Fixes
+
+* a11y-heading-in-sectioning-contentのLayout系コンポーネントのas属性をチェックする際の処理がエラーハンドリング出来ていなかったため対応 ([#101](https://github.com/kufu/eslint-plugin-smarthr/issues/101)) ([f77d686](https://github.com/kufu/eslint-plugin-smarthr/commit/f77d686cbe4f5061b1371c04cc0b84d058c41a34))
+
+### [0.3.21](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.20...v0.3.21) (2024-01-16)
+
+
+### Features
+
+* a11y-heading-in-sectioning-content の Layout[as={sectioningContentTag}] への対応 ([#91](https://github.com/kufu/eslint-plugin-smarthr/issues/91)) ([62bb051](https://github.com/kufu/eslint-plugin-smarthr/commit/62bb0510d0e91db063a9bd09dab4fbeff6a2844e))
+
+
+### Bug Fixes
+
+* a11y-delegate-element-has-role-presentationでインタラクティブな要素のチェック処理を厳密に行う ([#100](https://github.com/kufu/eslint-plugin-smarthr/issues/100)) ([e715bff](https://github.com/kufu/eslint-plugin-smarthr/commit/e715bff6a95ab2cbf3652b44f999ad4c98ccb621))
+* import時のrenameの際、typeの場合はチェックを無視する設定を追加 ([#99](https://github.com/kufu/eslint-plugin-smarthr/issues/99)) ([cae899f](https://github.com/kufu/eslint-plugin-smarthr/commit/cae899ff2b012e93b2651c971034553cefeef10e))
+
 ### [0.3.20](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.19...v0.3.20) (2024-01-02)
 
 ### [0.3.19](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.18...v0.3.19) (2024-01-01)
