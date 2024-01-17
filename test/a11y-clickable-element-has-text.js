@@ -134,26 +134,32 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
-    { code: `import { SmartHRLogo as SmartHRLogoHoge } from './hoge'`, errors: [ { message: `SmartHRLogoHogeを正規表現 "/SmartHRLogo$/" がmatchする名称に変更してください` } ] },
-    { code: `import { AbcButton as AbcButtonFuga } from './hoge'`, errors: [ { message: `AbcButtonFugaを正規表現 "/Button$/" がmatchする名称に変更してください` } ] },
-    { code: `import { Anchor as AnchorHoge } from './hoge'`, errors: [ { message: `AnchorHogeを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
-    { code: `import { HogeLink as HogeLinkFuga } from './hoge'`, errors: [ { message: `HogeLinkFugaを正規表現 "/Link$/" がmatchする名称に変更してください` } ] },
-    { code: `import { FugaText as FugaTextFuga } from './hoge'`, errors: [ { message: `FugaTextFugaを正規表現 "/Text$/" がmatchする名称に変更してください` } ] },
-    { code: `import { FugaMessage as FugaMessageFuga } from './hoge'`, errors: [ { message: `FugaMessageFugaを正規表現 "/Message$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled.a``', errors: [ { message: `Hogeを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled.button``', errors: [ { message: `Hogeを正規表現 "/Button$/" がmatchする名称に変更してください` } ]  },
-    { code: 'const Hoge = styled(Anchor)``', errors: [ { message: `Hogeを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ]  },
-    { code: 'const Hoge = styled(Link)``', errors: [ { message: `Hogeを正規表現 "/Link$/" がmatchする名称に変更してください` } ]  },
-    { code: 'const Hoge = styled(Button)``', errors: [ { message: `Hogeを正規表現 "/Button$/" がmatchする名称に変更してください` } ]  },
-    { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ]  },
-    { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ]  },
-    { code: 'const Fuga = styled(SmartHRLogo)``', errors: [ { message: `Fugaを正規表現 "/SmartHRLogo$/" がmatchする名称に変更してください` } ]  },
-    { code: 'const Piyo = styled.a(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Piyo = styled("a")(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Piyo = styled("a")``', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Piyo = styled(Anchor)(() => ``)', errors: [ { message: `Piyoを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled(Text)``', errors: [ { message: `Hogeを正規表現 "/Text$/" がmatchする名称に変更してください` } ]  },
-    { code: 'const Hoge = styled(HogeMessage)``', errors: [ { message: `Hogeを正規表現 "/Message$/" がmatchする名称に変更してください` } ]  },
+    { code: `import { SmartHRLogo as SmartHRLogoHoge } from './hoge'`, errors: [ { message: `SmartHRLogoHogeを正規表現 "/SmartHRLogo$/" がmatchする名称に変更してください。
+ - SmartHRLogoが型の場合、'import type { SmartHRLogo as SmartHRLogoHoge }' もしくは 'import { type SmartHRLogo as SmartHRLogoHoge }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: `import { AbcButton as AbcButtonFuga } from './hoge'`, errors: [ { message: `AbcButtonFugaを正規表現 "/Button$/" がmatchする名称に変更してください。
+ - AbcButtonが型の場合、'import type { AbcButton as AbcButtonFuga }' もしくは 'import { type AbcButton as AbcButtonFuga }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: `import { Anchor as AnchorHoge } from './hoge'`, errors: [ { message: `AnchorHogeを正規表現 "/Anchor$/" がmatchする名称に変更してください。
+ - Anchorが型の場合、'import type { Anchor as AnchorHoge }' もしくは 'import { type Anchor as AnchorHoge }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: `import { HogeLink as HogeLinkFuga } from './hoge'`, errors: [ { message: `HogeLinkFugaを正規表現 "/Link$/" がmatchする名称に変更してください。
+ - HogeLinkが型の場合、'import type { HogeLink as HogeLinkFuga }' もしくは 'import { type HogeLink as HogeLinkFuga }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: `import { FugaText as FugaTextFuga } from './hoge'`, errors: [ { message: `FugaTextFugaを正規表現 "/Text$/" がmatchする名称に変更してください。
+ - FugaTextが型の場合、'import type { FugaText as FugaTextFuga }' もしくは 'import { type FugaText as FugaTextFuga }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: `import { FugaMessage as FugaMessageFuga } from './hoge'`, errors: [ { message: `FugaMessageFugaを正規表現 "/Message$/" がmatchする名称に変更してください。
+ - FugaMessageが型の場合、'import type { FugaMessage as FugaMessageFuga }' もしくは 'import { type FugaMessage as FugaMessageFuga }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: 'const Hoge = styled.a``', errors: [ { message: `Hogeを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Hoge = styled.button``', errors: [ { message: `Hogeを正規表現 "/Button$/" がmatchする名称に変更してください。` } ]  },
+    { code: 'const Hoge = styled(Anchor)``', errors: [ { message: `Hogeを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ]  },
+    { code: 'const Hoge = styled(Link)``', errors: [ { message: `Hogeを正規表現 "/Link$/" がmatchする名称に変更してください。` } ]  },
+    { code: 'const Hoge = styled(Button)``', errors: [ { message: `Hogeを正規表現 "/Button$/" がmatchする名称に変更してください。` } ]  },
+    { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ]  },
+    { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ]  },
+    { code: 'const Fuga = styled(SmartHRLogo)``', errors: [ { message: `Fugaを正規表現 "/SmartHRLogo$/" がmatchする名称に変更してください。` } ]  },
+    { code: 'const Piyo = styled.a(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Piyo = styled("a")(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Piyo = styled("a")``', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Piyo = styled(Anchor)(() => ``)', errors: [ { message: `Piyoを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Hoge = styled(Text)``', errors: [ { message: `Hogeを正規表現 "/Text$/" がmatchする名称に変更してください。` } ]  },
+    { code: 'const Hoge = styled(HogeMessage)``', errors: [ { message: `Hogeを正規表現 "/Message$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const StyledButton = styled.div``', errors: [ { message: `StyledButton は /(B|^b)utton$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
  - StyledButton の名称の末尾が"Button" という文字列ではない状態にしつつ、"div"を継承していることをわかる名称に変更してください
  - もしくは"div"を"StyledButton"の継承元であることがわかるような適切なタグや別コンポーネントに差し替えてください

@@ -49,14 +49,17 @@ ruleTester.run('a11y-image-has-alt-attribute', rule, {
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
-    { code: `import { HogeImg as ImgFuga } from './hoge'`, errors: [ { message: `ImgFugaを正規表現 "/Img$/" がmatchする名称に変更してください` } ] },
-    { code: `import { HogeImage as HogeImageFuga } from './hoge'`, errors: [ { message: `HogeImageFugaを正規表現 "/Image$/" がmatchする名称に変更してください` } ] },
-    { code: `import { Icon as Hoge } from './hoge'`, errors: [ { message: `Hogeを正規表現 "/Icon$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled.img``', errors: [ { message: `Hogeを正規表現 "/(Img|Image|Icon)$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled.svg``', errors: [ { message: `Hogeを正規表現 "/(Img|Image|Icon)$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled(Icon)``', errors: [ { message: `Hogeを正規表現 "/Icon$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled(Img)``', errors: [ { message: `Hogeを正規表現 "/Img$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled(Image)``', errors: [ { message: `Hogeを正規表現 "/Image$/" がmatchする名称に変更してください` } ] },
+    { code: `import { HogeImg as ImgFuga } from './hoge'`, errors: [ { message: `ImgFugaを正規表現 "/Img$/" がmatchする名称に変更してください。
+ - HogeImgが型の場合、'import type { HogeImg as ImgFuga }' もしくは 'import { type HogeImg as ImgFuga }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: `import { HogeImage as HogeImageFuga } from './hoge'`, errors: [ { message: `HogeImageFugaを正規表現 "/Image$/" がmatchする名称に変更してください。
+ - HogeImageが型の場合、'import type { HogeImage as HogeImageFuga }' もしくは 'import { type HogeImage as HogeImageFuga }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: `import { Icon as Hoge } from './hoge'`, errors: [ { message: `Hogeを正規表現 "/Icon$/" がmatchする名称に変更してください。
+ - Iconが型の場合、'import type { Icon as Hoge }' もしくは 'import { type Icon as Hoge }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: 'const Hoge = styled.img``', errors: [ { message: `Hogeを正規表現 "/(Img|Image|Icon)$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Hoge = styled.svg``', errors: [ { message: `Hogeを正規表現 "/(Img|Image|Icon)$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Hoge = styled(Icon)``', errors: [ { message: `Hogeを正規表現 "/Icon$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Hoge = styled(Img)``', errors: [ { message: `Hogeを正規表現 "/Img$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Hoge = styled(Image)``', errors: [ { message: `Hogeを正規表現 "/Image$/" がmatchする名称に変更してください。` } ] },
     { code: 'const StyledImage = styled.span``', errors: [ { message: `StyledImage は /(Image|^(img|svg))$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
  - StyledImage の名称の末尾が"Image" という文字列ではない状態にしつつ、"span"を継承していることをわかる名称に変更してください
  - もしくは"span"を"StyledImage"の継承元であることがわかるような適切なタグや別コンポーネントに差し替えてください

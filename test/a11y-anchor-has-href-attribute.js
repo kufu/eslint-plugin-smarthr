@@ -41,11 +41,13 @@ ruleTester.run('a11y-anchor-has-href-attribute', rule, {
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
-    { code: `import { Anchor as AnchorHoge } from './hoge'`, errors: [ { message: `AnchorHogeを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
-    { code: `import { HogeLink as HogeLinkFuga } from './hoge'`, errors: [ { message: `HogeLinkFugaを正規表現 "/Link$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled.a``', errors: [ { message: `Hogeを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled(Anchor)``', errors: [ { message: `Hogeを正規表現 "/Anchor$/" がmatchする名称に変更してください` } ] },
-    { code: 'const Hoge = styled(Link)``', errors: [ { message: `Hogeを正規表現 "/Link$/" がmatchする名称に変更してください` } ] },
+    { code: `import { Anchor as AnchorHoge } from './hoge'`, errors: [ { message: `AnchorHogeを正規表現 "/Anchor$/" がmatchする名称に変更してください。
+ - Anchorが型の場合、'import type { Anchor as AnchorHoge }' もしくは 'import { type Anchor as AnchorHoge }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: `import { HogeLink as HogeLinkFuga } from './hoge'`, errors: [ { message: `HogeLinkFugaを正規表現 "/Link$/" がmatchする名称に変更してください。
+ - HogeLinkが型の場合、'import type { HogeLink as HogeLinkFuga }' もしくは 'import { type HogeLink as HogeLinkFuga }' のように明示的に型であることを宣言してください。名称変更が不要になります` } ] },
+    { code: 'const Hoge = styled.a``', errors: [ { message: `Hogeを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Hoge = styled(Anchor)``', errors: [ { message: `Hogeを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ] },
+    { code: 'const Hoge = styled(Link)``', errors: [ { message: `Hogeを正規表現 "/Link$/" がmatchする名称に変更してください。` } ] },
     { code: 'const FugaAnchor = styled.div``', errors: [ { message: `FugaAnchor は /(Anchor|^a)$/ にmatchする名前のコンポーネントを拡張することを期待している名称になっています
  - FugaAnchor の名称の末尾が"Anchor" という文字列ではない状態にしつつ、"div"を継承していることをわかる名称に変更してください
  - もしくは"div"を"FugaAnchor"の継承元であることがわかるような適切なタグや別コンポーネントに差し替えてください
