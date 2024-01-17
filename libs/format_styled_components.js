@@ -33,8 +33,7 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
         context.report({
           node,
           message: `${extended}を正規表現 "${e.toString()}" がmatchする名称に変更してください。${isImport ? `
- - ${base}が型の場合、'import type { ${base} as ${extended} }' もしくは 'import { type ${base} as ${extended} }' のように明示的に型であることを宣言してください。名称変更が不要になります
-` : ''}`,
+ - ${base}が型の場合、'import type { ${base} as ${extended} }' もしくは 'import { type ${base} as ${extended} }' のように明示的に型であることを宣言してください。名称変更が不要になります` : ''}`,
         });
       }
     })
