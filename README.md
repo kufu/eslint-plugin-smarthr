@@ -6,6 +6,7 @@
 - [a11y-heading-in-sectioning-content](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-heading-in-sectioning-content)
 - [a11y-image-has-alt-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-image-has-alt-attribute)
 - [a11y-input-has-name-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-input-has-name-attribute)
+- [a11y-numbered-text-within-ol](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-numbered-text-within-ol)
 - [a11y-prohibit-input-placeholder](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-input-placeholder)
 - [a11y-trigger-has-button](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-trigger-has-button)
 - [best-practice-for-date](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-date)
