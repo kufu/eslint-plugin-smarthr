@@ -60,6 +60,11 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<Reel as="aside"><div><Heading>hoge</Heading></div></Reel>' },
     { code: '<Sidebar as="nav"><div><Heading>hoge</Heading></div></Sidebar>' },
     { code: '<Stack as="section"><div><Heading>hoge</Heading></div></Stack>' },
+    { code: '<HogeCenter forwardedAs="section"><div><Heading>hoge</Heading></div></HogeCenter>' },
+    { code: '<HogeCluster forwardedAs="section"><div><Heading>hoge</Heading></div></HogeCluster>' },
+    { code: '<HogeReel forwardedAs="aside"><div><Heading>hoge</Heading></div></HogeReel>' },
+    { code: '<HogeSidebar forwardedAs="nav"><div><Heading>hoge</Heading></div></HogeSidebar>' },
+    { code: '<HogeStack forwardedAs="section"><div><Heading>hoge</Heading></div></HogeStack>' },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
