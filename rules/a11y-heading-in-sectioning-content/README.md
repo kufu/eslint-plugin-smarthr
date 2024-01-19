@@ -3,6 +3,7 @@
 - Headingコンポーネントをsmarthr-ui/SectioningContent(Article, Aside, Nav, Section, SectioningFragment) のいずれかで囲むことを促すルールです
   - article, aside, nav, section で Heading とHeadingの対象となる範囲を囲むとブラウザが正確に解釈できるようになるメリットがあります
   - またsmarthr-ui/SectioningContentで smarthr-ui/Headingを囲むことで、Headingのレベル(h1~h6)を自動的に計算するメリットもあります
+- Headingコンポーネントをsmarthr-ui/Layout(Center, Reel, Sidebar, Stack) のいずれかで囲んでおり、かつas, forwardedAsのいずれかの属性で 'section', 'article', 'aside', 'nav' が指定されている場合、SectioningContentで囲んでいるものとして扱われるようになります
 
 ## rules
 
@@ -59,20 +60,17 @@
     <Heading>fuga</Heading>
   </Section>
 </Section>
-```
 
-```jsx
 <>
   <PageHeading>Page Name.</PageHeading>
   <Section>
-    <Heading>
-      hoge
-    </Heading>
+    <Heading>hoge</Heading>
   </Section>
   <StyledSection>
-    <Heading>
-      fuga
-    </Heading>
+    <Heading>fuga</Heading>
   </StyledSection>
+  <Center as="aside">
+    <Heading>piyo</Heading>
+  </Center>
 </>
 ```
