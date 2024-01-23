@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.25](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.24...v0.3.25) (2024-01-23)
+
+
+### Features
+
+* a11y-input-in-form-controlを追加する ([#98](https://github.com/kufu/eslint-plugin-smarthr/issues/98)) ([fb7e77d](https://github.com/kufu/eslint-plugin-smarthr/commit/fb7e77d8c3ac73f57425d094a240d998ff78a51d))
+* a11y-prohibit-useless-sectioning-fragmentを追加する ([#106](https://github.com/kufu/eslint-plugin-smarthr/issues/106)) ([994c040](https://github.com/kufu/eslint-plugin-smarthr/commit/994c04027892a5fe50fb71ba8b5941401f12c02c))
+
 ### [0.3.24](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.23...v0.3.24) (2024-01-19)
 
 ### [0.3.23](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.22...v0.3.23) (2024-01-16)
