@@ -15,7 +15,7 @@ const EXPECTED_NAMES = {
 const TARGET_TAG_NAME_REGEX = new RegExp(`(${Object.keys(EXPECTED_NAMES).join('|')})`)
 const INPUT_NAME_REGEX = /^[a-zA-Z0-9_\[\]]+$/
 const INPUT_TAG_REGEX = /(i|I)nput$/
-const RADIO_BUTTON_REGEX = /RadioButton$/
+const RADIO_BUTTON_REGEX = /RadioButton(Panel)?$/
 
 const findNameAttr = (a) => a?.name?.name === 'name'
 const findSpreadAttr = (a) => a.type === 'JSXSpreadAttribute'
