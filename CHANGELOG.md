@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.26](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.25...v0.3.26) (2024-01-24)
+
+
+### Bug Fixes
+
+* a11y-prohibit-useless-sectioning-fragmentの属性チェックのバグを修正 ([#107](https://github.com/kufu/eslint-plugin-smarthr/issues/107)) ([b42bdd9](https://github.com/kufu/eslint-plugin-smarthr/commit/b42bdd9e11258a6a32e13647c0c764065b5bac64))
+
 ### [0.3.25](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.24...v0.3.25) (2024-01-23)
 
 
