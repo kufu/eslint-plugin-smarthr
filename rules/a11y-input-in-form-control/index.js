@@ -179,15 +179,19 @@ module.exports = {
                       }
                     // HINT: 擬似的にラベルが設定されている場合、無視する
                     } else if (!isRadio && !isCheckbox && !isPseudoLabel) {
+                      const isSelect = nodeName.match(SELECT_REGEX)
+
                       context.report({
                         node: n,
                         message: `${name} が ラベルを持たない入力要素(${nodeName})を含んでいます。入力要素が何であるかを正しく伝えるため、以下の方法のいずれかで修正してください。
  - 方法1: ${name} を smarthr-ui/FormControl、もしくはそれを拡張したコンポーネントに変更してください
  - 方法2: ${nodeName} がlabel要素を含むコンポーネントである場合、名称を${FORM_CONTROL_REGEX}にマッチするものに変更してください
-    - smarthr-ui/FormControl、smarthr-ui/FormGroup はlabel要素を内包しています
+   - smarthr-ui/FormControl、smarthr-ui/FormGroup はlabel要素を内包しています
  - 方法3: ${nodeName} がRadioButton、もしくはCheckboxを表すコンポーネントの場合、名称を${LABELED_INPUTS_REGEX}にマッチするものに変更してください
-    - smarthr-ui/RadioButton、smarthr-ui/RadioButtonPanel、smarthr-ui/Checkbox はlabel要素を内包しています
- - 方法4: ${name} が smarthr-ui/Fieldset、もしくはそれを拡張しているコンポーネントではない場合、名称を ${FIELDSET_REGEX} にマッチしないものに変更してください`,
+   - smarthr-ui/RadioButton、smarthr-ui/RadioButtonPanel、smarthr-ui/Checkbox はlabel要素を内包しています
+ - 方法4: ${name} が smarthr-ui/Fieldset、もしくはそれを拡張しているコンポーネントではない場合、名称を ${FIELDSET_REGEX} にマッチしないものに変更してください
+ - 方法5: 上記のいずれの方法も適切では場合、${nodeName}のtitle属性に "どんな値を${isSelect ? '選択' : '入力'}すれば良いのか" の説明を設定してください
+   - 例: <${nodeName} title="${isSelect ? '検索対象を選択してください' : '姓を全角カタカナのみで入力してください'}" />`,
                       });
                     }
 
