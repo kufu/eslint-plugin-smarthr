@@ -233,6 +233,16 @@ module.exports = {
 
                 break
               }
+              case 'FunctionDeclaration': {
+                if (n.parent.type.match(IGNORE_INPUT_CHECK_PARENT_TYPE)) {
+                  const name = n.id.name
+
+                  // 入力要素系コンポーネントの拡張なので対象外
+                  if (name.match(FORM_CONTROL_INPUTS_REGEX) || checkAdditionalMultiInputComponents(name) || checkAdditionalInputComponents(name)) {
+                    return
+                  }
+                }
+              }
               case 'Program': {
                 // HINT: smarthr-ui/CheckBoxはlabelを単独で持つため、FormControl系でラップをする必要はない
                 // HINT: 擬似的にラベルが設定されている場合、無視する
