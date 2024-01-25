@@ -8,6 +8,7 @@
 - [a11y-input-has-name-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-input-has-name-attribute)
 - [a11y-input-in-form-control](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-input-in-form-control)
 - [a11y-prohibit-input-placeholder](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-input-placeholder)
+- [a11y-prohibit-useless-sectioning-fragment](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-useless-sectioning-fragment)
 - [a11y-trigger-has-button](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-trigger-has-button)
 - [best-practice-for-date](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-date)
 - [best-practice-for-remote-trigger-dialog](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-remote-trigger-dialog)
