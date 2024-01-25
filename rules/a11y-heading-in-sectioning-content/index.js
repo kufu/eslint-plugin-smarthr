@@ -112,6 +112,7 @@ const searchBubbleUp = (node) => {
   if (
     // Headingコンポーネントの拡張なので対象外
     node.type === 'VariableDeclarator' && ignoreHeadingCheckParentType.includes(node.parent.parent?.type) && node.id.name.match(declaratorHeadingRegex) ||
+    node.type === 'FunctionDeclaration' && ignoreHeadingCheckParentType.includes(node.parent.type) && node.id.name.match(declaratorHeadingRegex) ||
     // ModelessDialogのheaderにHeadingを設定している場合も対象外
     node.type === 'JSXAttribute' && node.name.name === 'header' && node.parent.name.name.match(modelessDialogRegex)
   ) {
