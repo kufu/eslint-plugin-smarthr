@@ -33,6 +33,7 @@ const EXPECTED_NAMES = {
   'Reel$': '(Reel)$',
   'Sidebar$': '(Sidebar)$',
   'Stack$': '(Stack)$',
+  '(L|^l)abel$': '(Label)$',
 
 }
 
@@ -190,7 +191,8 @@ module.exports = {
  - 方法3: ${nodeName} がRadioButton、もしくはCheckboxを表すコンポーネントの場合、名称を${LABELED_INPUTS_REGEX}にマッチするものに変更してください
    - smarthr-ui/RadioButton、smarthr-ui/RadioButtonPanel、smarthr-ui/Checkbox はlabel要素を内包しています
  - 方法4: ${name} が smarthr-ui/Fieldset、もしくはそれを拡張しているコンポーネントではない場合、名称を ${FIELDSET_REGEX} にマッチしないものに変更してください
- - 方法5: 上記のいずれの方法も適切では場合、${nodeName}のtitle属性に "どんな値を${isSelect ? '選択' : '入力'}すれば良いのか" の説明を設定してください
+ - 方法5: 別途label要素が存在し、それらと紐づけたい場合はlabel要素のhtmlFor属性、${nodeName}のid属性に同じ文字列を指定してください。この文字列はhtml内で一意である必要があります
+ - 方法6: 上記のいずれの方法も適切ではない場合、${nodeName}のtitle属性に "どんな値を${isSelect ? '選択' : '入力'}すれば良いのか" の説明を設定してください
    - 例: <${nodeName} title="${isSelect ? '検索対象を選択してください' : '姓を全角カタカナのみで入力してください'}" />`,
                       });
                     }
@@ -213,7 +215,8 @@ module.exports = {
  - 方法1: ${actualName} を${wrapComponentName}、もしくはそれを拡張したコンポーネントに変更してください
    - ${actualName} 内のHeading要素は${wrapComponentName}のtitle属性に変更してください
  - 方法2: ${actualName} と ${nodeName} の間に ${wrapComponentName} が存在するようにマークアップを変更してください${isRadio ? '' : `
- - 方法3: 上記のいずれの方法も適切では場合、${nodeName}のtitle属性に "どんな値を${isSelect ? '選択' : '入力'}すれば良いのか" の説明を設定してください
+ - 方法3: 別途label要素が存在し、それらと紐づけたい場合はlabel要素のhtmlFor属性、${nodeName}のid属性に同じ文字列を指定してください。この文字列はhtml内で一意である必要があります
+ - 方法4: 上記のいずれの方法も適切ではない場合、${nodeName}のtitle属性に "どんな値を${isSelect ? '選択' : '入力'}すれば良いのか" の説明を設定してください
    - 例: <${nodeName} title="${isSelect ? '検索対象を選択してください' : '姓を全角カタカナのみで入力してください'}" />`}`,
                         });
                       }
@@ -260,7 +263,7 @@ module.exports = {
  - FieldsetでRadioButtonを囲むことでグループ化された入力要素に対して適切なタイトル・説明を追加出来ます` : ``}
  - ${nodeName}が入力要素とラベル・タイトル・説明など含む概念を表示するコンポーネントの場合、コンポーネント名を${FROM_CONTROLS_REGEX}とマッチするように修正してください
  - ${nodeName}が入力要素自体を表現するコンポーネントの一部である場合、ルートとなるコンポーネントの名称を${FORM_CONTROL_INPUTS_REGEX}とマッチするように修正してください${isRadio ? '' : `
- - 上記のいずれの方法も適切では場合、${nodeName}のtitle属性に "どんな値を${isSelect ? '選択' : '入力'}すれば良いのか" の説明を設定してください
+ - 上記のいずれの方法も適切ではない場合、${nodeName}のtitle属性に "どんな値を${isSelect ? '選択' : '入力'}すれば良いのか" の説明を設定してください
    - 例: <${nodeName} title="${isSelect ? '検索対象を選択してください' : '姓を全角カタカナのみで入力してください'}" />`}`,
                   });
                 }

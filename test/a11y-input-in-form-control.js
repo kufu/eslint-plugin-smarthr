@@ -16,13 +16,13 @@ const noLabeledInput = (name) => `${name} を、smarthr-ui/FormControl もしく
  - FormControlで入力要素を囲むことでラベルと入力要素が適切に紐づき、操作性が高まります
  - ${name}が入力要素とラベル・タイトル・説明など含む概念を表示するコンポーネントの場合、コンポーネント名を/((FormGroup)$|(FormControl)$|((F|^f)ieldset)$)/とマッチするように修正してください
  - ${name}が入力要素自体を表現するコンポーネントの一部である場合、ルートとなるコンポーネントの名称を/((I|^i)nput$|SearchInput$|(T|^t)extarea$|(S|^s)elect$|InputFile$|Combo(b|B)ox$|DatePicker$|RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/とマッチするように修正してください
- - 上記のいずれの方法も適切では場合、${name}のtitle属性に "どんな値を入力すれば良いのか" の説明を設定してください
+ - 上記のいずれの方法も適切ではない場合、${name}のtitle属性に "どんな値を入力すれば良いのか" の説明を設定してください
    - 例: <${name} title="姓を全角カタカナのみで入力してください" />`
 const noLabeledSelect = (name) => `${name} を、smarthr-ui/FormControl もしくはそれを拡張したコンポーネントが囲むようマークアップを変更してください。
  - FormControlで入力要素を囲むことでラベルと入力要素が適切に紐づき、操作性が高まります
  - ${name}が入力要素とラベル・タイトル・説明など含む概念を表示するコンポーネントの場合、コンポーネント名を/((FormGroup)$|(FormControl)$|((F|^f)ieldset)$)/とマッチするように修正してください
  - ${name}が入力要素自体を表現するコンポーネントの一部である場合、ルートとなるコンポーネントの名称を/((I|^i)nput$|SearchInput$|(T|^t)extarea$|(S|^s)elect$|InputFile$|Combo(b|B)ox$|DatePicker$|RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/とマッチするように修正してください
- - 上記のいずれの方法も適切では場合、${name}のtitle属性に "どんな値を選択すれば良いのか" の説明を設定してください
+ - 上記のいずれの方法も適切ではない場合、${name}のtitle属性に "どんな値を選択すれば良いのか" の説明を設定してください
    - 例: <${name} title="検索対象を選択してください" />`
 const invalidPureCheckboxInFormControl = (name) => `HogeFormControl が ${name} を含んでいます。smarthr-ui/FormControl を smarthr-ui/Fieldset に変更し、正しくグルーピングされるように修正してください。
  - 可能なら${name}はsmarthr-ui/Checkboxへの変更を検討してください。難しい場合は ${name} と結びつくlabel要素が必ず存在するよう、マークアップする必要があることに注意してください。`
@@ -45,7 +45,8 @@ const noLabeledInputInFieldset = (name) => `HogeFieldset が ラベルを持た�
  - 方法3: ${name} がRadioButton、もしくはCheckboxを表すコンポーネントの場合、名称を/(RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/にマッチするものに変更してください
    - smarthr-ui/RadioButton、smarthr-ui/RadioButtonPanel、smarthr-ui/Checkbox はlabel要素を内包しています
  - 方法4: HogeFieldset が smarthr-ui/Fieldset、もしくはそれを拡張しているコンポーネントではない場合、名称を /Fieldset$/ にマッチしないものに変更してください
- - 方法5: 上記のいずれの方法も適切では場合、${name}のtitle属性に "どんな値を入力すれば良いのか" の説明を設定してください
+ - 方法5: 別途label要素が存在し、それらと紐づけたい場合はlabel要素のhtmlFor属性、${name}のid属性に同じ文字列を指定してください。この文字列はhtml内で一意である必要があります
+ - 方法6: 上記のいずれの方法も適切ではない場合、${name}のtitle属性に "どんな値を入力すれば良いのか" の説明を設定してください
    - 例: <${name} title="姓を全角カタカナのみで入力してください" />`
 const noLabeledInputInFieldsetWithSelect = (name) => `HogeFieldset が ラベルを持たない入力要素(${name})を含んでいます。入力要素が何であるかを正しく伝えるため、以下の方法のいずれかで修正してください。
  - 方法1: HogeFieldset を smarthr-ui/FormControl、もしくはそれを拡張したコンポーネントに変更してください
@@ -54,13 +55,15 @@ const noLabeledInputInFieldsetWithSelect = (name) => `HogeFieldset が ラベル
  - 方法3: ${name} がRadioButton、もしくはCheckboxを表すコンポーネントの場合、名称を/(RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/にマッチするものに変更してください
    - smarthr-ui/RadioButton、smarthr-ui/RadioButtonPanel、smarthr-ui/Checkbox はlabel要素を内包しています
  - 方法4: HogeFieldset が smarthr-ui/Fieldset、もしくはそれを拡張しているコンポーネントではない場合、名称を /Fieldset$/ にマッチしないものに変更してください
- - 方法5: 上記のいずれの方法も適切では場合、${name}のtitle属性に "どんな値を選択すれば良いのか" の説明を設定してください
+ - 方法5: 別途label要素が存在し、それらと紐づけたい場合はlabel要素のhtmlFor属性、${name}のid属性に同じ文字列を指定してください。この文字列はhtml内で一意である必要があります
+ - 方法6: 上記のいずれの方法も適切ではない場合、${name}のtitle属性に "どんな値を選択すれば良いのか" の説明を設定してください
    - 例: <${name} title="検索対象を選択してください" />`
 const useFormControlInsteadOfSection = (name, section) => `${name}は${section}より先に、smarthr-ui/FormControlが入力要素を囲むようマークアップを以下のいずれかの方法で変更してください。
  - 方法1: ${section} をFormControl、もしくはそれを拡張したコンポーネントに変更してください
    - ${section} 内のHeading要素はFormControlのtitle属性に変更してください
  - 方法2: ${section} と ${name} の間に FormControl が存在するようにマークアップを変更してください
- - 方法3: 上記のいずれの方法も適切では場合、${name}のtitle属性に "どんな値を入力すれば良いのか" の説明を設定してください
+ - 方法3: 別途label要素が存在し、それらと紐づけたい場合はlabel要素のhtmlFor属性、${name}のid属性に同じ文字列を指定してください。この文字列はhtml内で一意である必要があります
+ - 方法4: 上記のいずれの方法も適切ではない場合、${name}のtitle属性に "どんな値を入力すれば良いのか" の説明を設定してください
    - 例: <${name} title="姓を全角カタカナのみで入力してください" />`
 const useFormControlInsteadOfSectionInRadio = (name, section) => `${name}は${section}より先に、smarthr-ui/Fieldsetが入力要素を囲むようマークアップを以下のいずれかの方法で変更してください。
  - 方法1: ${section} をFieldset、もしくはそれを拡張したコンポーネントに変更してください
