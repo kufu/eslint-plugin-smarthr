@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.27](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.26...v0.3.27) (2024-01-28)
+
+
+### Features
+
+* a11y系コンポーネントで入力要素の拡張コンポーネントの判定をfunctionを使っている場合にも正しく判定できるように修正 ([#108](https://github.com/kufu/eslint-plugin-smarthr/issues/108)) ([c929760](https://github.com/kufu/eslint-plugin-smarthr/commit/c929760b3d8e166e7e3f7befcf048fa28cc48042))
+
 ### [0.3.26](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.25...v0.3.26) (2024-01-24)
 
 
