@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-smarthr",
-  "version": "0.3.24",
+  "version": "0.3.27",
   "author": "SmartHR",
   "license": "MIT",
   "description": "A sharable ESLint plugin for SmartHR",
@@ -22,7 +22,6 @@
     "url": "https://github.com/kufu/eslint-plugin-smarthr/issues"
   },
   "dependencies": {
-    "inflected": "^2.1.0",
     "json5": "^2.2.0"
   },
   "devDependencies": {

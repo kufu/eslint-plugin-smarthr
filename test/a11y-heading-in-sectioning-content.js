@@ -55,6 +55,8 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<><Section><Heading>hoge</Heading></Section><Section><Heading>fuga</Heading></Section></>' },
     { code: 'const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>' },
     { code: 'export const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>' },
+    { code: 'function FugaHeading() { return <PiyoHeading anyArg={abc}>hoge</PiyoHeading> }' },
+    { code: 'export function FugaHeading() { return <PiyoHeading anyArg={abc}>hoge</PiyoHeading> }' },
     { code: '<Center as="section"><div><Heading>hoge</Heading></div></Center>' },
     { code: '<Cluster as="section"><div><Heading>hoge</Heading></div></Cluster>' },
     { code: '<Reel as="aside"><div><Heading>hoge</Heading></div></Reel>' },
