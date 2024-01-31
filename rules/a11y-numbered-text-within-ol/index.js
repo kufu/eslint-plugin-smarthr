@@ -6,12 +6,12 @@ const EXPECTED_NAMES = {
 }
 const UNEXPECTED_NAMES = EXPECTED_NAMES
 
-const NUMBERED_TEXT_REGEX = /^([1-9])([^1-9]{2})/
+const NUMBERED_TEXT_REGEX = /^[\s\n]*(([1-9])([^1-9]{2})[^\s\n]*)/
 const ORDERED_LIST_REGEX = /(Ordered(.*)List|^ol)$/
 const SELECT_REGEX = /(S|s)elect$/
 
 const searchOrderedList = (node) => {
-  if (node.type === 'JSXElement' && node.openingElement.name) {
+  if (node.type === 'JSXElement' && node.openingElement.name?.name) {
     const name = node.openingElement.name.name
 
     if (name.match(ORDERED_LIST_REGEX)) {
@@ -41,7 +41,8 @@ const checkNumberedTextInOl = (result, node, context) => {
   }
 }
 
-const renderTag = (node) => `<${node.parent.name.name} ${node.name.name}="${node.value.value}">`
+const renderTag = (node) => `\`${node.name.name}="${node.value.value}"\``
+const renderNode = (node, matcher) => node.type === 'JSXText' ? `\`${matcher[1]}\`` : renderTag(node)
 
 const SCHEMA = []
 
@@ -51,109 +52,36 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
-    let firstAttributeNumber = 0
-    let firstNumberedAttribute = null
-    let firstTextNumber = 0
-    let firstNumberedText = null
+    let firstNumber = 0
+    let firstNumberedNode = null
+    let firstNumberedMatcher = null
 
-    return {
-      ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
-      JSXAttribute: (node) => {
-        if (node.value?.value) {
-          const matcher = node.value.value.match(NUMBERED_TEXT_REGEX)
+    function checker(node, matcher) {
+      if (matcher) {
+        const result = searchOrderedList(node)
 
-          if (matcher) {
-            const result = searchOrderedList(node)
-
-            if (result === 0) {
-              return
-            }
-
-            checkNumberedTextInOl(result, node, context)
-
-            const nowNumber = matcher[1] * 1
-
-            if (firstNumberedAttribute && nowNumber !== firstAttributeNumber) {
-              if (nowNumber === firstAttributeNumber + 1) {
-                const resultFirst = searchOrderedList(firstNumberedAttribute)
-
-                if (!resultFirst) {
-                  if (!result) {
-                    context.report({
-                      node: firstNumberedAttribute,
-                      message: `テキストとして連番をもつ要素がol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
- - ${renderTag(firstNumberedAttribute)} と ${renderTag(node)} が同じol要素内に存在するように修正してください
- - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol内に存在する必要があります`,
-                    })
-                  } else {
-                    context.report({
-                      node: firstNumberedAttribute,
-                      message: `テキストとして連番をもつ要素がol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
- - ${renderTag(firstNumberedAttribute)} が ${renderTag(node)} を囲んでいるol要素内(<${result.name.name}>)に存在するように修正してください
- - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol要素内(<${result.name.name}>)に存在する必要があります`,
-                    })
-                  }
-                } else {
-                  if (!result) {
-                    context.report({
-                      node,
-                      message: `テキストとして連番をもつ要素がol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
- - ${renderTag(node)} が ${renderTag(firstNumberedAttribute)} を囲んでいるol要素内(<${resultFirst.name.name}>)に存在するように修正してください
- - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol要素内(<${resultFirst.name.name}>)に存在する必要があります`,
-                    })
-
-                    firstNumberedAttribute = null
-                  } else if (resultFirst !== result) {
-                    context.report({
-                      node,
-                      message: `テキストとして連番をもつ要素が同一のol要素でマークアップされていません。同一のol要素でマークアップすることでリスト内の要素関連性を正しく表せるためマークアップの修正を行ってください。
- - ${renderTag(firstNumberedAttribute)} と ${renderTag(node)} が同じol要素内に存在するように修正してください
- - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol内に存在する必要があります`,
-                    })
-                  }
-                }
-              }
-
-              firstAttributeNumber = nowNumber
-              firstNumberedAttribute = node
-            } else if (!firstNumberedAttribute || nowNumber === firstAttributeNumber) {
-              firstAttributeNumber = nowNumber
-              firstNumberedAttribute = node
-            }
-          }
-        }
-      },
-      JSXText: (node) => {
-        const matcher = node.value.match(NUMBERED_TEXT_REGEX)
-
-        if (matcher) {
-          const result = searchOrderedList(node)
-
-          if (result === 0) {
-            return
-          }
-
+        if (result !== 0) {
           checkNumberedTextInOl(result, node, context)
 
-          const nowNumber = matcher[1] * 1
+          const nowNumber = matcher[2] * 1
 
-          if (firstNumberedText && nowNumber !== firstTextNumber) {
-            if (nowNumber === firstTextNumber + 1) {
-              const resultFirst = searchOrderedList(firstNumberedText)
+          if (firstNumberedNode && nowNumber !== firstNumber) {
+            if (nowNumber === firstNumber + 1) {
+              const resultFirst = searchOrderedList(firstNumberedNode)
 
               if (!resultFirst) {
                 if (!result) {
                   context.report({
-                    node: firstNumberedText,
+                    node: firstNumberedNode,
                     message: `連番を含むテキストがol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
- - "${firstNumberedText.value}" と "${node.value}" が同じol要素内に存在するように修正してください
+ - ${renderNode(firstNumberedNode, firstNumberedMatcher)} と ${renderNode(node, matcher)} が同じol要素内に存在するように修正してください
  - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol内に存在する必要があります`,
                   })
                 } else {
                   context.report({
-                    node: firstNumberedText,
+                    node: firstNumberedNode,
                     message: `連番を含むテキストがol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
- - "${firstNumberedText.value}" が "${node.value}" を囲んでいるol要素内(<${result.name.name}>)に存在するように修正してください
+ - ${renderNode(firstNumberedNode, firstNumberedMatcher)} が ${renderNode(node, matcher)} を囲んでいるol要素内(<${result.name.name}>)に存在するように修正してください
  - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol要素内(<${result.name.name}>)に存在する必要があります`,
                   })
                 }
@@ -162,27 +90,43 @@ module.exports = {
                   context.report({
                     node,
                     message: `連番を含むテキストがol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
- - "${node.value}" が "${firstNumberedText.value}" を囲んでいるol要素内(<${resultFirst.name.name}>)に存在するように修正してください
+ - ${renderNode(node, matcher)} が ${renderNode(firstNumberedNode, firstNumberedMatcher)} を囲んでいるol要素内(<${resultFirst.name.name}>)に存在するように修正してください
  - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol要素内(<${resultFirst.name.name}>)に存在する必要があります`,
                   })
+
+                  firstNumberedNode = null
                 } else if (resultFirst !== result) {
                   context.report({
                     node,
                     message: `連番を含むテキストが同一のol要素でマークアップされていません。同一のol要素でマークアップすることでリスト内の要素関連性を正しく表せるためマークアップの修正を行ってください。
- - "${firstNumberedText.value}" と "${node.value}" が同じol要素内に存在するように修正してください
+ - ${renderNode(firstNumberedNode, firstNumberedMatcher)} と ${renderNode(node, matcher)} が同じol要素内に存在するように修正してください
  - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol内に存在する必要があります`,
                   })
                 }
               }
             }
 
-            firstTextNumber = nowNumber
-            firstNumberedText = node
-          } else if (!firstNumberedText || nowNumber === firstTextNumber) {
-            firstTextNumber = nowNumber
-            firstNumberedText = node
+            firstNumber = nowNumber
+            firstNumberedNode = node
+            firstNumberedMatcher = matcher
+          } else if (!firstNumberedNode || nowNumber === firstNumber) {
+            firstNumber = nowNumber
+            firstNumberedNode = node
+            firstNumberedMatcher = matcher
           }
         }
+      }
+    }
+
+    return {
+      ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
+      JSXAttribute: (node) => {
+        if (node.value?.value) {
+          checker(node, node.value.value.match(NUMBERED_TEXT_REGEX))
+        }
+      },
+      JSXText: (node) => {
+        checker(node, node.value.match(NUMBERED_TEXT_REGEX))
       },
     }
   },
