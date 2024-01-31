@@ -20,7 +20,6 @@
 - [prohibit-file-name](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/prohibit-file-name)
 - [prohibit-import](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/prohibit-import)
 - [prohibit-path-within-template-literal](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/prohibit-path-within-template-literal)
-- [redundant-name](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/redundant-name)
 - [require-barrel-import](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-barrel-import)
 - [require-declaration](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-declaration)
 - [require-export](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/require-export)
