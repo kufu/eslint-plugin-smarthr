@@ -2,8 +2,11 @@ const { generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_LABELED_INPUT_NAMES = {
   'RadioButton$': '(RadioButton)$',
+  'RadioButtons$': '(RadioButtons)$',
   'RadioButtonPanel$': '(RadioButtonPanel)$',
+  'RadioButtonPanels$': '(RadioButtonPanels)$',
   'Check(B|b)ox$': '(CheckBox)$',
+  'Check(B|b)ox(e)?s$': '(CheckBoxes)$',
 }
 const EXPECTED_INPUT_NAMES = {
   '(I|^i)nput$': '(Input)$',
@@ -43,9 +46,9 @@ const FORM_CONTROL_INPUTS_REGEX = new RegExp(`(${Object.keys(EXPECTED_INPUT_NAME
 const LABELED_INPUTS_REGEX = new RegExp(`(${Object.keys(EXPECTED_LABELED_INPUT_NAMES).join('|')})`)
 const SEARCH_INPUT_REGEX = /SearchInput$/
 const INPUT_REGEX = /(i|I)nput$/
-const RADIO_BUTTONS_REGEX = /RadioButton(Panel)?$/
-const CHECKBOX_REGEX = /Check(B|b)ox?$/
-const SELECT_REGEX = /(S|s)elect?$/
+const RADIO_BUTTONS_REGEX = /RadioButton(Panel)?(s)?$/
+const CHECKBOX_REGEX = /Check(B|b)ox(s|es)?$/
+const SELECT_REGEX = /(S|s)elect(s)?$/
 const FROM_CONTROLS_REGEX = new RegExp(`(${Object.keys(EXPECTED_FORM_CONTROL_NAMES).join('|')})`)
 const FORM_CONTROL_REGEX = /(Form(Control|Group))$/
 const FIELDSET_REGEX = /Fieldset$/
@@ -54,6 +57,7 @@ const SECTIONING_REGEX = /(((A|^a)(rticle|side))|(N|^n)av|(S|^s)ection|^Sectioni
 const BARE_SECTIONING_TAG_REGEX = /^(article|aside|nav|section)$/
 const LAYOUT_COMPONENT_REGEX = /((C(ent|lust)er)|Reel|Sidebar|Stack)$/
 const AS_REGEX = /^(as|forwardedAs)$/
+const SUFFIX_S_REGEX = /s$/
 
 const IGNORE_INPUT_CHECK_PARENT_TYPE = /^(Program|ExportNamedDeclaration)$/
 
@@ -132,6 +136,8 @@ module.exports = {
               }
             }
           }
+
+          const isPreMultiple = isAdditionalMultiInput || isFormControlInput && nodeName.match(SUFFIX_S_REGEX)
           const isRadio = (isPureInput && isTypeRadio) || nodeName.match(RADIO_BUTTONS_REGEX);
           const isCheckbox = !isRadio && (isPureInput && isTypeCheck || nodeName.match(CHECKBOX_REGEX));
 
@@ -154,7 +160,7 @@ module.exports = {
                       }
                     }
 
-                    const isMultiInput = isAdditionalMultiInput || hit || isInMap
+                    const isMultiInput = isPreMultiple || hit || isInMap
                     const matcherFormControl = name.match(FORM_CONTROL_REGEX)
 
                     if (matcherFormControl) {
