@@ -15,13 +15,13 @@ const ruleTester = new RuleTester({
 const noLabeledInput = (name) => `${name} を、smarthr-ui/FormControl もしくはそれを拡張したコンポーネントが囲むようマークアップを変更してください。
  - FormControlで入力要素を囲むことでラベルと入力要素が適切に紐づき、操作性が高まります
  - ${name}が入力要素とラベル・タイトル・説明など含む概念を表示するコンポーネントの場合、コンポーネント名を/((FormGroup)$|(FormControl)$|((F|^f)ieldset)$)/とマッチするように修正してください
- - ${name}が入力要素自体を表現するコンポーネントの一部である場合、ルートとなるコンポーネントの名称を/((I|^i)nput$|SearchInput$|(T|^t)extarea$|(S|^s)elect$|InputFile$|Combo(b|B)ox$|DatePicker$|RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/とマッチするように修正してください
+ - ${name}が入力要素自体を表現するコンポーネントの一部である場合、ルートとなるコンポーネントの名称を/((I|^i)nput$|SearchInput$|(T|^t)extarea$|(S|^s)elect$|InputFile$|Combo(b|B)ox$|DatePicker$|RadioButton$|RadioButtons$|RadioButtonPanel$|RadioButtonPanels$|Check(B|b)ox$|Check(B|b)ox(e)?s$)/とマッチするように修正してください
  - 上記のいずれの方法も適切ではない場合、${name}のtitle属性に "どんな値を入力すれば良いのか" の説明を設定してください
    - 例: <${name} title="姓を全角カタカナのみで入力してください" />`
 const noLabeledSelect = (name) => `${name} を、smarthr-ui/FormControl もしくはそれを拡張したコンポーネントが囲むようマークアップを変更してください。
  - FormControlで入力要素を囲むことでラベルと入力要素が適切に紐づき、操作性が高まります
  - ${name}が入力要素とラベル・タイトル・説明など含む概念を表示するコンポーネントの場合、コンポーネント名を/((FormGroup)$|(FormControl)$|((F|^f)ieldset)$)/とマッチするように修正してください
- - ${name}が入力要素自体を表現するコンポーネントの一部である場合、ルートとなるコンポーネントの名称を/((I|^i)nput$|SearchInput$|(T|^t)extarea$|(S|^s)elect$|InputFile$|Combo(b|B)ox$|DatePicker$|RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/とマッチするように修正してください
+ - ${name}が入力要素自体を表現するコンポーネントの一部である場合、ルートとなるコンポーネントの名称を/((I|^i)nput$|SearchInput$|(T|^t)extarea$|(S|^s)elect$|InputFile$|Combo(b|B)ox$|DatePicker$|RadioButton$|RadioButtons$|RadioButtonPanel$|RadioButtonPanels$|Check(B|b)ox$|Check(B|b)ox(e)?s$)/とマッチするように修正してください
  - 上記のいずれの方法も適切ではない場合、${name}のtitle属性に "どんな値を選択すれば良いのか" の説明を設定してください
    - 例: <${name} title="検索対象を選択してください" />`
 const invalidPureCheckboxInFormControl = (name) => `HogeFormControl が ${name} を含んでいます。smarthr-ui/FormControl を smarthr-ui/Fieldset に変更し、正しくグルーピングされるように修正してください。
@@ -42,7 +42,7 @@ const noLabeledInputInFieldset = (name) => `HogeFieldset が ラベルを持た�
  - 方法1: HogeFieldset を smarthr-ui/FormControl、もしくはそれを拡張したコンポーネントに変更してください
  - 方法2: ${name} がlabel要素を含むコンポーネントである場合、名称を/(Form(Control|Group))$/にマッチするものに変更してください
    - smarthr-ui/FormControl、smarthr-ui/FormGroup はlabel要素を内包しています
- - 方法3: ${name} がRadioButton、もしくはCheckboxを表すコンポーネントの場合、名称を/(RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/にマッチするものに変更してください
+ - 方法3: ${name} がRadioButton、もしくはCheckboxを表すコンポーネントの場合、名称を/(RadioButton$|RadioButtons$|RadioButtonPanel$|RadioButtonPanels$|Check(B|b)ox$|Check(B|b)ox(e)?s$)/にマッチするものに変更してください
    - smarthr-ui/RadioButton、smarthr-ui/RadioButtonPanel、smarthr-ui/Checkbox はlabel要素を内包しています
  - 方法4: HogeFieldset が smarthr-ui/Fieldset、もしくはそれを拡張しているコンポーネントではない場合、名称を /Fieldset$/ にマッチしないものに変更してください
  - 方法5: 別途label要素が存在し、それらと紐づけたい場合はlabel要素のhtmlFor属性、${name}のid属性に同じ文字列を指定してください。この文字列はhtml内で一意である必要があります
@@ -52,7 +52,7 @@ const noLabeledInputInFieldsetWithSelect = (name) => `HogeFieldset が ラベル
  - 方法1: HogeFieldset を smarthr-ui/FormControl、もしくはそれを拡張したコンポーネントに変更してください
  - 方法2: ${name} がlabel要素を含むコンポーネントである場合、名称を/(Form(Control|Group))$/にマッチするものに変更してください
    - smarthr-ui/FormControl、smarthr-ui/FormGroup はlabel要素を内包しています
- - 方法3: ${name} がRadioButton、もしくはCheckboxを表すコンポーネントの場合、名称を/(RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/にマッチするものに変更してください
+ - 方法3: ${name} がRadioButton、もしくはCheckboxを表すコンポーネントの場合、名称を/(RadioButton$|RadioButtons$|RadioButtonPanel$|RadioButtonPanels$|Check(B|b)ox$|Check(B|b)ox(e)?s$)/にマッチするものに変更してください
    - smarthr-ui/RadioButton、smarthr-ui/RadioButtonPanel、smarthr-ui/Checkbox はlabel要素を内包しています
  - 方法4: HogeFieldset が smarthr-ui/Fieldset、もしくはそれを拡張しているコンポーネントではない場合、名称を /Fieldset$/ にマッチしないものに変更してください
  - 方法5: 別途label要素が存在し、それらと紐づけたい場合はlabel要素のhtmlFor属性、${name}のid属性に同じ文字列を指定してください。この文字列はhtml内で一意である必要があります
@@ -76,7 +76,7 @@ const invalidChildreninFormControl = (children) => `FormControl が、${children
    - FormControlではなく、smarthr-ui/Fieldset、もしくはsmarthr-ui/Section + smarthr-ui/Heading などでのマークアップを検討してください
  - 方法2: 親要素であるFormControlがsmarthr-ui/FormControlを拡張したコンポーネントではない場合、コンポーネント名を/(Form(Control|Group))$/と一致しない名称に変更してください`
 const requireMultiInputInFormControlWithRoleGroup = () => `HogeFormControl内に入力要素が2個以上存在しないため、'role=\"group\"'を削除してください。'role=\"group\"'は複数の入力要素を一つのグループとして扱うための属性です。
- - HogeFormControl内に2つ以上の入力要素が存在する場合、入力要素を含むコンポーネント名全てを/((I|^i)nput$|SearchInput$|(T|^t)extarea$|(S|^s)elect$|InputFile$|Combo(b|B)ox$|DatePicker$|RadioButton$|RadioButtonPanel$|Check(B|b)ox$)/、もしくは/((FormGroup)$|(FormControl)$|((F|^f)ieldset)$)/にマッチする名称に変更してください`
+ - HogeFormControl内に2つ以上の入力要素が存在する場合、入力要素を含むコンポーネント名全てを/((I|^i)nput$|SearchInput$|(T|^t)extarea$|(S|^s)elect$|InputFile$|Combo(b|B)ox$|DatePicker$|RadioButton$|RadioButtons$|RadioButtonPanel$|RadioButtonPanels$|Check(B|b)ox$|Check(B|b)ox(e)?s$)/、もしくは/((FormGroup)$|(FormControl)$|((F|^f)ieldset)$)/にマッチする名称に変更してください`
 
 ruleTester.run('a11y-input-in-form-control', rule, {
   valid: [
@@ -129,6 +129,10 @@ ruleTester.run('a11y-input-in-form-control', rule, {
     { code: '<HogeFieldset><HogeCheckBox /><HogeInput title="any" /></HogeFieldset>' },
     { code: '<FugaSection><HogeInput title="any" /></FugaSection>' },
     { code: '<HogeTextarea title="any" />' },
+    { code: '<Fieldset><HogeRadioButtons /></Fieldset>' },
+    { code: '<Fieldset><HogeRadioButtonPanels /></Fieldset>' },
+    { code: '<Fieldset><HogeCheckBoxs /></Fieldset>' },
+    { code: '<Fieldset><HogeCheckBoxes /></Fieldset>' },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
@@ -169,5 +173,8 @@ ruleTester.run('a11y-input-in-form-control', rule, {
     { code: '<FormControl><HogeFieldset /></FormControl>', errors: [ { message: invalidChildreninFormControl('HogeFieldset') } ] },
     { code: '<FormControl><HogeFormControl /></FormControl>', errors: [ { message: invalidChildreninFormControl('HogeFormControl') } ] },
     { code: '<HogeFormControl role="group"><HogeInput /></HogeFormControl>', errors: [ { message: requireMultiInputInFormControlWithRoleGroup() } ] },
+    { code: '<HogeFormControl><HogeRadioButtons /></HogeFormControl>', errors: [ { message: invalidRadioInFormControl('HogeRadioButtons') } ] },
+    { code: '<HogeFormControl><HogeCheckBoxs /></HogeFormControl>', errors: [ { message: invalidMultiInputsInFormControl() } ] },
+    { code: '<HogeFormControl><HogeCheckBoxes /></HogeFormControl>', errors: [ { message: invalidMultiInputsInFormControl() } ] },
   ]
 })
