@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.27...v0.4.0) (2024-02-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* 利用者がいなくなったsmarthr/redundant-nameを削除する (#111)
+
+### Features
+
+* a11y-input-in-form-controlでlabelが設定されている可能性が高いRadio, Checkboxの複数形コンポーネントを正しく判定できるようにする ([#112](https://github.com/kufu/eslint-plugin-smarthr/issues/112)) ([77ee8f4](https://github.com/kufu/eslint-plugin-smarthr/commit/77ee8f4cac883eb0a198875305a416f0172a584e))
+
+
+### Bug Fixes
+
+* 利用者がいなくなったsmarthr/redundant-nameを削除する ([#111](https://github.com/kufu/eslint-plugin-smarthr/issues/111)) ([2bc1011](https://github.com/kufu/eslint-plugin-smarthr/commit/2bc10118cc0a18366300c3816f091060d2a0677d))
+
 ### [0.3.27](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.26...v0.3.27) (2024-01-28)
 
 
