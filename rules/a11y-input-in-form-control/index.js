@@ -63,6 +63,7 @@ const IGNORE_INPUT_CHECK_PARENT_TYPE = /^(Program|ExportNamedDeclaration)$/
 
 const findRoleGroup = (a) => a.name?.name === 'role' && a.value.value === 'group'
 const findAsSectioning = (a) => a.name?.name.match(AS_REGEX) && a.value.value.match(BARE_SECTIONING_TAG_REGEX)
+const findTitle = (i) => i.key.name === 'title'
 
 const SCHEMA = [
   {
@@ -121,6 +122,12 @@ module.exports = {
                   case 'title':
                     isPseudoLabel = true
                     break
+                  case 'inputAttributes': {
+                    if (!isPseudoLabel && i.value.expression.type === 'ObjectExpression' && i.value.expression.properties.some(findTitle)) {
+                      isPseudoLabel = true
+                    }
+                    break
+                  }
                   case 'type':
                     switch (i.value.value) {
                       case 'radio':
