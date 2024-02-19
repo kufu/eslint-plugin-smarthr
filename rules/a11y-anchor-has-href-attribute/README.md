@@ -6,7 +6,9 @@
   - URL遷移を行う場合、hrefが設定されていないとキーボード操作やコンテキストメニューからの遷移ができなくなります
     - これらの操作は href属性を参照します
   - 無効化されたリンクであることを表したい場合 `href={undefined}` を設定してください
-- checkTypeオプションに 'smart' を指定することで spread attributeが設定されている場合はcorrectに出来ます。
+- checkTypeオプションに 'smart' を指定することで spread attributeが設定されている場合はcorrectに出来ます
+- react-router-dom packageを利用している場合、a要素にto属性が指定されている場合、href属性が指定されているものとして許容します
+- next packageを利用している場合、 next/link コンポーネント直下のa要素にhref属性が指定されていないことを許容します
 
 ## rules
 
