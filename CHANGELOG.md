@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.4.0...v0.4.1) (2024-02-21)
+
+
+### Features
+
+* a11y-numbered-text-within-olを追加する ([#105](https://github.com/kufu/eslint-plugin-smarthr/issues/105)) ([167b92f](https://github.com/kufu/eslint-plugin-smarthr/commit/167b92f0f29db8ee9a446d25e09e04a7b11ce340))
+* ComboBoxなどのinputAttributesでtitle属性が指定された場合、擬似的にラベルが付いていると判定するように修正 ([#113](https://github.com/kufu/eslint-plugin-smarthr/issues/113)) ([5f3b594](https://github.com/kufu/eslint-plugin-smarthr/commit/5f3b5943ec64a18d094a9c66627ad1db2bbabe08))
+
 ## [0.4.0](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.3.27...v0.4.0) (2024-02-05)
 
 
