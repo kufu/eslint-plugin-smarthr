@@ -30,9 +30,9 @@ const REGEX_NLSP = /^\s*\n+\s*$/
 const REGEX_CLICKABLE_ELEMENT = /^(a|(.*?)Anchor(Button)?|(.*?)Link|(b|B)utton)$/
 const REGEX_SMARTHR_LOGO = /SmartHRLogo$/
 const REGEX_TEXT_COMPONENT = /(Text|Message)$/
+const REGEX_JSX_TYPE = /^(JSXText|JSXExpressionContainer)$/
 
-const HIT_TYPES_RECURSICVE_SEARCH = ['JSXText', 'JSXExpressionContainer']
-const HIT_TEXT_ATTRS = ['visuallyHiddenText', 'alt']
+const HIT_TEXT_ATTR = 'alt'
 
 const filterFalsyJSXText = (cs) => cs.filter(checkFalsyJSXText)
 const checkFalsyJSXText = (c) => (
@@ -68,7 +68,7 @@ module.exports = {
         }
 
         const recursiveSearch = (c) => {
-          if (HIT_TYPES_RECURSICVE_SEARCH.includes(c.type)) {
+          if (REGEX_JSX_TYPE.test(c.type)) {
             return true
           }
 
@@ -97,7 +97,7 @@ module.exports = {
 
                 if (
                   prev ||
-                  !HIT_TEXT_ATTRS.includes(a.name.name)
+                  HIT_TEXT_ATTR !== a.name.name
                 ) {
                   return prev
                 }
