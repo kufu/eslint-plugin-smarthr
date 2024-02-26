@@ -43,7 +43,7 @@
 ```
 
 ```jsx
-<XxxAnchor>>
+<XxxAnchor>
   <XxxTextYyyy />
 </XxxAnchor>
 ```
@@ -62,7 +62,7 @@
 </XxxLink>
 ```
 ```jsx
-<XxxAnchor>>
+<XxxAnchor>
   <YyyIcon visuallyHiddenText="hoge" />
 </XxxAnchor>
 ```
@@ -77,7 +77,7 @@
 ```
 
 ```jsx
-<XxxAnchor>>
+<XxxAnchor>
   <XxxText />
 </XxxAnchor>
 ```
