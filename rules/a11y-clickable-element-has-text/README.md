@@ -1,6 +1,11 @@
 # smarthr/a11y-clickable-element-has-text
 
-- ButtonやAnchor,Link コンポーネントにテキスト要素が設定されていない場合、アクセシビリティの問題が発生する可能性を防ぐルールです
+- ButtonやAnchor,Link コンポーネントにテキスト要素が設定されていない場合、スクリーンリーダーで押したものが何だったのかわからない等の問題が発生する可能性を防ぐルールです
+- a要素やbutton要素の中身にtextがあることを担保するルール
+- 画像要素の場合は `visuallyHiddenText`や `alt`等代替テキストを設定する
+- SVGの場合はrole="img" と aria-labelを設定する
+- linkとかanchorのchildrenを含まない要素はチェックしない
+  - 例） `<YyyAnchor />`
 
 ## rules
 
@@ -38,7 +43,7 @@
 ```
 
 ```jsx
-<XxxAnchor>>
+<XxxAnchor>
   <XxxTextYyyy />
 </XxxAnchor>
 ```
@@ -57,7 +62,7 @@
 </XxxLink>
 ```
 ```jsx
-<XxxAnchor>>
+<XxxAnchor>
   <YyyIcon visuallyHiddenText="hoge" />
 </XxxAnchor>
 ```
@@ -68,11 +73,11 @@
 ```
 
 ```jsx
-<YyyAnchoor />
+<YyyAnchor />
 ```
 
 ```jsx
-<XxxAnchor>>
+<XxxAnchor>
   <XxxText />
 </XxxAnchor>
 ```
