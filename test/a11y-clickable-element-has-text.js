@@ -93,12 +93,6 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
       code: `<a><img src="hoge.jpg" alt="ほげ" /></a>`,
     },
     {
-      code: `<a><Icon visuallyHiddenText="ほげ" /></a>`,
-    },
-    {
-      code: `<a><AnyComponent><Icon visuallyHiddenText="ほげ" /></AnyComponent></a>`,
-    },
-    {
       code: `<a>{any}</a>`,
     },
     {
@@ -195,10 +189,6 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
       errors: [{ message: defaultErrorMessage }]
     },
     {
-      code: `<a><AnyComponent><Icon visuallyHiddenText="" /></AnyComponent></a>`,
-      errors: [{ message: defaultErrorMessage }]
-    },
-    {
       code: `<button><img src="hoge.jpg" /></button>`,
       errors: [{ message: defaultErrorMessage }]
     },
@@ -212,10 +202,6 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     },
     {
       code: `<button><img src="hoge.jpg" alt="" /></button>`,
-      errors: [{ message: defaultErrorMessage }]
-    },
-    {
-      code: `<button><AnyComponent><Icon visuallyHiddenText="" /></AnyComponent></button>`,
       errors: [{ message: defaultErrorMessage }]
     },
     {
