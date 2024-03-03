@@ -18,6 +18,44 @@ const checkImportStyledComponents = (node, context) => {
   }
 }
 
+const getStyledComponentBaseName = (node) => {
+  let base = null
+
+  if (!node.init) {
+    return base
+  }
+
+  const tag = node.init.tag || node.init
+
+  if (tag.object?.name === STYLED_COMPONENTS_METHOD) {
+    base = tag.property.name
+  } else if (tag.callee) {
+    const callee = tag.callee
+
+    switch (STYLED_COMPONENTS_METHOD) {
+      case callee.name: {
+        const arg = tag.arguments[0]
+        base = arg.name || arg.value
+        break
+      }
+      case callee.callee?.name: {
+        const arg = callee.arguments[0]
+        base = arg.name || arg.value
+        break
+      }
+      case callee.object?.name:
+        base = callee.property.name
+        break
+      case callee.object?.callee?.name:
+        const arg = callee.object.arguments[0]
+        base = arg.name || arg.value
+        break
+    }
+  }
+
+  return base
+}
+
 const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => {
   const entriesesTagNames = Object.entries(EXPECTED_NAMES).map(([b, e]) => [ new RegExp(b), new RegExp(e) ])
   const entriesesUnTagNames = UNEXPECTED_NAMES ? Object.entries(UNEXPECTED_NAMES).map(([b, e]) => {
@@ -52,39 +90,7 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
       }
     },
     VariableDeclarator: (node) => {
-      if (!node.init) {
-        return
-      }
-
-      const tag = node.init.tag || node.init
-
-      let base = null
-
-      if (tag.object?.name === STYLED_COMPONENTS_METHOD) {
-        base = tag.property.name
-      } else if (tag.callee) {
-        const callee = tag.callee
-
-        switch (STYLED_COMPONENTS_METHOD) {
-          case callee.name: {
-            const arg = tag.arguments[0]
-            base = arg.name || arg.value
-            break
-          }
-          case callee.callee?.name: {
-            const arg = callee.arguments[0]
-            base = arg.name || arg.value
-            break
-          }
-          case callee.object?.name:
-            base = callee.property.name
-            break
-          case callee.object?.callee?.name:
-            const arg = callee.object.arguments[0]
-            base = arg.name || arg.value
-            break
-        }
-      }
+      const base = getStyledComponentBaseName(node)
 
       if (base) {
         const extended = node.id.name
@@ -117,4 +123,4 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
   }
 }
 
-module.exports = { generateTagFormatter }
+module.exports = { generateTagFormatter, checkImportStyledComponents, getStyledComponentBaseName }
