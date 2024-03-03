@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.4.1...v0.4.2) (2024-03-03)
+
+
+### Features
+
+* best-practice-for-button-elementを追加 ([#115](https://github.com/kufu/eslint-plugin-smarthr/issues/115)) ([c19ab10](https://github.com/kufu/eslint-plugin-smarthr/commit/c19ab1062d00aa000cfcf9b86535af21b47a0ead))
+
+
+### Bug Fixes
+
+* a11y-numbered-text-within-ol でwidthの値が誤検知されてしまう場合に対応する ([#117](https://github.com/kufu/eslint-plugin-smarthr/issues/117)) ([3741d54](https://github.com/kufu/eslint-plugin-smarthr/commit/3741d5412f62ac04286e0626e37d2ca3c57c4f60))
+
 ### [0.4.1](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.4.0...v0.4.1) (2024-02-21)
 
 
