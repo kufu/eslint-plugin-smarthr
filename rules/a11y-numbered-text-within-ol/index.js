@@ -6,20 +6,27 @@ const EXPECTED_NAMES = {
 }
 const UNEXPECTED_NAMES = EXPECTED_NAMES
 
-const NUMBERED_TEXT_REGEX = /^[\s\n]*(([1-9])([^1-9]{2})[^\s\n]*)/
+const NUMBERED_TEXT_REGEX = /^[\s\n]*(([0-9])([^0-9]{2})[^\s\n]*)/
 const ORDERED_LIST_REGEX = /(Ordered(.*)List|^ol)$/
 const SELECT_REGEX = /(S|s)elect$/
+const IGNORE_ATTRIBUTE_REGEX = /((w|W)idth|(h|H)eight)$/
+const AS_ATTRIBUTE_REGEX = /^(as|forwardedAs)$/
+
+const findAsOlAttr = (a) => a.type === 'JSXAttribute' && AS_ATTRIBUTE_REGEX.test(a.name?.name) && a.value?.value === 'ol'
 
 const searchOrderedList = (node) => {
   if (node.type === 'JSXElement' && node.openingElement.name?.name) {
     const name = node.openingElement.name.name
 
-    if (name.match(ORDERED_LIST_REGEX)) {
-      return node.openingElement
-    } else if (name.match(SELECT_REGEX)) {
+    if (name.match(SELECT_REGEX)) {
       // HINT: select要素の場合、optionのラベルに連番がついている場合がありえるのでignoreする
       // 通常と処理を分けるためnullではなく0を返す
       return 0
+    } else if (
+      name.match(ORDERED_LIST_REGEX) ||
+      node.openingElement.attributes.find(findAsOlAttr)
+    ) {
+      return node.openingElement
     }
   }
 
@@ -121,7 +128,7 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXAttribute: (node) => {
-        if (node.value?.value) {
+        if (node.value?.value && !IGNORE_ATTRIBUTE_REGEX.test(node.name?.name)) {
           checker(node, node.value.value.match(NUMBERED_TEXT_REGEX))
         }
       },

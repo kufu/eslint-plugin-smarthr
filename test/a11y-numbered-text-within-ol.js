@@ -21,7 +21,10 @@ ruleTester.run('a11y-numbered-text-within-ol', rule, {
     { code: `<><p>2: hoge</p><p>1: hoge</p></>` },
     { code: `<ol><li>abc</li><li>def</li></ol>` },
     { code: `<OrderedList><li>abc</li><li>def</li></OrderedList>` },
+    { code: `<Hoge as="ol"><li>abc</li><li>def</li></Hoge>` },
+    { code: `<Hoge forwardedAs="ol"><li>abc</li><li>def</li></Hoge>` },
     { code: `<Select><optgroup><option value="hoge">1. hoge</option><option value="fuga">2. fuga</option></optgroup></Select>` },
+    { code: `<><Hoge width="100%" /><Hoge height="200%" /><Hoge maxWidth="30px" /></>` },
   ],
   invalid: [
     { code: `<><p>1: hoge</p><p>2: hoge</p></>`, errors: [ { message: `連番を含むテキストがol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
