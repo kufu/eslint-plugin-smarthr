@@ -333,7 +333,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### [0.2.14](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.13...v0.2.14) (2022-12-13)
 
 ### Features
-* trim-propsルールを追加 ([#44](https://github.com/kufu/eslint-plugin-smarthr/pull/44)) 
+* trim-propsルールを追加 ([#44](https://github.com/kufu/eslint-plugin-smarthr/pull/44))
 
 ### [0.2.13](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.2.12...v0.2.13) (2022-12-07)
 
