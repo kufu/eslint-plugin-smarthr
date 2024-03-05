@@ -42,7 +42,7 @@ const SCHEMA = [
   {
     type: 'object',
     properties: {
-      checkType: { type: 'string', enum: ['always', 'smart'], default: 'always' },
+      checkType: { type: 'string', enum: ['always', 'allow-spread-attributes'], default: 'always' },
     },
     additionalProperties: false,
   }
@@ -76,7 +76,7 @@ module.exports = {
                   !isWithinSvgJsxElement(node.parent)
                 ) &&
                 (
-                  checkType !== 'smart' ||
+                  checkType !== 'allow-spread-attributes' ||
                   !node.attributes.some(findSpreadAttr)
                 )
               ) {

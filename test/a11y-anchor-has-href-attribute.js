@@ -37,7 +37,7 @@ ruleTester.run('a11y-anchor-has-href-attribute', rule, {
     { code: `<HogeAnchor href={hoge}>ほげ</HogeAnchor>` },
     { code: `<Link href="hoge">ほげ</Link>` },
     { code: `<Link href="#fuga">ほげ</Link>` },
-    { code: '<AnyAnchor {...args1} />', options: [{ checkType: 'smart' }] },
+    { code: '<AnyAnchor {...args1} />', options: [{ checkType: 'allow-spread-attributes' }] },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },

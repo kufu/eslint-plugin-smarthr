@@ -34,7 +34,7 @@ const SCHEMA = [
   {
     type: 'object',
     properties: {
-      checkType: { type: 'string', enum: ['always', 'smart'], default: 'always' },
+      checkType: { type: 'string', enum: ['always', 'allow-spread-attributes'], default: 'always' },
     },
     additionalProperties: false,
   }
@@ -60,7 +60,7 @@ module.exports = {
           if (!nameAttr) {
             if (
               node.attributes.length === 0 ||
-              checkType !== 'smart' ||
+              checkType !== 'allow-spread-attributes' ||
               !node.attributes.some(findSpreadAttr)
             ) {
               const isRadio =
