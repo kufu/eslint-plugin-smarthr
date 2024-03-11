@@ -1,7 +1,7 @@
 # smarthr/a11y-image-has-alt-attribute
 
 - 画像やアイコンにalt属性を設定することを強制するルールです
-- checkTypeオプションに 'smart' を指定することで spread attributeが設定されている場合はcorrectに出来ます。
+- checkTypeオプションに 'allow-spread-attributes' を指定することで spread attributeが設定されている場合はcorrectに出来ます。
 
 ## rules
 
@@ -10,7 +10,7 @@
   rules: {
     'smarthr/a11y-image-has-alt-attribute': [
       'error', // 'warn', 'off'
-      // { checkType: 'always' } /* 'always' || 'smart' */
+      // { checkType: 'always' } /* 'always' || 'allow-spread-attributes' */
     ]
   },
 }
@@ -56,7 +56,7 @@ const StyledPiyo = styled(Icon)``
 <Icon alt="message" />
 ```
 ```jsx
-// checkType: 'smart'
+// checkType: 'allow-spread-attributes'
 <XxxImage {...args} />
 <YyyIcon {...args} any="any" />
 ```

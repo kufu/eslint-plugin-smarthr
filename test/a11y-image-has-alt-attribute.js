@@ -45,7 +45,7 @@ ruleTester.run('a11y-image-has-alt-attribute', rule, {
     { code: '<HogeImage aria-describedby="hoge" />' },
     { code: '<HogeImage aria-describedby="hoge" alt="fuga" />' },
     { code: '<svg><image /></svg>' },
-    { code: '<AnyImg {...hoge} />', options: [{ checkType: 'smart' }] },
+    { code: '<AnyImg {...hoge} />', options: [{ checkType: 'allow-spread-attributes' }] },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },

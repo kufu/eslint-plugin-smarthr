@@ -4,7 +4,7 @@
   - 入力要素は name を設定することでブラウザの補完機能が有効になる可能性が高まります。
     - 補完機能はブラウザによって異なるため、補完される可能性が上がるよう、name には半角英数の小文字・大文字と一部記号(`_ , [, ]`)のみ利用可能です。
   - input[type="radio"] は name を適切に設定することでラジオグループが確立され、キーボード操作しやすくなる等のメリットがあります。
-- checkTypeオプションに 'smart' を指定することで spread attributeが設定されている場合はcorrectに出来ます。
+- checkTypeオプションに 'allow-spread-attributes' を指定することで spread attributeが設定されている場合はcorrectに出来ます。
 
 ## rules
 
@@ -13,7 +13,7 @@
   rules: {
     'smarthr/a11y-input-has-name-attribute': [
       'error', // 'warn', 'off'
-      // { checkType: 'always' } /* 'always' || 'smart' */
+      // { checkType: 'always' } /* 'always' || 'allow-spread-attributes' */
     ]
   },
 }
@@ -51,7 +51,7 @@ const StyledPiyo = styled(RadioButton)``;
 <Textarea name="some" />
 <Select name="piyo" />
 
-// checkType: 'smart'
+// checkType: 'allow-spread-attributes'
 <AnyInput {...args} />
 <AnyInput {...args} any="any" />
 ```

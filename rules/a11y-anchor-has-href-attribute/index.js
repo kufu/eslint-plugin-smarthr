@@ -45,7 +45,7 @@ const baseCheck = (node, checkType) => {
   if (
     nodeName.match(REGEX_TARGET) &&
     checkExistAttribute(node, findHrefAttribute) &&
-    (checkType !== 'smart' || !node.attributes.some(findSpreadAttr))
+    (checkType !== 'allow-spread-attributes' || !node.attributes.some(findSpreadAttr))
   ) {
     return nodeName
   }
@@ -87,7 +87,7 @@ const SCHEMA = [
   {
     type: 'object',
     properties: {
-      checkType: { type: 'string', enum: ['always', 'smart'], default: 'always' },
+      checkType: { type: 'string', enum: ['always', 'allow-spread-attributes'], default: 'always' },
     },
     additionalProperties: false,
   }
