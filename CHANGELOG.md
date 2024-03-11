@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.4.2...v0.5.0) (2024-03-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* spread attributesが指定されている場合、ruleをcorrectにする smartr オプションを allow-spread-attributes オプションにリネームする (#119)
+
+### Bug Fixes
+
+* spread attributesが指定されている場合、ruleをcorrectにする smartr オプションを allow-spread-attributes オプションにリネームする ([#119](https://github.com/kufu/eslint-plugin-smarthr/issues/119)) ([25752bb](https://github.com/kufu/eslint-plugin-smarthr/commit/25752bb8e77cf170779de3746b9dbbc3997be09d))
+
 ### [0.4.2](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.4.1...v0.4.2) (2024-03-03)
 
 
