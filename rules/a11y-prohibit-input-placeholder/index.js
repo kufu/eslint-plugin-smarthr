@@ -11,7 +11,7 @@ const EXPECTED_NAMES = {
 
 module.exports = {
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     schema: [],
   },
   create(context) {
