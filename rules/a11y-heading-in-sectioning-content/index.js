@@ -126,7 +126,7 @@ const findTagAttr = (a) => a.name?.name == 'tag'
 
 module.exports = {
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     schema: [],
   },
   create(context) {
