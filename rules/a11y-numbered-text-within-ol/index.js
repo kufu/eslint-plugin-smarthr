@@ -9,7 +9,7 @@ const UNEXPECTED_NAMES = EXPECTED_NAMES
 const NUMBERED_TEXT_REGEX = /^[\s\n]*(([0-9])([^0-9]{2})[^\s\n]*)/
 const ORDERED_LIST_REGEX = /(Ordered(.*)List|^ol)$/
 const SELECT_REGEX = /(S|s)elect$/
-const IGNORE_ATTRIBUTE_REGEX = /((w|W)idth|(h|H)eight)$/
+const IGNORE_ATTRIBUTE_VALUE_REGEX = /^[0-9]+(px|em|ex|ch|rem|lh|rlh|vw|vh|vmin|vmax|vb|vi|svw|svh|lvw|lvh|dvw|dvh|%)?$/
 const AS_ATTRIBUTE_REGEX = /^(as|forwardedAs)$/
 
 const findAsOlAttr = (a) => a.type === 'JSXAttribute' && AS_ATTRIBUTE_REGEX.test(a.name?.name) && a.value?.value === 'ol'
@@ -128,7 +128,7 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXAttribute: (node) => {
-        if (node.value?.value && !IGNORE_ATTRIBUTE_REGEX.test(node.name?.name)) {
+        if (node.value?.value && !IGNORE_ATTRIBUTE_VALUE_REGEX.test(node.value.value)) {
           checker(node, node.value.value.match(NUMBERED_TEXT_REGEX))
         }
       },
