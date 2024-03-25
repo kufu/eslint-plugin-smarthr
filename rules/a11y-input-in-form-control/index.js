@@ -32,6 +32,7 @@ const EXPECTED_NAMES = {
   '(A|^a)side$': '(Aside)$',
   '(N|^n)av$': '(Nav)$',
   '(S|^s)ection$': '(Section)$',
+  'Cluster$': '(Cluster)$',
   'Center$': '(Center)$',
   'Reel$': '(Reel)$',
   'Sidebar$': '(Sidebar)$',
