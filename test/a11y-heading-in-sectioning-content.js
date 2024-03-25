@@ -22,6 +22,9 @@ const pageMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存
 const pageInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
 const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside, Nav, Section, SectioningFragmentのいずれかの自動レベル計算に任せるよう、tag属性を削除してください。
  - tag属性を指定することで意図しないレベルに固定されてしまう可能性があります。`
+const notHaveHeadingMessage = (elementName) => `${elementName} はHeading要素を含んでいません。
+ - SectioningContentはHeadingを含むようにマークアップする必要があります
+ - Headingにするべき適切な文字列が存在しない場合、 ${elementName} は削除するか、SectioningContentではない要素に差し替えてください`
 
 ruleTester.run('a11y-heading-in-sectioning-content', rule, {
   valid: [
@@ -137,5 +140,8 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<Section><Heading>hoge</Heading><Heading>fuga</Heading></Section>', errors: [ { message: lowerMessage } ] },
     { code: '<Section><PageHeading>hoge</PageHeading></Section>', errors: [ { message: pageInSectionMessage } ] },
     { code: '<Section><Heading tag="h2">hoge</Heading></Section>', errors: [ { message: noTagAttrMessage } ] },
+    { code: '<Section></Section>', errors: [ { message: notHaveHeadingMessage('Section') } ] },
+    { code: '<Aside><HogeSection></HogeSection></Aside>', errors: [ { message: notHaveHeadingMessage('Aside') }, { message: notHaveHeadingMessage('HogeSection') } ] },
+    { code: '<Aside><HogeSection><Heading /></HogeSection></Aside>', errors: [ { message: notHaveHeadingMessage('Aside') } ] },
   ],
 });
