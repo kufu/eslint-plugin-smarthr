@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.3](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.2...v0.5.3) (2024-03-26)
+
+
+### Features
+
+* a11y-heading-in-sectioning-contentでHeadingを持たないSectioning Contentを検知するように修正 ([#124](https://github.com/kufu/eslint-plugin-smarthr/issues/124)) ([8b96de0](https://github.com/kufu/eslint-plugin-smarthr/commit/8b96de0c9a474b0c8d72a4b9c3b3b351d2cfb4e5))
+* smarthr-ui/Layouts系コンポーネントの利用方法をチェックする best-practice-for-layouts ルールを追加する ([#126](https://github.com/kufu/eslint-plugin-smarthr/issues/126)) ([e0324e4](https://github.com/kufu/eslint-plugin-smarthr/commit/e0324e4ffab0413e61811cf7cf7f129c0602e0f0))
+
+
+### Bug Fixes
+
+* a11y-input-in-form-control で Clusterを拡張する際のチェックを追加 ([#125](https://github.com/kufu/eslint-plugin-smarthr/issues/125)) ([f723e24](https://github.com/kufu/eslint-plugin-smarthr/commit/f723e24db86c1095178bb1f28636147e7b619bf2))
+* a11y-numbered-text-within-olのチェックで、属性の値でstyleに数値を指定しているような値の場合、無視する ([#123](https://github.com/kufu/eslint-plugin-smarthr/issues/123)) ([77a6278](https://github.com/kufu/eslint-plugin-smarthr/commit/77a6278ff8ec58c99843746442e1f3c0e54574c5))
+
 ### [0.5.2](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.1...v0.5.2) (2024-03-17)
 
 ### [0.5.1](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.0...v0.5.1) (2024-03-17)
