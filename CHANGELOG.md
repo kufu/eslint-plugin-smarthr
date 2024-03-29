@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.6](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.5...v0.5.6) (2024-03-29)
+
+
+### Bug Fixes
+
+* best-practice-for-layoutsで "a?.map(function)" のようにchainを使っている場合正しく検知できなかった問題を修正 ([#131](https://github.com/kufu/eslint-plugin-smarthr/issues/131)) ([80da1ca](https://github.com/kufu/eslint-plugin-smarthr/commit/80da1caa3d9b8cf9e3fc9d9cfd3f1b0e28be9e29))
+
 ### [0.5.5](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.4...v0.5.5) (2024-03-29)
 
 
