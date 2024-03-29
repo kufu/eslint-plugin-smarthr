@@ -24,6 +24,7 @@ const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside
  - tag属性を指定することで意図しないレベルに固定されてしまう可能性があります。`
 const notHaveHeadingMessage = (elementName) => `${elementName} はHeading要素を含んでいません。
  - SectioningContentはHeadingを含むようにマークアップする必要があります
+ - ${elementName}に設定しているいずれかの属性がHeading，もしくはHeadingのテキストに該当する場合、その属性の名称を /^(heading|title)$/ にマッチする名称に変更してください
  - Headingにするべき適切な文字列が存在しない場合、 ${elementName} は削除するか、SectioningContentではない要素に差し替えてください`
 
 ruleTester.run('a11y-heading-in-sectioning-content', rule, {
@@ -55,6 +56,9 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: 'const FugaStack = styled(HogeStack)``' },
     { code: '<PageHeading>hoge</PageHeading>' },
     { code: '<Section><Heading>hoge</Heading></Section>' },
+    { code: '<FugaSection heading={<Heading>hoge</Heading>}>abc</FugaSection>' },
+    { code: '<FugaSection heading="hoge">abc</FugaSection>' },
+    { code: '<FugaSection title="hoge">abc</FugaSection>' },
     { code: '<><Section><Heading>hoge</Heading></Section><Section><Heading>fuga</Heading></Section></>' },
     { code: 'const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>' },
     { code: 'export const HogeHeading = () => <FugaHeading anyArg={abc}>hoge</FugaHeading>' },
@@ -142,6 +146,6 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<Section><Heading tag="h2">hoge</Heading></Section>', errors: [ { message: noTagAttrMessage } ] },
     { code: '<Section></Section>', errors: [ { message: notHaveHeadingMessage('Section') } ] },
     { code: '<Aside><HogeSection></HogeSection></Aside>', errors: [ { message: notHaveHeadingMessage('Aside') }, { message: notHaveHeadingMessage('HogeSection') } ] },
-    { code: '<Aside><HogeSection><Heading /></HogeSection></Aside>', errors: [ { message: notHaveHeadingMessage('Aside') } ] },
+    { code: '<Aside any="hoge"><HogeSection><Heading /></HogeSection></Aside>', errors: [ { message: notHaveHeadingMessage('Aside') } ] },
   ],
 });

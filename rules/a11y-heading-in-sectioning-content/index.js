@@ -55,8 +55,10 @@ const asRegex = /^(as|forwardedAs)$/
 const ignoreCheckParentTypeRegex = /^(Program|ExportNamedDeclaration)$/
 const noHeadingTagNamesRegex = /^(span|legend)$/
 const ignoreHeadingCheckParentTypeRegex = /^(Program|ExportNamedDeclaration)$/
+const headingAttributeRegex = /^(heading|title)$/
 
 const includeSectioningAsAttr = (a) => a.name?.name.match(asRegex) && bareTagRegex.test(a.value.value)
+const findHeadingAttribute = (a) => headingAttributeRegex.test(a.name?.name || '')
 
 const headingMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
  - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。
@@ -298,6 +300,13 @@ module.exports = {
           }
         } else if (!node.selfClosing) {
           const isSection = sectioningRegex.test(elementName)
+
+          // HINT: SectioningContent系コンポーネントの拡張の場合、title, heading属性などにHeadingのテキストが仕込まれている場合がある
+          // 対象属性を持っている場合はcorrectとして扱う
+          if (isSection && node.attributes.some(findHeadingAttribute)) {
+            return
+          }
+
           const layoutSectionAsAttr = !isSection && layoutComponentRegex.test(elementName) ? node.attributes.find(includeSectioningAsAttr) : null
 
           if ((isSection || layoutSectionAsAttr) && !searchBubbleUpSections(node.parent.parent) && !forInSearchChildren(node.parent.children)) {
@@ -305,6 +314,7 @@ module.exports = {
               node,
               message: `${isSection ? elementName : `<${elementName} ${layoutSectionAsAttr.name.name}="${layoutSectionAsAttr.value.value}">`} はHeading要素を含んでいません。
  - SectioningContentはHeadingを含むようにマークアップする必要があります
+ - ${elementName}に設定しているいずれかの属性がHeading，もしくはHeadingのテキストに該当する場合、その属性の名称を ${headingAttributeRegex.toString()} にマッチする名称に変更してください
  - Headingにするべき適切な文字列が存在しない場合、 ${isSection ? `${elementName} は削除するか、SectioningContentではない要素に差し替えてください` : `${layoutSectionAsAttr.name.name}="${layoutSectionAsAttr.value.value}"を削除、もしくは別の要素に変更してください`}`,
             })
           }
