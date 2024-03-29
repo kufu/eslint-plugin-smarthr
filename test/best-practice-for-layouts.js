@@ -3,7 +3,7 @@ const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 12,
     ecmaFeatures: {
       experimentalObjectRestSpread: true,
       jsx: true,
@@ -29,6 +29,9 @@ ruleTester.run('best-practice-for-button-element', rule, {
     { code: `<Stack><Hoge /><Hoge /></Stack>` },
     { code: `<Stack>{a}<Hoge /></Stack>` },
     { code: `<AnyStack>{a.map(action)}</AnyStack>` },
+    { code: `<AnyStack>{a?.map(action)}</AnyStack>` },
+    { code: `<AnyStack>{a.b?.map(action)}</AnyStack>` },
+    { code: `<AnyStack>{a?.b?.map(action)}</AnyStack>` },
     { code: `<AnyStack>{a && <><Hoge /><Hoge /></>}</AnyStack>` },
     { code: `<AnyStack>{a && a.map(action)}</AnyStack>` },
     { code: `<AnyStack>{a && a.b.map(action)}</AnyStack>` },

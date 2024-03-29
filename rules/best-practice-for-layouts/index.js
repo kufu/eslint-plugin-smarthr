@@ -40,6 +40,7 @@ const searchChildren = (node) => {
 
   switch(node.type) {
     case 'JSXExpressionContainer':
+    case 'ChainExpression':
       return searchChildren(node.expression)
     case 'CallExpression':
       return node.callee.property?.name !== 'map'

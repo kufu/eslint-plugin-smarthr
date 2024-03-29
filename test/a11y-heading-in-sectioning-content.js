@@ -3,7 +3,7 @@ const RuleTester = require('eslint').RuleTester;
 
 const ruleTester = new RuleTester({
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 12,
     ecmaFeatures: {
       experimentalObjectRestSpread: true,
       jsx: true,
