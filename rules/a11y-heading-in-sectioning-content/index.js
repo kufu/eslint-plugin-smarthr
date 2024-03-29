@@ -193,7 +193,7 @@ const searchChildren = (n) => {
       } else if (
         (
           headingRegex.test(name) &&
-          !n.openingElement.attributes.find(findTagAttr)?.value.value.match(noHeadingTagNamesRegex)
+          !n.openingElement.attributes.find(findTagAttr)?.value.value?.match(noHeadingTagNamesRegex)
         ) ||
         forInSearchChildren(n.openingElement.attributes)
       ) {
@@ -253,7 +253,7 @@ module.exports = {
         } else if (headingRegex.test(elementName)) {
           const tagAttr = node.attributes.find(findTagAttr)
 
-          if (!tagAttr?.value.value.match(noHeadingTagNamesRegex)) {
+          if (!tagAttr?.value.value?.match(noHeadingTagNamesRegex)) {
             const result = searchBubbleUp(node.parent)
             let hit = false
 
