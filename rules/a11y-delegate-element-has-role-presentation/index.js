@@ -43,6 +43,8 @@ const INTERACTIVE_COMPONENT_NAMES = Object.keys(EXPECTED_NAMES).join('|')
 const INTERACTIVE_ON_REGEX = /^on(Change|Input|Focus|Blur|(Double)?Click|Key(Down|Up|Press)|Mouse(Enter|Over|Down|Up|Leave)|Select|Submit)$/
 const MEANED_ROLE_REGEX = /^(combobox|group|slider|toolbar)$/
 const INTERACTIVE_NODE_TYPE_REGEX = /^(JSXElement|JSXExpressionContainer|ConditionalExpression)$/
+const AS_REGEX = /^(as|forwardedAs)$/
+const AS_VALUE_REGEX = /^(form|fieldset)$/
 
 const messageNonInteractiveEventHandler = (nodeName, interactiveComponentRegex, onAttrs) => {
   const onAttrsText = onAttrs.join(', ')
@@ -122,12 +124,15 @@ module.exports = {
         let onAttrs = []
         let roleMean = undefined
         let isRolePresentation = false
+        let isAsInteractive = false
 
         node.attributes.forEach((a) => {
           const aName = a.name?.name || ''
 
           if (aName.match(INTERACTIVE_ON_REGEX)) {
             onAttrs.push(aName)
+          } else if (AS_REGEX.test(aName) && AS_VALUE_REGEX.test(a.value?.value || '')) {
+            isAsInteractive = true
           } else if (aName === 'role') {
             const v = a.value?.value || ''
 
@@ -140,7 +145,7 @@ module.exports = {
           }
         })
 
-        if (nodeName.match(interactiveComponentRegex)) {
+        if (isAsInteractive || nodeName.match(interactiveComponentRegex)) {
           if (isRolePresentation) {
             context.report({
               node,

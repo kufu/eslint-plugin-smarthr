@@ -56,6 +56,8 @@ ruleTester.run('smarthr/a11y-delegate-element-has-role-presentation', rule, {
     { code: '<Wrapper onClick={any} role="presentation">{any1 ? (any2 ? <HogeLink /> : null) : null}</Wrapper>' },
     { code: '<Wrapper onClick={any} role="presentation">{any ? null : (hoge ? <AnyLink /> : null)}</Wrapper>' },
     { code: '<Wrapper onClick={any} role="slider">Hoge</Wrapper>' },
+    { code: '<Wrapper onSubmit={any} as="form" />' },
+    { code: '<Wrapper onSubmit={any} forwardedAs="fieldset">any</Wrapper>' },
   ],
   invalid: [
     { code: '<Input role="presentation" />', errors: [ { message: messageInteractiveHasRolePresentation('Input') } ] },
