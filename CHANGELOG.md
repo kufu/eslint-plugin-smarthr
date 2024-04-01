@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.7](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.6...v0.5.7) (2024-04-01)
+
+
+### Features
+
+* a11y-delegate-element-has-role-presentationでas, forwardedAsにform, fieldsetが指定されている場合、インタファクティブな要素として扱うように修正 ([#132](https://github.com/kufu/eslint-plugin-smarthr/issues/132)) ([3d629fa](https://github.com/kufu/eslint-plugin-smarthr/commit/3d629fa73e7346c229831a0075478fcbfe582de1))
+* a11y-replace-unreadable-symbol ([#128](https://github.com/kufu/eslint-plugin-smarthr/issues/128)) ([9410ff9](https://github.com/kufu/eslint-plugin-smarthr/commit/9410ff9ad9ed5a0d18945e3567a1fee8c056f822))
+
 ### [0.5.6](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.5...v0.5.6) (2024-03-29)
 
 
