@@ -12,6 +12,12 @@ const ruleTester = new RuleTester({
   },
 })
 
+const expectedErrorMessage = `input要素及びtextarea要素にmaxLength属性を設定しないでください。
+- maxLength属性がついた要素に、テキストをペーストすると、maxLength属性の値を超えた範囲が意図せず切り捨てられてしまいます。
+- 以下のいずれかの方法で修正をおこなってください
+  - 方法1: pattern属性とtitle属性を組み合わせ、form要素でラップする
+  - 方法2: JavaScriptを用いたバリデーションを実装する`
+
 ruleTester.run('a11y-prohibit-input-maxlength-attribute', rule, {
   valid: [
     { code: `<input />` },
@@ -22,11 +28,11 @@ ruleTester.run('a11y-prohibit-input-maxlength-attribute', rule, {
     { code: `<HogeTextarea value="hoge" />` }
   ],
   invalid: [
-    { code: `<input maxLength="30" />`, errors: [{ message: 'input要素にはmaxLength属性を設定しないでください' }] },
-    { code: `<Input type="text" />` },
-    { code: `<HogeInput value="hoge" />` },
-    { code: `<textarea>hoge</textarea>` },
-    { code: `<Textarea type="text" />` },
-    { code: `<HogeTextarea value="hoge" />` }
+    { code: `<input maxLength="30" />`, errors: [{ message: expectedErrorMessage }] },
+    { code: `<Input type="text" maxLength="40" />`, errors: [{ message: expectedErrorMessage }] },
+    { code: `<HogeInput maxLength value="hoge" />`, errors: [{ message: expectedErrorMessage }] },
+    { code: `<textarea maxLength="50">hoge</textarea>`, errors: [{ message: expectedErrorMessage }]},
+    { code: `<Textarea type="text" maxLength="60" />`, errors: [{ message: expectedErrorMessage }]},
+    { code: `<HogeTextarea maxLength="70" value="hoge" />`, errors: [{ message: expectedErrorMessage }]}
   ]
 })

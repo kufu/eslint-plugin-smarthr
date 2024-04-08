@@ -27,9 +27,11 @@ module.exports = {
           if (maxLengthAttr) {
             context.report({
               node,
-              message: `input要素にはmaxLength属性を設定しないでください。
-pattern属性とtitle属性を組み合わせ、form要素でラップするか、JavaScriptでバリデーションしてください。
-              `,
+              message: `input要素及びtextarea要素にmaxLength属性を設定しないでください。
+- maxLength属性がついた要素に、テキストをペーストすると、maxLength属性の値を超えた範囲が意図せず切り捨てられてしまいます。
+- 以下のいずれかの方法で修正をおこなってください
+  - 方法1: pattern属性とtitle属性を組み合わせ、form要素でラップする
+  - 方法2: JavaScriptを用いたバリデーションを実装する`,
             })
           }
         }
