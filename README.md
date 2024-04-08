@@ -9,6 +9,7 @@
 - [a11y-input-has-name-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-input-has-name-attribute)
 - [a11y-input-in-form-control](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-input-in-form-control)
 - [a11y-numbered-text-within-ol](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-numbered-text-within-ol)
+- [a11y-prohibit-input-maxlength-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-input-maxlength-attribute)
 - [a11y-prohibit-input-placeholder](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-input-placeholder)
 - [a11y-prohibit-useless-sectioning-fragment](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-useless-sectioning-fragment)
 - [a11y-replace-unreadable-symbol](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-replace-unreadable-symbol)
