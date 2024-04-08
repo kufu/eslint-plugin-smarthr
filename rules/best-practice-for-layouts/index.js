@@ -25,6 +25,7 @@ const checkFalsyJSXText = (c) => (
 )
 
 const findJustifyAttr = (a) => a.name?.name === 'justify'
+const findAlignAttr = (a) => a.name?.name === 'align'
 
 const searchChildren = (node) => {
   if (
@@ -80,11 +81,17 @@ module.exports = {
                 return
               }
 
+              const alignAttr = layoutType === 'Stack' ? node.attributes.find(findAlignAttr) : null
+
+              if (alignAttr && FLEX_END_REGEX.test(alignAttr.value.value)) {
+                return
+              }
+
               if (searchChildren(children[0])) {
                 context.report({
                   node,
                   message:
-                    justifyAttr && justifyAttr.value.value === 'center'
+                    (justifyAttr && justifyAttr.value.value === 'center' || alignAttr && alignAttr.value.value === 'center')
                       ? `${nodeName} は smarthr-ui/${layoutType} ではなく smarthr-ui/Center でマークアップしてください`
                       : `${nodeName}には子要素が一つしか無いため、${layoutType}でマークアップする意味がありません。
  - styleを確認し、div・spanなど、別要素でマークアップし直すか、${nodeName}を削除してください
