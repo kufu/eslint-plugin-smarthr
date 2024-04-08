@@ -10,6 +10,9 @@ const findTypeAttr = (a) => a.type === 'JSXAttribute' && a.name.name === 'type'
 
 const SCHEMA = []
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'problem',

@@ -15,6 +15,9 @@ const filterFalsyJSXText = (cs) => cs.filter((c) => (
   !(c.type === 'JSXText' && c.value.match(/^\s*\n+\s*$/))
 ))
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'problem',

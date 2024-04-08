@@ -27,7 +27,8 @@
   "devDependencies": {
     "eslint": "^8.8.0",
     "jest": "^27.4.7",
-    "standard-version": "^9.3.2"
+    "standard-version": "^9.3.2",
+    "typescript-eslint": "^7.5.0"
   },
   "peerDependencies": {
     "eslint": "^7 || ^8"
