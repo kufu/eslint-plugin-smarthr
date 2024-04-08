@@ -24,8 +24,8 @@ module.exports = {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
         if (node.name.type === 'JSXIdentifier' && INPUT_COMPONENT_NAMES.test(node.name.name)) {
-          const attributes = node.attributes
-          const maxLengthAttr = attributes.find(a => a.name?.name === 'maxLength')
+          const checkHasMaxLength = (attr) => attr.name?.name === 'maxLength'
+          const maxLengthAttr = node.attributes.find(checkHasMaxLength)
           if (maxLengthAttr) {
             context.report({
               node,
