@@ -83,6 +83,9 @@ const calculateReplacedImportPath = (source) => {
 const pickImportedName = (s) => s.imported?.name
 const findExistsSync = (p) => fs.existsSync(p)
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'suggestion',

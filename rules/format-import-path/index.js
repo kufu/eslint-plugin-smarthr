@@ -79,6 +79,9 @@ const calculateRelativeImportPath = ({ importPath, filteredDirs, filteredPaths }
   return `${filteredDirs.length === 0 ? './' : [...Array(filteredDirs.length)].reduce((prev) => `${prev}../`, '')}${filteredPaths.join('/')}`.replace(/^(.+?)\/$/, '$1')
 }
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'suggestion',

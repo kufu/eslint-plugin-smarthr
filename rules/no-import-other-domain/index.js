@@ -33,6 +33,9 @@ const SCHEMA = [
   }
 ]
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'suggestion',

@@ -9,6 +9,9 @@ const EXPECTED_NAMES = {
   'DatePicker$': 'DatePicker$',
 }
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'problem',

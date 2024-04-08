@@ -223,6 +223,9 @@ const forInSearchChildren = (ary) => {
 
 const findTagAttr = (a) => a.name?.name == 'tag'
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'problem',

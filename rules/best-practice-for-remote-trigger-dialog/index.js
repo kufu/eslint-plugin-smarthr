@@ -8,6 +8,9 @@ const EXPECTED_NAMES = {
 const REGEX_REMOTE_TRIGGER_DIALOG = /RemoteTrigger(Action|Message|Modeless)Dialog$/
 const REGEX_REMOTE_DIALOG_TRIGGER = /RemoteDialogTrigger$/
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'suggestion',
