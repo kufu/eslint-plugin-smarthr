@@ -23,8 +23,7 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const name = node.name?.name
-        if (name && INPUT_COMPONENT_NAMES.test(name)) {
+        if (node.name.type === 'JSXIdentifier' && INPUT_COMPONENT_NAMES.test(node.name.name)) {
           const attributes = node.attributes
           const maxLengthAttr = attributes.find(a => a.name?.name === 'maxLength')
           if (maxLengthAttr) {
