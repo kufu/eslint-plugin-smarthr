@@ -40,6 +40,9 @@ const useRegex = (use) => {
   return new RegExp(`((${codeSeparator}(${actualUse})${codeSeparator})|(^(${actualUse})${codeSeparator})|${codeSeparator}(${actualUse})$)`)
 }
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'suggestion',

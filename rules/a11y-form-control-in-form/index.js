@@ -62,6 +62,9 @@ const searchBubbleUp = (node) => {
   return searchBubbleUp(node.parent)
 }
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'problem',

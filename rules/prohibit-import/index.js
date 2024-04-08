@@ -32,6 +32,9 @@ const SCHEMA = [{
 
 const defaultReportMessage = (moduleName, exportName) => `${moduleName}${typeof exportName == 'string' ? `/${exportName}`: ''} は利用しないでください`
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'suggestion',

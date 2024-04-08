@@ -44,6 +44,9 @@ const message = `a, buttonなどのクリッカブルな要素内にはテキス
   - SVG component の場合、altを属性として受け取れるようにした上で '<svg role="img" aria-label={alt}>' のように指定してください
  - クリッカブルな要素内に設置しているコンポーネントがテキストを含んでいる場合、"XxxxText" のように末尾に "Text" もしくは "Message" という名称を設定してください`
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'problem',
