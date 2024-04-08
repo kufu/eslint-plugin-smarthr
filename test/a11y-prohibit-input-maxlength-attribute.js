@@ -25,7 +25,8 @@ ruleTester.run('a11y-prohibit-input-maxlength-attribute', rule, {
     { code: `<HogeInput value="hoge" />` },
     { code: `<textarea>hoge</textarea>` },
     { code: `<Textarea type="text" />` },
-    { code: `<HogeTextarea value="hoge" />` }
+    { code: `<HogeTextarea value="hoge" />` },
+    { code: `<><input /></>`}
   ],
   invalid: [
     { code: `<input maxLength={30} />`, errors: [{ message: expectedErrorMessage('input') }] },
