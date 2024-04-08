@@ -11,6 +11,9 @@ const INPUT_COMPONENT_NAMES = new RegExp(`(${Object.keys(EXPECTED_NAMES).join('|
 
 const SCHEMA = []
 
+/**
+ * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
+ */
 module.exports = {
   meta: {
     type: 'problem',
