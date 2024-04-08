@@ -19,10 +19,10 @@
 ## ❌ Incorrect
 
 ```jsx
-<input maxLength="30" />
-<XxxInput maxLength="40" />
-<textarea maxLength="50" />
-<XxxTextarea maxLength="60" />
+<input maxLength={30} />
+<XxxInput maxLength={40} />
+<textarea maxLength={50} />
+<XxxTextarea maxLength={60} />
 ```
 
 ## ✅ Correct
