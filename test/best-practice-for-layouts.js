@@ -55,6 +55,8 @@ ruleTester.run('best-practice-for-button-element', rule, {
     { code: `<AnyCluster>{a ? <Hoge /> : a ? <Hoge /> : a.b.map(action)}</AnyCluster>` },
     { code: `<Cluster justify="flex-end">{a}</Cluster>` },
     { code: `<HogeCluster justify="end">{a}</HogeCluster>` },
+    { code: `<Stack align="flex-end">{a}</Stack>` },
+    { code: `<HogeStack align="end">{a}</HogeStack>` },
   ],
   invalid: [
     { code: `<Stack><Hoge /></Stack>`, errors: [ { message: errorMessage('Stack', 'Stack') } ] },
@@ -82,6 +84,7 @@ ruleTester.run('best-practice-for-button-element', rule, {
     { code: `<AnyCluster>{a ? <Hoge /> : a.b.hoge(action)}</AnyCluster>`, errors: [ { message: errorMessage('Cluster', 'AnyCluster') } ] },
     { code: `<AnyCluster>{a ? <Hoge /> : a ? <Hoge /> : a.b.hoge(action)}</AnyCluster>`, errors: [ { message: errorMessage('Cluster', 'AnyCluster') } ] },
     { code: `<HogeCluster justify="center">{a}</HogeCluster>`, errors: [ { message: 'HogeCluster は smarthr-ui/Cluster ではなく smarthr-ui/Center でマークアップしてください' } ] },
+    { code: `<HogeStack align="center">{a}</HogeStack>`, errors: [ { message: 'HogeStack は smarthr-ui/Stack ではなく smarthr-ui/Center でマークアップしてください' } ] },
   ]
 })
 
