@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.8](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.7...v0.5.8) (2024-04-09)
+
+
+### Features
+
+* a11y-prohibit-input-maxlength-attribute ([#135](https://github.com/kufu/eslint-plugin-smarthr/issues/135)) ([9f9d010](https://github.com/kufu/eslint-plugin-smarthr/commit/9f9d010e819d936fe5f55556a8f65e6485c552ce))
+* best-practice-for-layouts に <Stack align="center"> を <Center> に置き換えることを促すチェックを追加 ([#133](https://github.com/kufu/eslint-plugin-smarthr/issues/133)) ([5835530](https://github.com/kufu/eslint-plugin-smarthr/commit/58355308bf9a5d18d2d731e699c54806af969ed9))
+
 ### [0.5.7](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.6...v0.5.7) (2024-04-01)
 
 
