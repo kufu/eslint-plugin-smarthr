@@ -1,6 +1,6 @@
 # smarthr/a11y-heading-in-sectioning-content
 
-- Headingコンポーネントをsmarthr-ui/SectioningContent(Article, Aside, Nav, Section, SectioningFragment) のいずれかで囲むことを促すルールです
+- Headingコンポーネントをsmarthr-ui/SectioningContent(Article, Aside, Nav, Section) のいずれかで囲むことを促すルールです
   - article, aside, nav, section で Heading とHeadingの対象となる範囲を囲むとブラウザが正確に解釈できるようになるメリットがあります
   - またsmarthr-ui/SectioningContentで smarthr-ui/Headingを囲むことで、Headingのレベル(h1~h6)を自動的に計算するメリットもあります
 - Headingコンポーネントをsmarthr-ui/Layout(Center, Reel, Sidebar, Stack) のいずれかで囲んでおり、かつas, forwardedAsのいずれかの属性で 'section', 'article', 'aside', 'nav' が指定されている場合、SectioningContentで囲んでいるものとして扱われるようになります
