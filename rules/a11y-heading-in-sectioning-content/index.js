@@ -14,6 +14,8 @@ const EXPECTED_NAMES = {
   'Reel$': 'Reel$',
   'Sidebar$': 'Sidebar$',
   'Stack$': 'Stack$',
+  'Base$': 'Base$',
+  'BaseColumn$': 'BaseColumn$',
 }
 
 const unexpectedMessageTemplate = `{{extended}} は smarthr-ui/{{expected}} をextendすることを期待する名称になっています
@@ -42,6 +44,8 @@ const UNEXPECTED_NAMES = {
   'Reel$': '(Reel)$',
   'Sidebar$': '(Sidebar)$',
   'Stack$': '(Stack)$',
+  'Base$': '(Base)$',
+  'BaseColumn$': '(BaseColumn)$',
 }
 
 const headingRegex = /((^h(1|2|3|4|5|6))|Heading)$/
@@ -50,7 +54,7 @@ const declaratorHeadingRegex = /Heading$/
 const sectioningRegex = /((A(rticle|side))|Nav|Section|^SectioningFragment)$/
 const bareTagRegex = /^(article|aside|nav|section)$/
 const modelessDialogRegex = /ModelessDialog$/
-const layoutComponentRegex = /((C(ent|lust)er)|Reel|Sidebar|Stack)$/
+const layoutComponentRegex = /((C(ent|lust)er)|Reel|Sidebar|Stack|Base(Column)?)$/
 const asRegex = /^(as|forwardedAs)$/
 const ignoreCheckParentTypeRegex = /^(Program|ExportNamedDeclaration)$/
 const noHeadingTagNamesRegex = /^(span|legend)$/
@@ -61,14 +65,12 @@ const includeSectioningAsAttr = (a) => a.name?.name.match(asRegex) && bareTagReg
 const findHeadingAttribute = (a) => headingAttributeRegex.test(a.name?.name || '')
 
 const headingMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
- - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。
- - 'as="section"' などでアウトラインを示している場合、as属性を指定した要素をsmarthr-ui/SectioningFragmentでラップしてください。
-  - 要素内のHeadingのレベルが自動計算されるようになります。`
+ - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。`
 const rootHeadingMessage = `${headingMessage}
  - Headingをh1にしたい場合(機能名、ページ名などこのページ内でもっとも重要な見出しの場合)、smarthr-ui/PageHeadingを利用してください。その場合はSectionなどでアウトラインを示す必要はありません。`
 const pageHeadingMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
 const pageHeadingInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
-const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside, Nav, Section, SectioningFragmentのいずれかの自動レベル計算に任せるよう、tag属性を削除してください。
+const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside, Nav, Sectionのいずれかの自動レベル計算に任せるよう、tag属性を削除してください。
  - tag属性を指定することで意図しないレベルに固定されてしまう可能性があります。`
 
 const VariableDeclaratorBareToSHR = (context, node) => {

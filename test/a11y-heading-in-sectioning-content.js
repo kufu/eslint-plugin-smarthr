@@ -13,14 +13,12 @@ const ruleTester = new RuleTester({
 });
 
 const lowerMessage = `smarthr-ui/Headingと紐づく内容の範囲（アウトライン）が曖昧になっています。
- - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。
- - 'as=\"section\"' などでアウトラインを示している場合、as属性を指定した要素をsmarthr-ui/SectioningFragmentでラップしてください。
-  - 要素内のHeadingのレベルが自動計算されるようになります。`
+ - smarthr-uiのArticle, Aside, Nav, SectionのいずれかでHeadingコンポーネントと内容をラップしてHeadingに対応する範囲を明確に指定してください。`
 const message = `${lowerMessage}
  - Headingをh1にしたい場合(機能名、ページ名などこのページ内でもっとも重要な見出しの場合)、smarthr-ui/PageHeadingを利用してください。その場合はSectionなどでアウトラインを示す必要はありません。`
 const pageMessage = 'smarthr-ui/PageHeading が同一ファイル内に複数存在しています。PageHeadingはh1タグを出力するため最も重要な見出しにのみ利用してください。'
 const pageInSectionMessage = 'smarthr-ui/PageHeadingはsmarthr-uiのArticle, Aside, Nav, Sectionで囲まないでください。囲んでしまうとページ全体の見出しではなくなってしまいます。'
-const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside, Nav, Section, SectioningFragmentのいずれかの自動レベル計算に任せるよう、tag属性を削除してください。
+const noTagAttrMessage = `tag属性を指定せず、smarthr-uiのArticle, Aside, Nav, Sectionのいずれかの自動レベル計算に任せるよう、tag属性を削除してください。
  - tag属性を指定することで意図しないレベルに固定されてしまう可能性があります。`
 const notHaveHeadingMessage = (elementName) => `${elementName} はHeading要素を含んでいません。
  - SectioningContentはHeadingを含むようにマークアップする必要があります
@@ -74,6 +72,8 @@ ruleTester.run('a11y-heading-in-sectioning-content', rule, {
     { code: '<HogeReel forwardedAs="aside"><div><Heading>hoge</Heading></div></HogeReel>' },
     { code: '<HogeSidebar forwardedAs="nav"><div><Heading>hoge</Heading></div></HogeSidebar>' },
     { code: '<HogeStack forwardedAs="section"><div><Heading>hoge</Heading></div></HogeStack>' },
+    { code: '<HogeBase as="aside"><Heading>hoge</Heading></HogeBase>' },
+    { code: '<HogeBaseColumn forwardedAs="nav"><Heading>hoge</Heading></HogeBaseColumn>' },
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },

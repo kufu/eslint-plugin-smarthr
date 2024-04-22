@@ -9,6 +9,8 @@ const EXPECTED_NAMES = {
   'Reel$': '(Reel)$',
   'Sidebar$': '(Sidebar)$',
   'Stack$': '(Stack)$',
+  'Base$': '(Base)$',
+  'BaseColumn$': '(BaseColumn)$',
 }
 
 const UNEXPECTED_NAMES = EXPECTED_NAMES
@@ -16,7 +18,7 @@ const UNEXPECTED_NAMES = EXPECTED_NAMES
 const BARE_SECTIONING_TAG_REGEX = /^(article|aside|nav|section)$/
 const SECTIONING_REGEX = /((A(rticle|side))|Nav|Section)$/
 const SECTIONING_FRAGMENT_REGEX = /^SectioningFragment$/
-const LAYOUT_REGEX = /((C(ent|lust)er)|Reel|Sidebar|Stack)$/
+const LAYOUT_REGEX = /((C(ent|lust)er)|Reel|Sidebar|Stack|Base(Column)?)$/
 const AS_REGEX = /^(as|forwardedAs)$/
 
 const includeSectioningAsAttr = (a) => a.name?.name?.match(AS_REGEX) && a.value.value?.match(BARE_SECTIONING_TAG_REGEX)
