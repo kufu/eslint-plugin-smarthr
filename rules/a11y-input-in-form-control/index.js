@@ -185,6 +185,7 @@ module.exports = {
  - 可能なら${nodeName}は${convertComp}への変更を検討してください。難しい場合は ${nodeName} と結びつくlabel要素が必ず存在するよう、マークアップする必要があることに注意してください。` : ''}`,
                         });
                       } else if (isMultiInput && !openingElement.attributes.find(findRoleGroup)) {
+                        if (node.parent?.parent?.type === 'ConditionalExpression') return;
                         context.report({
                           node: n,
                           message: `${name} が複数の入力要素を含んでいます。ラベルと入力要素の紐づけが正しく行われない可能性があるため、以下の方法のいずれかで修正してください。
