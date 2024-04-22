@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.9](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.7...v0.5.9) (2024-04-22)
+
+
+### Features
+
+* a11y-prohibit-input-maxlength-attribute ([#135](https://github.com/kufu/eslint-plugin-smarthr/issues/135)) ([9f9d010](https://github.com/kufu/eslint-plugin-smarthr/commit/9f9d010e819d936fe5f55556a8f65e6485c552ce))
+* a11y系コンポーネントでBase,BaseColumnにas="section"などSectioningContentが指定された場合、outlineが切られていると判断するよう修正 ([#138](https://github.com/kufu/eslint-plugin-smarthr/issues/138)) ([7b62c62](https://github.com/kufu/eslint-plugin-smarthr/commit/7b62c6293cf057e97616992dd30fcf67b758f32f))
+* best-practice-for-layouts に <Stack align="center"> を <Center> に置き換えることを促すチェックを追加 ([#133](https://github.com/kufu/eslint-plugin-smarthr/issues/133)) ([5835530](https://github.com/kufu/eslint-plugin-smarthr/commit/58355308bf9a5d18d2d731e699c54806af969ed9))
+* best-practice-for-layoutsでStackコンポーネントにgap={0}が指定されている場合、適切に置き換え・または削除を促すように修正 ([#137](https://github.com/kufu/eslint-plugin-smarthr/issues/137)) ([2a11919](https://github.com/kufu/eslint-plugin-smarthr/commit/2a11919ffa20ddbbc6a59210ec14d81d2d510cda))
+
 ### [0.5.8](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.7...v0.5.8) (2024-04-09)
 
 
