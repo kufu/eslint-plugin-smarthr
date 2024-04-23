@@ -27,5 +27,7 @@ ruleTester.run('a11y-prohibit-useless-sectioning-fragment', rule, {
     { code: `<SectioningFragment><AnyAside>hoge</AnyAside></SectioningFragment>`, errors: [ { message: error('<AnyAside>') } ] },
     { code: `<SectioningFragment><HogeStack as="aside">hoge</HogeStack></SectioningFragment>`, errors: [ { message: error('<HogeStack as="aside">') } ] },
     { code: `<SectioningFragment><HogeReel forwardedAs="nav">hoge</HogeReel></SectioningFragment>`, errors: [ { message: error('<HogeReel forwardedAs="nav">') } ] },
+    { code: `<SectioningFragment><FugaBase as="article">hoge</FugaBase></SectioningFragment>`, errors: [ { message: error('<FugaBase as="article">') } ] },
+    { code: `<SectioningFragment><FugaBaseColumn as="article">hoge</FugaBaseColumn></SectioningFragment>`, errors: [ { message: error('<FugaBaseColumn as="article">') } ] },
   ]
 })

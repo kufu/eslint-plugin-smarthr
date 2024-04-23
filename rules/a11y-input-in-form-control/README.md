@@ -73,7 +73,7 @@
   <DatePicker />
   ~
   <DatePicker />
-</Fieldset>
+</FormControl>
 
 <Fieldset title="any heading">
   <FormControl role="group">
