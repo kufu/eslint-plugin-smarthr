@@ -135,6 +135,7 @@ ruleTester.run('a11y-input-in-form-control', rule, {
     { code: '<Fieldset><HogeRadioButtonPanels /></Fieldset>' },
     { code: '<Fieldset><HogeCheckBoxs /></Fieldset>' },
     { code: '<Fieldset><HogeCheckBoxes /></Fieldset>' },
+    { code: '<HogeFormControl>{ dateInput ? <DateInput /> : <Input /> }</HogeFormControl>'},
   ],
   invalid: [
     { code: `import hoge from 'styled-components'`, errors: [ { message: `styled-components をimportする際は、名称が"styled" となるようにしてください。例: "import styled from 'styled-components'"` } ] },
@@ -179,5 +180,7 @@ ruleTester.run('a11y-input-in-form-control', rule, {
     { code: '<HogeFormControl><HogeRadioButtons /></HogeFormControl>', errors: [ { message: invalidRadioInFormControl('HogeRadioButtons') } ] },
     { code: '<HogeFormControl><HogeCheckBoxs /></HogeFormControl>', errors: [ { message: invalidMultiInputsInFormControl() } ] },
     { code: '<HogeFormControl><HogeCheckBoxes /></HogeFormControl>', errors: [ { message: invalidMultiInputsInFormControl() } ] },
+    { code: "<HogeFormControl>{ dateInput ? <DateInput /> : <Input /> }<CheckBox /></HogeFormControl>", errors: [ { message: invalidMultiInputsInFormControl() } ]},
+    { code: "<HogeFormControl><CheckBox />{ dateInput ? <DateInput /> : <Input /> }</HogeFormControl>", errors: [ { message: invalidMultiInputsInFormControl() } ]},
   ]
 })

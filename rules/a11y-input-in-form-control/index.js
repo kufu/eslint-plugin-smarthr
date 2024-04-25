@@ -94,6 +94,7 @@ module.exports = {
     const checkAdditionalMultiInputComponents = (name) => additionalMultiInputComponents && name.match(additionalMultiInputComponents)
 
     let formControls = []
+    let conditionalformControls = []
     let checkboxFormControls = []
 
     return {
@@ -102,6 +103,7 @@ module.exports = {
         const nodeName = node.name.name || '';
         const isFormControlInput = nodeName.match(FORM_CONTROL_INPUTS_REGEX)
         const isAdditionalMultiInput = checkAdditionalMultiInputComponents(nodeName)
+        let conditionalExpressions = []
 
         if (isFormControlInput || isAdditionalMultiInput || checkAdditionalInputComponents(nodeName)) {
           let isInMap = false
@@ -162,12 +164,22 @@ module.exports = {
                 if (name) {
                   if (name.match(FROM_CONTROLS_REGEX)) {
                     const hit = formControls.includes(n)
+                    let conditionalHit = false
 
                     if (!hit) {
                       formControls.push(n)
 
+
                       if (isCheckbox) {
                         checkboxFormControls.push(n)
+                      }
+                    }
+
+                    if (conditionalExpressions.length > 0) {
+                      conditionalHit = conditionalformControls.includes(n)
+
+                      if (!conditionalHit) {
+                        conditionalformControls.push(n)
                       }
                     }
 
@@ -184,7 +196,7 @@ module.exports = {
  - Fieldsetで同じname属性のラジオボタン全てを囲むことで正しくグループ化され、適切なタイトル・説明を追加出来ます` : ''}${isPureInput ? `
  - 可能なら${nodeName}は${convertComp}への変更を検討してください。難しい場合は ${nodeName} と結びつくlabel要素が必ず存在するよう、マークアップする必要があることに注意してください。` : ''}`,
                         });
-                      } else if (isMultiInput && !openingElement.attributes.find(findRoleGroup)) {
+                      } else if (isMultiInput && !conditionalHit && !openingElement.attributes.find(findRoleGroup)) {
                         context.report({
                           node: n,
                           message: `${name} が複数の入力要素を含んでいます。ラベルと入力要素の紐づけが正しく行われない可能性があるため、以下の方法のいずれかで修正してください。
@@ -243,6 +255,10 @@ module.exports = {
                   }
                 }
 
+                break
+              }
+              case 'ConditionalExpression': {
+                conditionalExpressions.push(n)
                 break
               }
               case 'VariableDeclarator': {
