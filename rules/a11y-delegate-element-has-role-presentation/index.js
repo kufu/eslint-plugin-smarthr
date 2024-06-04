@@ -31,6 +31,7 @@ const EXPECTED_NAMES = {
   'Pagination$': 'Pagination$',
   'SideNav$': 'SideNav$',
   'AccordionPanel$': 'AccordionPanel$',
+  'FilterDropdown$': 'FilterDropdown$',
 }
 
 const UNEXPECTED_NAMES = {
