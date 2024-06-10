@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.12](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.11...v0.5.12) (2024-06-10)
+
+
+### Features
+
+* best-practice-for-data-test-attributeを追加 ([#141](https://github.com/kufu/eslint-plugin-smarthr/issues/141)) ([30a8f00](https://github.com/kufu/eslint-plugin-smarthr/commit/30a8f003e1cdb79c709390be0322703e74de284d))
+
 ### [0.5.11](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.9...v0.5.11) (2024-06-06)
 
 
