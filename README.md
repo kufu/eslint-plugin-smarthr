@@ -15,6 +15,7 @@
 - [a11y-replace-unreadable-symbol](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-replace-unreadable-symbol)
 - [a11y-trigger-has-button](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-trigger-has-button)
 - [best-practice-for-button-element](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-button-element)
+- [best-practice-for-data-test-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-data-test-attribute)
 - [best-practice-for-date](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-date)
 - [best-practice-for-layouts](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-layouts)
 - [best-practice-for-remote-trigger-dialog](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-remote-trigger-dialog)
