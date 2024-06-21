@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.13](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.12...v0.5.13) (2024-06-21)
+
+
+### Features
+
+* ButtonやTextLinkコンポーネントにprefix, suffixの両属性を同時に設定できないルールを追加 ([1eb7568](https://github.com/kufu/eslint-plugin-smarthr/commit/1eb75680a1125391106994532b58cc0591853711))
+
 ### [0.5.12](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.11...v0.5.12) (2024-06-10)
 
 
