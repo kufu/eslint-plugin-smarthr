@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.14](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.11...v0.5.14) (2024-07-02)
+
+
+### Features
+
+* best-practice-for-data-test-attributeを追加 ([#141](https://github.com/kufu/eslint-plugin-smarthr/issues/141)) ([30a8f00](https://github.com/kufu/eslint-plugin-smarthr/commit/30a8f003e1cdb79c709390be0322703e74de284d))
+* ButtonやTextLinkコンポーネントにprefix, suffixの両属性を同時に設定できないルールを追加 ([1eb7568](https://github.com/kufu/eslint-plugin-smarthr/commit/1eb75680a1125391106994532b58cc0591853711))
+
+
+### Bug Fixes
+
+* a11y-clickable-element-has-text でtext属性を持つコンポーネントが存在する場合、真となるように修正 ([#143](https://github.com/kufu/eslint-plugin-smarthr/issues/143)) ([46b7048](https://github.com/kufu/eslint-plugin-smarthr/commit/46b7048dc3bb5a29455e205fabdd584fa478d2f1))
+
 ### [0.5.13](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.12...v0.5.13) (2024-06-21)
 
 
