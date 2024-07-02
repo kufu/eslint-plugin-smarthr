@@ -120,6 +120,9 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
       code: `<a><FormattedMessage /></a>`,
     },
     {
+      code: `<button><Hoge text="any" /></button>`,
+    },
+    {
       code: `<a><AnyComponent /></a>`,
       options: [{
         componentsWithText: ['AnyComponent']

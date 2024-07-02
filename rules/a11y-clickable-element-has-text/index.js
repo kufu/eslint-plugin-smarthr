@@ -32,8 +32,6 @@ const REGEX_SMARTHR_LOGO = /SmartHRLogo$/
 const REGEX_TEXT_COMPONENT = /(Text|Message)$/
 const REGEX_JSX_TYPE = /^(JSXText|JSXExpressionContainer)$/
 
-const HIT_TEXT_ATTR = 'alt'
-
 const filterFalsyJSXText = (cs) => cs.filter(checkFalsyJSXText)
 const checkFalsyJSXText = (c) => (
   !(c.type === 'JSXText' && c.value.match(REGEX_NLSP))
@@ -91,30 +89,29 @@ module.exports = {
                 return true
               }
 
-              // HINT: role & aria-label を同時に設定されている場合は許可
+              // HINT: role & aria-label を同時に設定されている場合か、text属性が設定されている場合許可
               let existRole = false
               let existAriaLabel = false
               const result = c.openingElement.attributes.reduce((prev, a) =>  {
-                existRole = existRole || (a.name.name === 'role' && a.value.value === 'img')
-                existAriaLabel = existAriaLabel || a.name.name === 'aria-label'
+                const n = a.name.name
 
-                if (
-                  prev ||
-                  HIT_TEXT_ATTR !== a.name.name
-                ) {
-                  return prev
+                if (prev || n === 'text') {
+                  return true
                 }
 
-                return (!!a.value.value || a.value.type === 'JSXExpressionContainer') ? a : prev
+                const v = a.value?.value
+
+                existRole = existRole || (n === 'role' && v === 'img')
+                existAriaLabel = existAriaLabel || n === 'aria-label'
+
+                if (existRole && existAriaLabel) {
+                  return true
+                }
+
+                return n === 'alt' && (v || a.value.type === 'JSXExpressionContainer') || false
               }, null)
 
-              if (
-                result ||
-                (existRole && existAriaLabel) ||
-                (c.children && filterFalsyJSXText(c.children).some(recursiveSearch))
-              ) {
-                return true
-              }
+              return result || (c.children && filterFalsyJSXText(c.children).some(recursiveSearch))
             }
           }
 
