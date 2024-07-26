@@ -21,15 +21,11 @@
 ## ❌ Incorrect
 
 ```jsx
-<Button>hoge</Button>
-<Button suffix={SUFFIX}>hoge</Button>
-<Button prefix="PREFIX">hoge</Button>
-<TextLink>hoge</TextLink>
-<TextLink suffix="SUFFIX">hoge</TextLink>
-<TextLink prefix={PREFIX}>hoge</TextLink>
-<StyledButton>hoge</StyledButton>
-<StyledLink>hoge</StyledLink>
-<Input prefix={PREFIX} suffix={SUFFIX} />
+<Button suffix={SUFFIX} prefix={PREFIX}>hoge</Button>
+<Button suffix prefix>hoge</Button>
+<StyledButton suffix={undefined} prefix={null}>hoge</StyledButton>
+<Link prefix="PREFIX" suffix="SUFFIX">hoge</Link>
+<StyledLink prefix="PREFIX" suffix="SUFFIX">hoge</StyledLink>
 ```
 
 ## ✅ Correct
