@@ -19,6 +19,7 @@
 - [best-practice-for-date](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-date)
 - [best-practice-for-layouts](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-layouts)
 - [best-practice-for-remote-trigger-dialog](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-remote-trigger-dialog)
+- [design-system-guideline-prohibit-double-icons](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/design-system-guideline-prohibit-double-icons)
 - [format-import-path](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-import-path)
 - [format-translate-component](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/format-translate-component)
 - [jsx-start-with-spread-attributes](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/jsx-start-with-spread-attributes)
