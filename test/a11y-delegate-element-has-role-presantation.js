@@ -12,7 +12,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const defaultInteractiveRegex = '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|DropZone$|Switch$|SegmentedControl$|RightFixedNote$|FieldSet$|Fieldset$|FormControl$|FormGroup$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|FormDialog$|Pagination$|SideNav$|AccordionPanel$|FilterDropdown$)/'
+const defaultInteractiveRegex = '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|TimePicker$|DropZone$|Switch$|SegmentedControl$|RightFixedNote$|FieldSet$|Fieldset$|FormControl$|FormGroup$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|FormDialog$|Pagination$|SideNav$|AccordionPanel$|FilterDropdown$)/'
 const messageNonInteractiveEventHandler = (nodeName, onAttrs, interactiveComponentRegex = defaultInteractiveRegex) => {
   const onAttrsText = onAttrs.join(', ')
 
@@ -67,7 +67,7 @@ ruleTester.run('smarthr/a11y-delegate-element-has-role-presentation', rule, {
     { code: '<div onClick={any} onSubmit={any2} role="presentation"><Hoge /></div>', errors: [ { message: messageRolePresentationNotHasInteractive('div', ['onClick', 'onSubmit']) } ] },
     { code: '<div onClick={any}><Link /></div>', errors: [ { message: messageNonInteractiveEventHandler('div', ['onClick']) } ] },
     { code: '<Wrapper onClick={any}><Link /></Wrapper>', errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onClick']) } ] },
-    { code: '<Wrapper onSubmit={any}><Hoge /></Wrapper>', options: [{ additionalInteractiveComponentRegex: ['^Hoge$'] }], errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onSubmit'], '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|DropZone$|Switch$|SegmentedControl$|RightFixedNote$|FieldSet$|Fieldset$|FormControl$|FormGroup$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|FormDialog$|Pagination$|SideNav$|AccordionPanel$|FilterDropdown$|^Hoge$)/') } ] },
+    { code: '<Wrapper onSubmit={any}><Hoge /></Wrapper>', options: [{ additionalInteractiveComponentRegex: ['^Hoge$'] }], errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onSubmit'], '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|TimePicker$|DropZone$|Switch$|SegmentedControl$|RightFixedNote$|FieldSet$|Fieldset$|FormControl$|FormGroup$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|FormDialog$|Pagination$|SideNav$|AccordionPanel$|FilterDropdown$|^Hoge$)/') } ] },
     { code: '<Wrapper onClick={any} onChange={anyany}><any><Link /></any></Wrapper>', errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onClick', 'onChange']) } ] },
     { code: '<Wrapper onClick={any}>{any ? null : (hoge ? <AnyLink /> : null)}</Wrapper>', errors: [ { message: messageNonInteractiveEventHandler('Wrapper', ['onClick']) } ] },
   ],

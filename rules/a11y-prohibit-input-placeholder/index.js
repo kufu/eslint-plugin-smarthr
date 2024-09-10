@@ -7,7 +7,9 @@ const EXPECTED_NAMES = {
   'FieldSet$': 'FieldSet$',
   'ComboBox$': 'ComboBox$',
   'DatePicker$': 'DatePicker$',
+  'TimePicker$': 'TimePicker$',
 }
+const INPUT_TAG_REGEX = /((i|I)nput|(t|T)extarea|FieldSet|ComboBox|(Date|Time)Picker)$/
 
 /**
  * @type {import('@typescript-eslint/utils').TSESLint.RuleModule<''>}
@@ -27,7 +29,7 @@ module.exports = {
           return
         }
 
-        if (!name.match(/((i|I)nput|(t|T)extarea|FieldSet|ComboBox|DatePicker)$/)) {
+        if (!name.match(INPUT_TAG_REGEX)) {
           return
         }
 

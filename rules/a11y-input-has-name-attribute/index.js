@@ -10,6 +10,7 @@ const EXPECTED_NAMES = {
   'Check(b|B)ox$': 'CheckBox$',
   'Combo(b|B)ox$': 'ComboBox$',
   'DatePicker$': 'DatePicker$',
+  'TimePicker$': 'TimePicker$',
   'DropZone$': 'DropZone$',
 }
 const TARGET_TAG_NAME_REGEX = new RegExp(`(${Object.keys(EXPECTED_NAMES).join('|')})`)

@@ -9,6 +9,7 @@ const EXPECTED_NAMES = {
   'Check(b|B)ox$': 'CheckBox$',
   'Combo(b|B)ox$': 'ComboBox$',
   'DatePicker$': 'DatePicker$',
+  'TimePicker$': 'TimePicker$',
   'DropZone$': 'DropZone$',
   'Switch$': 'Switch$',
   'SegmentedControl$': 'SegmentedControl$',

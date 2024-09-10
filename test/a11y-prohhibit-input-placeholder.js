@@ -41,6 +41,7 @@ ruleTester.run('a11y-prohibit-input-placeholder', rule, {
     { code: `<CustomComboBox />` },
     { code: `<SearchInput />` },
     { code: `<DatePicker />` },
+    { code: `<TimePicker />` },
     { code: `<CustomSearchInput tooltipMessage="hoge" />` },
     { code: `<CustomSearchInput tooltipMessage="hoge" placeholder="fuga" />` },
     { code: `<ComboBox defaultItem={items[0]} />` },
