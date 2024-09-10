@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.15](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.14...v0.5.15) (2024-09-10)
+
+
+### Features
+
+* a11y系ルールの対象にsmarthr-ui/TimePickerを追加する ([#146](https://github.com/kufu/eslint-plugin-smarthr/issues/146)) ([90d9bf4](https://github.com/kufu/eslint-plugin-smarthr/commit/90d9bf42d770026e7ebc9442096e677fab298841))
+
+
+### Bug Fixes
+
+* README.md内のIncorrect examplesを修正 ([fe0f7d2](https://github.com/kufu/eslint-plugin-smarthr/commit/fe0f7d2b8bf9773a8ff7e962084093bc6441bcda))
+
 ### [0.5.14](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.11...v0.5.14) (2024-07-02)
 
 
