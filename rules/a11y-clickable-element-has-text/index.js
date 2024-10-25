@@ -93,7 +93,7 @@ module.exports = {
               let existRole = false
               let existAriaLabel = false
               const result = c.openingElement.attributes.reduce((prev, a) =>  {
-                const n = a.name.name
+                const n = a.name?.name
 
                 if (prev || n === 'text') {
                   return true
