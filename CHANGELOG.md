@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.17](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.16...v0.5.17) (2024-11-04)
+
+
+### Features
+
+* a11y-prohibit-heading-in-formを追加 ([#148](https://github.com/kufu/eslint-plugin-smarthr/issues/148)) ([973f681](https://github.com/kufu/eslint-plugin-smarthr/commit/973f681fd3538224e7312b6eb38ea43e6fb17cc5))
+
 ### [0.5.16](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.15...v0.5.16) (2024-10-25)
 
 ### [0.5.15](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.14...v0.5.15) (2024-09-10)
