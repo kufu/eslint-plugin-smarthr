@@ -18,6 +18,7 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
+    const sourceCode = context.sourceCode ?? context.getSourceCode();
     return {
       JSXSpreadAttribute: (node) => {
         // HINT: -2: 計算中 -1: 見つからなかった >= 0: 見つかった
@@ -35,7 +36,6 @@ module.exports = {
 
         if (insertIndex >= 0) {
           const option = context.options[0]
-          const sourceCode = context.getSourceCode()
           const attributeCode = sourceCode.getText(node)
 
           context.report({
@@ -63,7 +63,7 @@ module.exports = {
           });
         }
       },
-    }
+    };
   },
 }
 module.exports.schema = SCHEMA

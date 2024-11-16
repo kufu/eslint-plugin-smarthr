@@ -41,8 +41,8 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
+    const filename = context.filename ?? context.getFilename();
     const options = context.options[0]
-    const filename = context.getFilename()
     const parentDir = (() => {
       const dir = filename.match(/^(.+?)\..+?$/)[1].split('/')
       dir.pop()

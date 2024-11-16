@@ -89,6 +89,7 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
+    const sourceCode = context.sourceCode ?? context.getSourceCode();
     const calcContext = calculateDomainContext(context)
 
     // 対象外ファイル
@@ -125,12 +126,12 @@ module.exports = {
             message: `${fixedImportPath} に修正してください`,
             fix: (fixer) => fixer.replaceText(
               node,
-              context.getSourceCode().getText(node).replace(new RegExp(`from '${importPath}'$`), `from '${fixedImportPath}'`)
+              sourceCode.getText(node).replace(new RegExp(`from '${importPath}'$`), `from '${fixedImportPath}'`)
             ),
           })
         }
       },
-    }
+    };
   },
 }
 module.exports.schema = SCHEMA

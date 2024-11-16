@@ -92,8 +92,8 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
+    const filename = context.filename ?? context.getFilename();
     const option = context.options[0] || {}
-    const filename = context.getFilename()
 
     if (option.ignores && option.ignores.some((i) => !!filename.match(new RegExp(i)))) {
       return {}

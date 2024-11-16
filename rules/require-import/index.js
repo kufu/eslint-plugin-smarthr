@@ -41,8 +41,8 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
+    const filename = context.filename ?? context.getFilename();
     const options = context.options[0]
-    const filename = context.getFilename()
     const targetPathRegexs = Object.keys(options)
     const targetRequires = targetPathRegexs.filter((regex) => !!filename.match(new RegExp(regex)))
 
