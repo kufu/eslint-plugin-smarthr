@@ -2,16 +2,14 @@ const rule = require('../rules/best-practice-for-button-element')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const ERRORMESSAGE_REQUIRED_TYPE_ATTR = `button要素を利用する場合、type属性に "button" もしくは "submit" を指定してください
  - button要素のtype属性のデフォルトは "submit" のため、button要素がformでラップされていると意図しないsubmitを引き起こす可能性があります
  - smarthr-ui/Button, smarthr-ui/UnstyledButtonのtype属性のデフォルトは "button" になっているため、buttonから置き換えることをおすすめします`

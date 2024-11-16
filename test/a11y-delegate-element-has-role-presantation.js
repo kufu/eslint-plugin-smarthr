@@ -2,15 +2,14 @@ const rule = require('../rules/a11y-delegate-element-has-role-presentation');
 const RuleTester = require('eslint').RuleTester;
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
-});
+})
 
 const defaultInteractiveRegex = '/((i|I)nput$|(t|T)extarea$|(s|S)elect$|InputFile$|RadioButtonPanel$|Check(b|B)ox$|Combo(b|B)ox$|DatePicker$|TimePicker$|DropZone$|Switch$|SegmentedControl$|RightFixedNote$|FieldSet$|Fieldset$|FormControl$|FormGroup$|(b|B)utton$|Anchor$|Link$|TabItem$|^a$|(f|F)orm$|ActionDialogWithTrigger$|RemoteDialogTrigger$|RemoteTrigger(.+)Dialog$|FormDialog$|Pagination$|SideNav$|AccordionPanel$|FilterDropdown$)/'
 const messageNonInteractiveEventHandler = (nodeName, onAttrs, interactiveComponentRegex = defaultInteractiveRegex) => {

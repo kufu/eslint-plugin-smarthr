@@ -2,15 +2,14 @@ const rule = require('../rules/a11y-input-has-name-attribute');
 const RuleTester = require('eslint').RuleTester;
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
-});
+})
 
 const MESSAGE_SUFFIX = `
  - ブラウザの自動補完が有効化されるなどのメリットがあります

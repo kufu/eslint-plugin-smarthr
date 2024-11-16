@@ -2,16 +2,14 @@ const rule = require('../rules/best-practice-for-date')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const errorNewDate = `'new Date(arg)' のように引数を一つだけ指定したDate instanceの生成は実行環境によって結果が異なるため、以下のいずれかの方法に変更してください
  - 'new Date(2022, 12 - 1, 31)' のように数値を個別に指定する
  - dayjsなど、日付系ライブラリを利用する (例:  'dayjs(arg).toDate()')`

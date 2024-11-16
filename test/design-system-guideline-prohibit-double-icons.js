@@ -2,16 +2,14 @@ const rule = require('../rules/design-system-guideline-prohibit-double-icons')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const generateErrorText = (name) => `${name} には prefix と suffix は同時に設定できません。
  - prefix または suffix のみを設定してください。
  - どちらにもアイコンをつけられそうな場合は、アイコン付き（右）（サフィックス）を優先し、アイコン付き（左）（プレフィックス）には指定しないでください。

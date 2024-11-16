@@ -2,16 +2,14 @@ const rule = require('../rules/a11y-form-control-in-form')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const generateErrorText = (elementName) => `${elementName}をform要素で囲むようにマークアップしてください。
  - form要素で囲むことでスクリーンリーダーに入力フォームであることが正しく伝わる、入力要素にfocusした状態でEnterを押せばsubmitできる、inputのpattern属性を利用できるなどのメリットがあります
  - 以下のいずれかの方法で修正をおこなってください

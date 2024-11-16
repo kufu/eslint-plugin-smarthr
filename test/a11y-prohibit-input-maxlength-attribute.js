@@ -2,16 +2,14 @@ const rule = require('../rules/a11y-prohibit-input-maxlength-attribute')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const expectedErrorMessage = (elName) => `${elName}にmaxLength属性を設定しないでください。
 - maxLength属性がついた要素に、テキストをペーストすると、maxLength属性の値を超えた範囲が意図せず切り捨てられてしまう場合があります
 - 以下のいずれかの方法で修正をおこなってください
