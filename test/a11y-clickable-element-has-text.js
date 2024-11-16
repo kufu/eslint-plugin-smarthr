@@ -147,7 +147,6 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const Hoge = styled(Link)``', errors: [ { message: `Hogeを正規表現 "/Link$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Hoge = styled(Button)``', errors: [ { message: `Hogeを正規表現 "/Button$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ]  },
-    { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Fuga = styled(SmartHRLogo)``', errors: [ { message: `Fugaを正規表現 "/SmartHRLogo$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Piyo = styled.a(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください。` } ] },
     { code: 'const Piyo = styled("a")(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください。` } ] },
