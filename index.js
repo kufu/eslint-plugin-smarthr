@@ -30,7 +30,6 @@ function generateRulesMap() {
 function generateRecommendedConfig(rules) {
   let config = {
     name: 'eslint-plugin-smarthr/recommended',
-    plugins: ['smarthr'],
     rules: {},
   }
 
