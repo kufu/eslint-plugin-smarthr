@@ -22,7 +22,7 @@
     "url": "https://github.com/kufu/eslint-plugin-smarthr/issues"
   },
   "dependencies": {
-    "json5": "^2.2.0"
+    "json5": "^2.2.3"
   },
   "devDependencies": {
     "eslint": "^8.8.0",
