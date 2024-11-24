@@ -14,6 +14,7 @@ const FORM_EXPECTED_NAMES = {
   '((F|^f)orm)$': '(Form)$',
   '(FormDialog)$': '(FormDialog)$',
   'RemoteTrigger(.*)FormDialog$': 'RemoteTrigger(.*)FormDialog$',
+  'FilterDropdown$': '(FilterDropdown)$',
 }
 const EXPECTED_NAMES = {
   ...FORM_CONTROL_EXPECTED_NAMES,
