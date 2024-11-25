@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.20](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.18...v0.5.20) (2024-11-25)
+
+
+### Bug Fixes
+
+* エラーメッセージ生成ミスを修正 ([#152](https://github.com/kufu/eslint-plugin-smarthr/issues/152)) ([17b8bd0](https://github.com/kufu/eslint-plugin-smarthr/commit/17b8bd03f6bd7c0587618f280c943517308710b2))
+
 ### [0.5.19](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.18...v0.5.19) (2024-11-25)
 
 
