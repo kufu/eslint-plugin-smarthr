@@ -14,6 +14,7 @@
 - [a11y-prohibit-sectioning-content-in-form](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-sectioning-content-in-form)
 - [a11y-prohibit-useless-sectioning-fragment](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-prohibit-useless-sectioning-fragment)
 - [a11y-replace-unreadable-symbol](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-replace-unreadable-symbol)
+- [a11y-required-layout-as-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-required-layout-as-attribute)
 - [a11y-trigger-has-button](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-trigger-has-button)
 - [best-practice-for-button-element](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-button-element)
 - [best-practice-for-data-test-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/best-practice-for-data-test-attribute)
