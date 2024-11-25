@@ -168,7 +168,7 @@ module.exports = {
                   message: `${isSection ? elementName : `${asAttr.name.name}="${asAttr.value.value}"`}とその内部に存在するHeadingをsmarthr-ui/Fieldsetに置き換えてください
  - もしくはform要素を利用していない場合、フォームを構成する入力要素郡すべてを一つのform要素で囲んでください
    - required属性、pattern属性など一部属性はform要素で囲まないと動作しません
-   - 送信用ボタンのonClickをform要素のonSubmitに移動し、送信用ボタンに `type="submit"` を指定することでより適切にマークアップ出来ます
+   - 送信用ボタンのonClickをform要素のonSubmitに移動し、送信用ボタンのtype属性に "submit" を指定することでより適切にマークアップ出来ます
      - その際、onSubmitの動作中で "e.preventDefault()" と "e.stopPropagation()" を指定する必要がある場合があります。
  - form内の見出しとなる要素をlegend, labelのみに統一することでスクリーンリーダーのジャンプ機能などの利便性が向上します
  - smarthr-ui/Fieldset が利用できない場合、fieldset要素とlegend要素を使ったマークアップに修正してください
