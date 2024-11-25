@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.18](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.17...v0.5.18) (2024-11-25)
+
+
+### Features
+
+* a11y-requried-layout-as-attribute ルールを追加する ([#150](https://github.com/kufu/eslint-plugin-smarthr/issues/150)) ([96e0970](https://github.com/kufu/eslint-plugin-smarthr/commit/96e09702ea59cfcd5a173e187300b9054047b65c))
+
+
+### Bug Fixes
+
+* a11y-form-control-in-form でFilterDropdownをformとして扱うように修正 ([#151](https://github.com/kufu/eslint-plugin-smarthr/issues/151)) ([9d86ef8](https://github.com/kufu/eslint-plugin-smarthr/commit/9d86ef885b607582324df24e5743d42533108db3))
+
 ### [0.5.17](https://github.com/kufu/eslint-plugin-smarthr/compare/v0.5.16...v0.5.17) (2024-11-04)
 
 
