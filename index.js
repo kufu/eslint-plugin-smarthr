@@ -31,7 +31,7 @@ function generateRecommendedConfig(rules) {
   let config = {
     name: 'eslint-plugin-smarthr/recommended',
     rules: {},
-  }
+  };
 
   for (let ruleName of Object.keys(rules)) {
     config.rules[`smarthr/${ruleName}`] = 'off';
