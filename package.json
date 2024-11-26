@@ -34,7 +34,7 @@
     "typescript-eslint": "^8.14.0"
   },
   "peerDependencies": {
-    "eslint": "^8 || ^9"
+    "eslint": "^9"
   },
   "keywords": [
     "eslint",
