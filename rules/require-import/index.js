@@ -41,10 +41,9 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
-    const filename = context.filename ?? context.getFilename();
     const options = context.options[0]
     const targetPathRegexs = Object.keys(options)
-    const targetRequires = targetPathRegexs.filter((regex) => !!filename.match(new RegExp(regex)))
+    const targetRequires = targetPathRegexs.filter((regex) => !!context.filename.match(new RegExp(regex)))
 
     if (targetRequires.length === 0) {
       return {}
@@ -54,7 +53,7 @@ module.exports = {
       Program: (node) => {
         const importDeclarations = node.body.filter((item) => item.type === 'ImportDeclaration')
         const parentDir = (() => {
-          const dir = filename.match(/^(.+?)\..+?$/)[1].split('/')
+          const dir = context.filename.match(/^(.+?)\..+?$/)[1].split('/')
           dir.pop()
 
           return dir.join('/')
@@ -66,7 +65,7 @@ module.exports = {
           Object.keys(option).forEach((targetModule) => {
             const { imported, reportMessage, targetRegex } = Object.assign({imported: true}, option[targetModule])
 
-            if (targetRegex && !filename.match(new RegExp(targetRegex))) {
+            if (targetRegex && !context.filename.match(new RegExp(targetRegex))) {
               return
             }
 

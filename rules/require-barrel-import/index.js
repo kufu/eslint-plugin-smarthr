@@ -92,18 +92,17 @@ module.exports = {
     schema: SCHEMA,
   },
   create(context) {
-    const filename = context.filename ?? context.getFilename();
     const option = context.options[0] || {}
 
-    if (option.ignores && option.ignores.some((i) => !!filename.match(new RegExp(i)))) {
+    if (option.ignores && option.ignores.some((i) => !!context.filename.match(new RegExp(i)))) {
       return {}
     }
 
-    let d = filename.split('/')
+    let d = context.filename.split('/')
     d.pop()
     const dir = d.join('/')
     const targetPathRegexs = Object.keys(option?.allowedImports || {})
-    const targetAllowedImports = targetPathRegexs.filter((regex) => !!filename.match(new RegExp(regex)))
+    const targetAllowedImports = targetPathRegexs.filter((regex) => !!context.filename.match(new RegExp(regex)))
 
     return {
       ImportDeclaration: (node) => {

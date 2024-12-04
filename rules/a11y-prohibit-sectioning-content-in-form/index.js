@@ -141,8 +141,7 @@ module.exports = {
     schema: [],
   },
   create(context) {
-    const filename = context.filename ?? context.getFilename();
-    const filenames = filename.replace(rootPathSlashed, '').replace(extRegex, '').split('/')
+    const filenames = context.filename.replace(rootPathSlashed, '').replace(extRegex, '').split('/')
     const isInnerForm = filenames.some(includeWrapper)
     const notified = []
 
