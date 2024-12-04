@@ -42,15 +42,14 @@ module.exports = {
   },
   create(context) {
     const options = context.options[0]
-    const filename = context.getFilename()
     const parentDir = (() => {
-      const dir = filename.match(/^(.+?)\..+?$/)[1].split('/')
+      const dir = context.filename.match(/^(.+?)\..+?$/)[1].split('/')
       dir.pop()
 
       return dir.join('/')
     })()
     const targetPathRegexs = Object.keys(options)
-    const targetProhibits = targetPathRegexs.filter((regex) => !!filename.match(new RegExp(regex)))
+    const targetProhibits = targetPathRegexs.filter((regex) => !!context.filename.match(new RegExp(regex)))
 
     if (targetProhibits.length === 0) {
       return {}

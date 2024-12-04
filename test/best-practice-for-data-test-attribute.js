@@ -2,16 +2,14 @@ const rule = require('../rules/best-practice-for-data-test-attribute')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const generateErrorMessage = (attr) => `テストのために要素を指定するために、${attr} 属性を利用するのではなく、他の方法で要素を指定することを検討してください。
  - 方法1: click_link, click_button等を利用したりすることで、利用しているテスト環境に準じた方法で要素を指定することを検討してください。
    - 参考(Testing Library): https://testing-library.com/docs/queries/about

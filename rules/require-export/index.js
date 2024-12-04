@@ -30,9 +30,8 @@ module.exports = {
   },
   create(context) {
     const options = context.options[0]
-    const filename = context.getFilename()
     const targetPathRegexs = Object.keys(options)
-    const targetRequires = targetPathRegexs.filter((regex) => !!filename.match(new RegExp(regex)))
+    const targetRequires = targetPathRegexs.filter((regex) => !!context.filename.match(new RegExp(regex)))
 
     if (targetRequires.length === 0) {
       return {}

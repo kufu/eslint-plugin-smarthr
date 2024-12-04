@@ -2,16 +2,14 @@ const rule = require('../rules/a11y-input-in-form-control')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const noLabeledInput = (name) => `${name} を、smarthr-ui/FormControl もしくはそれを拡張したコンポーネントが囲むようマークアップを変更してください。
  - FormControlで入力要素を囲むことでラベルと入力要素が適切に紐づき、操作性が高まります
  - ${name}が入力要素とラベル・タイトル・説明など含む概念を表示するコンポーネントの場合、コンポーネント名を/((FormGroup)$|(FormControl)$|((F|^f)ieldset)$)/とマッチするように修正してください

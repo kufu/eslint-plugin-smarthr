@@ -2,16 +2,14 @@ const rule = require('../rules/a11y-trigger-has-button')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 ruleTester.run('a11y-trigger-has-button', rule, {
   valid: [
     { code: `import styled from 'styled-components'` },

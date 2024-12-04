@@ -2,16 +2,14 @@ const rule = require('../rules/a11y-prohibit-useless-sectioning-fragment')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const error = (tag) => `無意味なSectioningFragmentが記述されています。子要素である${tag}で問題なくセクションは設定されているため、このSectioningFragmentは削除してください`
 
 ruleTester.run('a11y-prohibit-useless-sectioning-fragment', rule, {

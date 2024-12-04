@@ -5,12 +5,16 @@ const path = require('path');
 
 const rules = generateRulesMap();
 
+/**
+ * @type {import('eslint').Linter.Config}
+ */
 module.exports = {
-  configs: {
-    recommended: generateRecommendedConfig(rules),
-  },
+  name: 'eslint-plugin-smarthr',
   rules,
-};
+  plugins: {
+    recommended: generateRecommendedConfig(rules),
+  }
+}
 
 function generateRulesMap() {
   let rulesPath = path.join(__dirname, 'rules');
@@ -25,7 +29,7 @@ function generateRulesMap() {
 
 function generateRecommendedConfig(rules) {
   let config = {
-    plugins: ['smarthr'],
+    name: 'eslint-plugin-smarthr/recommended',
     rules: {},
   };
 

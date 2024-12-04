@@ -19,8 +19,7 @@ module.exports = {
   },
   create(context) {
     const options = context.options[0]
-    const filename = context.getFilename()
-    const targetPaths = Object.keys(options).filter((regex) => !!filename.match(new RegExp(regex)))
+    const targetPaths = Object.keys(options).filter((regex) => !!context.filename.match(new RegExp(regex)))
 
 
     if (targetPaths.length === 0) {
@@ -32,7 +31,7 @@ module.exports = {
     targetPaths.forEach((path) => {
       const message = options[path]
 
-      matcher = filename.match(new RegExp(path))
+      matcher = context.filename.match(new RegExp(path))
 
       if (matcher) {
         messages.push([...matcher].reduce(((prev, k, index) => prev.replaceAll(`\$${index}`, k)), message))

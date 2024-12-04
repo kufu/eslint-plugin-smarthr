@@ -7,13 +7,12 @@ const generateErrorText = (symbol, replaced, read) => `"${symbol}"はスクリ�
  - 前後の文脈などで "${read}" と読まれることが不適切な場合 \`<RangeSeparator decorators={{ visuallyHiddenText: () => "ANY" }} />\` のようにdecoratorsを指定してください`
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 2018,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
 
