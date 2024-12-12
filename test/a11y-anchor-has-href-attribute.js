@@ -2,16 +2,14 @@ const rule = require('../rules/a11y-anchor-has-href-attribute')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const generateErrorText = (name) => `${name} に href 属性を正しく設定してください
  - onClickなどでページ遷移する場合でもhref属性に遷移先のURIを設定してください
    - Cmd + clickなどのキーボードショートカットに対応出来ます

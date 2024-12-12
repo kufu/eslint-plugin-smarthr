@@ -2,16 +2,14 @@ const rule = require('../rules/a11y-clickable-element-has-text')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const defaultErrorMessage = `a, buttonなどのクリッカブルな要素内にはテキストを設定してください
  - 要素内にアイコン、画像のみを設置する場合はaltなどの代替テキスト用属性を指定してください
   - SVG component の場合、altを属性として受け取れるようにした上で '<svg role="img" aria-label={alt}>' のように指定してください
@@ -148,7 +146,6 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
     { code: 'const Hoge = styled(Anchor)``', errors: [ { message: `Hogeを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Hoge = styled(Link)``', errors: [ { message: `Hogeを正規表現 "/Link$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Hoge = styled(Button)``', errors: [ { message: `Hogeを正規表現 "/Button$/" がmatchする名称に変更してください。` } ]  },
-    { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Fuga = styled(HogeAnchor)``', errors: [ { message: `Fugaを正規表現 "/Anchor$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Fuga = styled(SmartHRLogo)``', errors: [ { message: `Fugaを正規表現 "/SmartHRLogo$/" がmatchする名称に変更してください。` } ]  },
     { code: 'const Piyo = styled.a(() => ``)', errors: [ { message: `Piyoを正規表現 "/(Anchor|Link)$/" がmatchする名称に変更してください。` } ] },

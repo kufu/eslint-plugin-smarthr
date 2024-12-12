@@ -2,9 +2,12 @@ const rule = require('../rules/prohibit-import')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    sourceType: 'module',
-    ecmaVersion: 12
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
+    },
   },
 })
 

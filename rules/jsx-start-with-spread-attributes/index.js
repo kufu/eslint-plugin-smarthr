@@ -35,8 +35,7 @@ module.exports = {
 
         if (insertIndex >= 0) {
           const option = context.options[0]
-          const sourceCode = context.getSourceCode()
-          const attributeCode = sourceCode.getText(node)
+          const attributeCode = context.sourceCode.getText(node)
 
           context.report({
             node,
@@ -49,7 +48,7 @@ module.exports = {
                 }
 
                 if (a !== node) {
-                  p = [...p, sourceCode.getText(a)]
+                  p = [...p, context.sourceCode.getText(a)]
                 }
 
                 return p
@@ -63,7 +62,7 @@ module.exports = {
           });
         }
       },
-    }
+    };
   },
 }
 module.exports.schema = SCHEMA

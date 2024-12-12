@@ -2,16 +2,14 @@ const rule = require('../rules/best-practice-for-layouts')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const errorMessage = (type, name) => `${name}には子要素が一つしか無いため、${type}でマークアップする意味がありません。
  - styleを確認し、div・spanなど、別要素でマークアップし直すか、${name}を削除してください
  - as, forwardedAsなどでSectioningContent系要素に変更している場合、対応するsmarthr-ui/Section, Aside, Nav, Article のいずれかに差し替えてください`

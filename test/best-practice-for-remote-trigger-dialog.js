@@ -2,16 +2,14 @@ const rule = require('../rules/best-practice-for-remote-trigger-dialog')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 ruleTester.run('best-practice-for-remote-trigger-dialog', rule, {
   valid: [
     { code: `import styled from 'styled-components'` },

@@ -2,16 +2,14 @@ const rule = require('../rules/a11y-image-has-alt-attribute')
 const RuleTester = require('eslint').RuleTester
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 12,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
-    sourceType: 'module',
   },
 })
-
 const messageNotExistAlt = `画像にはalt属性を指定してください。
  - コンポーネントが画像ではない場合、img or image を末尾に持たない名称に変更してください。
  - ボタンやリンクの先頭・末尾などに設置するアイコンとしての役割を持つ画像の場合、コンポーネント名の末尾を "Icon" に変更してください。
