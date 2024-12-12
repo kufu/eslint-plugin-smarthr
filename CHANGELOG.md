@@ -7,7 +7,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### ⚠ BREAKING CHANGES
 
-* ESLint v9 (#154)
+ESLint v9 及び FlatConfig への対応をしました。
+
+これにともない、ESLint v8 以下及び LegacyConfig では利用できなくなりました。
 
 * ESLint v9 ([#154](https://github.com/kufu/eslint-plugin-smarthr/issues/154)) ([a0b79fd](https://github.com/kufu/eslint-plugin-smarthr/commit/a0b79fd39fcab103008f9a257fb29d7d0e9c662b))
 
