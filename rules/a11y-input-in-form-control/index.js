@@ -118,6 +118,7 @@ module.exports = {
           let isPseudoLabel = false
           let isTypeRadio = false
           let isTypeCheck = false
+          let isTypeHidden = false
 
           if (isFormControlInput) {
             for (const i of node.attributes) {
@@ -143,12 +144,20 @@ module.exports = {
                       case 'checkbox':
                         isTypeCheck = true
                         break
+                      case 'hidden':
+                        isTypeHidden = true
+                        break
                     }
 
                     break
                 }
               }
             }
+          }
+
+          // HINT: hiddenの場合はラベルなしを許容する
+          if (isTypeHidden) {
+            return
           }
 
           const isPreMultiple = isAdditionalMultiInput || isFormControlInput && nodeName.match(SUFFIX_S_REGEX)
