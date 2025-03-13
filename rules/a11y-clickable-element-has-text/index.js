@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const SCHEMA = [
   {
@@ -28,8 +28,9 @@ const UNEXPECTED_NAMES = {
 
 const REGEX_NLSP = /^\s*\n+\s*$/
 const REGEX_CLICKABLE_ELEMENT = /^(a|(.*?)Anchor(Button)?|(.*?)Link|(b|B)utton)$/
-const REGEX_SMARTHR_LOGO = /SmartHRLogo$/
-const REGEX_TEXT_COMPONENT = /(Text|Message)$/
+
+// HINT: SmartHRLogo コンポーネントは内部でaltを持っているため対象外にする
+const REGEX_TEXT_COMPONENT = /(SmartHRLogo|Text|Message)$/
 const REGEX_JSX_TYPE = /^(JSXText|JSXExpressionContainer)$/
 
 const filterFalsyJSXText = (cs) => cs.filter(checkFalsyJSXText)
@@ -78,12 +79,7 @@ module.exports = {
               return c.children && filterFalsyJSXText(c.children).some(recursiveSearch)
             }
             case 'JSXElement': {
-              // // HINT: SmartHRLogo コンポーネントは内部でaltを持っているため対象外にする
-              if (c.openingElement.name.name.match(REGEX_SMARTHR_LOGO)) {
-                return true
-              }
-
-              const tagName = c.openingElement.name.name
+              const tagName = getTagName(c)
 
               if (tagName.match(REGEX_TEXT_COMPONENT) || componentsWithText.includes(tagName)) {
                 return true

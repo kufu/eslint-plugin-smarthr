@@ -123,4 +123,16 @@ const generateTagFormatter = ({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }) => 
   }
 }
 
-module.exports = { generateTagFormatter, checkImportStyledComponents, getStyledComponentBaseName }
+const getTagName = (node) => {
+  let tag = node
+
+  if (tag.openingElement) {
+    tag = tag.openingElement
+  }
+
+  const nameObj = tag.name
+
+  return nameObj.property?.name || nameObj.name
+}
+
+module.exports = { generateTagFormatter, checkImportStyledComponents, getStyledComponentBaseName, getTagName }

@@ -121,6 +121,12 @@ ruleTester.run('a11y-clickable-element-has-text', rule, {
       code: `<button><Hoge text="any" /></button>`,
     },
     {
+      code: `<Hoge.Fuga>any</Hoge.Fuga>`,
+    },
+    {
+      code: `<hoge.fuga>any</hoge.fuga>`,
+    },
+    {
       code: `<a><AnyComponent /></a>`,
       options: [{
         componentsWithText: ['AnyComponent']
