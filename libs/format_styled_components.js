@@ -130,9 +130,13 @@ const getTagName = (node) => {
     tag = tag.openingElement
   }
 
-  const nameObj = tag.name
+  const name = tag.name
 
-  return nameObj.property?.name || nameObj.name
+  if (name.object && name.property) {
+    return `${name.object.name}.${name.property.name}`
+  }
+
+  return name.name || ''
 }
 
 module.exports = { generateTagFormatter, checkImportStyledComponents, getStyledComponentBaseName, getTagName }

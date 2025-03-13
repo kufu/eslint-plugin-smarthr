@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   '(i|I)nput$': 'Input$',
@@ -23,13 +23,9 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const name = node.name.name
+        const name = getTagName(node)
 
-        if (!name) {
-          return
-        }
-
-        if (!name.match(INPUT_TAG_REGEX)) {
+        if (!name || !name.match(INPUT_TAG_REGEX)) {
           return
         }
 

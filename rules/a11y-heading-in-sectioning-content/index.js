@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   'PageHeading$': 'PageHeading$',
@@ -105,14 +105,22 @@ const reportMessageBareToSHR = (tagName, visibleExample) => {
 }
 
 const searchBubbleUp = (node) => {
-  if (
-    node.type === 'Program' ||
-    node.type === 'JSXElement' && node.openingElement.name.name && (
-      sectioningRegex.test(node.openingElement.name.name) ||
-      layoutComponentRegex.test(node.openingElement.name.name) && node.openingElement.attributes.some(includeSectioningAsAttr)
-    )
-  ) {
-    return node
+  switch (node.type) {
+    case 'Program':
+      return node
+    case 'JSXElement':
+      const tagName = getTagName(node)
+
+      if (
+        tagName && (
+          sectioningRegex.test(tagName) ||
+          layoutComponentRegex.test(tagName) && node.openingElement.attributes.some(includeSectioningAsAttr)
+        )
+      ) {
+        return node
+      }
+
+      break
   }
 
   if (
@@ -120,7 +128,7 @@ const searchBubbleUp = (node) => {
     node.type === 'VariableDeclarator' && node.parent.parent?.type.match(ignoreHeadingCheckParentTypeRegex) && declaratorHeadingRegex.test(node.id.name) ||
     node.type === 'FunctionDeclaration' && ignoreHeadingCheckParentTypeRegex.test(node.parent.type) && declaratorHeadingRegex.test(node.id.name) ||
     // ModelessDialogのheaderにHeadingを設定している場合も対象外
-    node.type === 'JSXAttribute' && node.name.name === 'header' && modelessDialogRegex.test(node.parent.name.name)
+    node.type === 'JSXAttribute' && getTagName(node) === 'header' && modelessDialogRegex.test(getTagName(node.parent))
   ) {
     return null
   }
@@ -187,7 +195,7 @@ const searchChildren = (n) => {
     case 'JSXFragment':
       break
     case 'JSXElement': {
-      const name = n.openingElement.name.name || ''
+      const name = getTagName(n)
 
       if (
         sectioningRegex.test(name) ||
@@ -248,7 +256,7 @@ module.exports = {
     return {
       ...formatter,
       JSXOpeningElement: (node) => {
-        const elementName = node.name.name || ''
+        const elementName = getTagName(node)
         const message = reportMessageBareToSHR(elementName, false)
 
         if (message) {

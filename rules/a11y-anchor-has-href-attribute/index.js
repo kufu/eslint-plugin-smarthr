@@ -1,7 +1,7 @@
 const JSON5 = require('json5')
 const fs = require('fs')
 
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const OPTION = (() => {
   const file = `${process.cwd()}/package.json`
@@ -40,7 +40,7 @@ const check = (node, checkType) => {
   return result && ((OPTION.nextjs && !nextCheck(node, checkType)) || (OPTION.react_router && !reactRouterCheck(node))) ? null : result
 }
 const baseCheck = (node, checkType) => {
-  const nodeName = node.name.name || ''
+  const nodeName = getTagName(node)
 
   if (
     nodeName.match(REGEX_TARGET) &&

@@ -65,9 +65,13 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const nodeName = node.name.name;
+        if (node.selfClosing) {
+          return
+        }
 
-        if (nodeName && !node.selfClosing) {
+        const nodeName = getTagName(node);
+
+        if (nodeName) {
           const matcher = nodeName.match(MULTI_CHILDREN_REGEX)
 
           if (matcher) {

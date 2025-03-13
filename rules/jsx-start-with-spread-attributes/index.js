@@ -1,3 +1,5 @@
+import { getTagName } from '../../libs/format_styled_components'
+
 const SCHEMA = [
   {
     type: 'object',
@@ -56,7 +58,7 @@ module.exports = {
 
               return fixer.replaceText(
                 elementNode,
-                `<${elementNode.name.name} ${sortedAttributes.join(' ')}${elementNode.selfClosing ? '/' : ''}>`
+                `<${getTagName(elementNode)} ${sortedAttributes.join(' ')}${elementNode.selfClosing ? '/' : ''}>`
               )
             } : null
           });

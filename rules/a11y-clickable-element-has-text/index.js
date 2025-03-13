@@ -64,8 +64,9 @@ module.exports = {
         }
 
         const node = parentNode.openingElement
+        const tagName = getTagName(node)
 
-        if (!node.name.name || !node.name.name.match(REGEX_CLICKABLE_ELEMENT)) {
+        if (!tagName || !tagName.match(REGEX_CLICKABLE_ELEMENT)) {
           return
         }
 

@@ -1,3 +1,5 @@
+import { getTagName } from '../../libs/format_styled_components'
+
 const SCHEMA = [
   {
     type: 'object',
@@ -42,7 +44,7 @@ module.exports = {
       JSXAttribute,
       JSXOpeningElement: (node) => {
         // HINT: 翻訳コンポーネントはテキストとbrのみ許容する
-        if (node.name.name === componentName) {
+        if (getTagName(node) === componentName) {
           let existValidChild = false
           let existNotBrElement = false
 
@@ -61,7 +63,7 @@ module.exports = {
 
                 break
               case 'JSXElement':
-                if (c.openingElement.name.name !== 'br') {
+                if (getTagName(c) !== 'br') {
                   existNotBrElement = true
                 }
 

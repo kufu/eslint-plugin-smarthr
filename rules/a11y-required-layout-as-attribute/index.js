@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const LAYOUT_EXPECTED_NAMES = {
   'Center$': '(Center)$',
@@ -35,7 +35,7 @@ const searchBubbleUp = (node) => {
       // rootまで検索した場合は確定でエラーにする
       return null
     case 'JSXElement': {
-      const name = node.openingElement.name.name || ''
+      const name = getTagName(node)
 
       if (headingRegex.test(name)) {
         return name
@@ -46,8 +46,10 @@ const searchBubbleUp = (node) => {
     case 'JSXAttribute': {
       const name = node.name.name || ''
 
-      if (name === 'title' && formControlRegex.test(node.parent.name.name)) {
-        return `${node.parent.name.name}のtitle属性`
+      const tagName = getTagName(node.parent)
+
+      if (name === 'title' && formControlRegex.test(tagName)) {
+        return `${tagName}のtitle属性`
       }
     }
   }
@@ -67,7 +69,7 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const name = node.name.name || ''
+        const name = getTagName(node)
 
         if (layoutRegex.test(name) && !node.attributes.some(findAsAttr)) {
           const parentName = searchBubbleUp(node.parent.parent)

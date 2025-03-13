@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_LABELED_INPUT_NAMES = {
   'RadioButton$': '(RadioButton)$',
@@ -101,7 +101,7 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const nodeName = node.name.name || '';
+        const nodeName = getTagName(node)
         const isFormControlInput = nodeName.match(FORM_CONTROL_INPUTS_REGEX)
         const isAdditionalMultiInput = checkAdditionalMultiInputComponents(nodeName)
         let conditionalExpressions = []
@@ -169,7 +169,7 @@ module.exports = {
             switch (n.type) {
               case 'JSXElement': {
                 const openingElement = n.openingElement
-                const name = openingElement.name.name
+                const name = getTagName(openingElement)
 
                 if (name) {
                   if (name.match(FROM_CONTROLS_REGEX)) {
@@ -349,7 +349,7 @@ module.exports = {
           const searchParent = (n) => {
             switch (n.type) {
               case 'JSXElement': {
-                const name = n.openingElement.name.name || ''
+                const name = getTagName(n)
 
                 // Fieldset > Dialog > Fieldset のようにDialogを挟んだFormControl系のネストは許容する(Portalで実際にはネストしていないため)
                 if (name.match(DIALOG_REGEX)) {
@@ -436,7 +436,7 @@ module.exports = {
                 case 'JSXFragment':
                   break
                 case 'JSXElement': {
-                  const name = n.openingElement.name.name || ''
+                  const name = getTagName(n)
 
                   if (name.match(FIELDSET_REGEX) || checkAdditionalMultiInputComponents(name)) {
                     // 複数inputが存在する可能性のあるコンポーネントなので無限カウントとする

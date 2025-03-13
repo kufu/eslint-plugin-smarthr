@@ -1,4 +1,4 @@
-const { checkImportStyledComponents, getStyledComponentBaseName } = require('../../libs/format_styled_components')
+const { getTagName, checkImportStyledComponents, getStyledComponentBaseName } = require('../../libs/format_styled_components')
 
 const ERRORMESSAGE_SUFFIX = `
  - button要素のtype属性のデフォルトは "submit" のため、button要素がformでラップされていると意図しないsubmitを引き起こす可能性があります
@@ -25,7 +25,7 @@ module.exports = {
         checkImportStyledComponents(node, context)
       },
       JSXOpeningElement: (node) => {
-        if (node.name.name === 'button' && !node.attributes.find(findTypeAttr)) {
+        if (getTagName(node) === 'button' && !node.attributes.find(findTypeAttr)) {
           context.report({
             node,
             message: ERRORMESSAGE_REQUIRED_TYPE_ATTR,

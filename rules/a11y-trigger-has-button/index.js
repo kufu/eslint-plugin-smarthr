@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   'DropdownTrigger$': 'DropdownTrigger$',
@@ -35,14 +35,15 @@ module.exports = {
         }
 
         const node = parentNode.openingElement
+        const tagName = getTagName(node)
 
-        if (!node.name.name) {
+        if (!tagName) {
           return
         }
 
-        const match = node.name.name.match(/(Dropdown|Dialog)Trigger$/)
+        const match = tagName.match(/(Dropdown|Dialog)Trigger$/)
 
-        if (!match || node.name.name.match(/HelpDialogTrigger$/)) {
+        if (!match || tagName.match(/HelpDialogTrigger$/)) {
           return
         }
 
@@ -63,10 +64,12 @@ module.exports = {
             return false
           }
 
+          const tn = getTagName(c)
+
           if (
             c.type !== 'JSXElement' ||
-            !c.openingElement.name.name.match(/(b|B)utton$/) ||
-            c.openingElement.name.name.match(/AnchorButton$/)
+            !tn.match(/(b|B)utton$/) ||
+            tn.match(/AnchorButton$/)
           ) {
             context.report({
               node: c,

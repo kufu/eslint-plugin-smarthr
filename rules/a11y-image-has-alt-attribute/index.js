@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   'Img$': 'Img$',
@@ -63,8 +63,10 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        if (node.name.name) {
-          const matcher = node.name.name.match(REGEX_IMG)
+        const tagName = getTagName(node)
+
+        if (tagName) {
+          const matcher = tagName.match(REGEX_IMG)
 
           if (matcher) {
             const alt = node.attributes.find(findAltAttr)

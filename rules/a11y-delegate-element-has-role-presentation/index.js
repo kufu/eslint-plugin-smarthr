@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components');
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components');
 
 const EXPECTED_NAMES = {
   '(i|I)nput$': 'Input$',
@@ -98,7 +98,7 @@ module.exports = {
     const isHasInteractive = (c) => {
       switch (c.type) {
         case 'JSXElement': {
-          const name = c.openingElement.name.name
+          const name = getTagName(c)
 
           if (name && name.match(interactiveComponentRegex)) {
             return true
@@ -124,7 +124,7 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const nodeName = node.name.name || '';
+        const nodeName = getTagName(node);
 
         let onAttrs = []
         let roleMean = undefined
@@ -202,7 +202,7 @@ module.exports = {
                 case 'JSXFragment':
                   break
                 case 'JSXElement': {
-                  const name = n.openingElement.name.name || ''
+                  const name = getTagName(n)
 
                   if (name.match(interactiveComponentRegex)) {
                     return true
