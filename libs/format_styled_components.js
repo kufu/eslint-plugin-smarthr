@@ -132,11 +132,11 @@ const getTagName = (node) => {
 
   const name = tag.name
 
-  if (name.object && name.property) {
+  if (name?.object && name?.property) {
     return `${name.object.name}.${name.property.name}`
   }
 
-  return name.name || ''
+  return name?.name || ''
 }
 
 module.exports = { generateTagFormatter, checkImportStyledComponents, getStyledComponentBaseName, getTagName }

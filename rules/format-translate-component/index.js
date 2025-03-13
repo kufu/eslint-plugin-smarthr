@@ -1,4 +1,4 @@
-import { getTagName } from '../../libs/format_styled_components'
+const { getTagName } = require('../../libs/format_styled_components')
 
 const SCHEMA = [
   {

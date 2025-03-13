@@ -10,6 +10,7 @@ const ruleTester = new RuleTester({
     },
   },
 })
+
 ruleTester.run('a11y-trigger-has-button', rule, {
   valid: [
     { code: `import styled from 'styled-components'` },

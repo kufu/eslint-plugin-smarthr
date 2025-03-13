@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   '(Input|^input)$': '(Input)$',

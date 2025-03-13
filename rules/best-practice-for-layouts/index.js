@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const MULTI_CHILDREN_EXPECTED_NAMES = {
   'Cluster$': '(Cluster)$',
@@ -27,7 +27,7 @@ const checkFalsyJSXText = (c) => (
 const searchChildren = (node) => {
   if (
     node.type === 'JSXFragment' ||
-    node.type === 'JSXElement' && node.openingElement.name?.name === 'SectioningFragment'
+    node.type === 'JSXElement' && getTagName(node) === 'SectioningFragment'
   ) {
     const children = node.children.filter(checkFalsyJSXText)
 
