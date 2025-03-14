@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const EXPECTED_NAMES = {
   '(Ordered(.*)List|^ol)$': '(Ordered(.*)List)$',
@@ -16,7 +16,7 @@ const findAsOlAttr = (a) => a.type === 'JSXAttribute' && AS_ATTRIBUTE_REGEX.test
 
 const searchOrderedList = (node) => {
   if (node.type === 'JSXElement' && node.openingElement.name?.name) {
-    const name = node.openingElement.name.name
+    const name = getTagName(node)
 
     if (name.match(SELECT_REGEX)) {
       // HINT: select要素の場合、optionのラベルに連番がついている場合がありえるのでignoreする
@@ -41,14 +41,14 @@ const checkNumberedTextInOl = (result, node, context) => {
   if (result) {
     context.report({
       node,
-      message: `${result.name.name} 内で連番がテキストとして記述されています。連番はol要素で表現できるため、削除してください。
+      message: `${getTagName(result)} 内で連番がテキストとして記述されています。連番はol要素で表現できるため、削除してください。
  - ol要素のデフォルトで表示される連番のフォーマット、スタイルから変更したい場合、counter-reset と counter-increment を利用してください
    - 参考: [MDN CSS カウンターの使用](https://developer.mozilla.org/ja/docs/Web/CSS/CSS_counter_styles/Using_CSS_counters)`,
     })
   }
 }
 
-const renderTag = (node) => `\`${node.name.name}="${node.value.value}"\``
+const renderTag = (node) => `\`${getTagName(node)}="${node.value.value}"\``
 const renderNode = (node, matcher) => node.type === 'JSXText' ? `\`${matcher[1]}\`` : renderTag(node)
 
 const SCHEMA = []
@@ -91,8 +91,8 @@ module.exports = {
                   context.report({
                     node: firstNumberedNode,
                     message: `連番を含むテキストがol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
- - ${renderNode(firstNumberedNode, firstNumberedMatcher)} が ${renderNode(node, matcher)} を囲んでいるol要素内(<${result.name.name}>)に存在するように修正してください
- - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol要素内(<${result.name.name}>)に存在する必要があります`,
+ - ${renderNode(firstNumberedNode, firstNumberedMatcher)} が ${renderNode(node, matcher)} を囲んでいるol要素内(<${getTagName(result)}>)に存在するように修正してください
+ - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol要素内(<${getTagName(result)}>)に存在する必要があります`,
                   })
                 }
               } else {
@@ -100,8 +100,8 @@ module.exports = {
                   context.report({
                     node,
                     message: `連番を含むテキストがol要素でマークアップされていません。ol要素でマークアップすることで関連する順番に意味のある要素を適切にマークアップできるため以下の方法で修正してください。
- - ${renderNode(node, matcher)} が ${renderNode(firstNumberedNode, firstNumberedMatcher)} を囲んでいるol要素内(<${resultFirst.name.name}>)に存在するように修正してください
- - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol要素内(<${resultFirst.name.name}>)に存在する必要があります`,
+ - ${renderNode(node, matcher)} が ${renderNode(firstNumberedNode, firstNumberedMatcher)} を囲んでいるol要素内(<${getTagName(resultFirst)}>)に存在するように修正してください
+ - 上記以外にも関連する連番をふくむ要素が存在する場合、それらも同じol要素内(<${getTagName(resultFirst)}>)に存在する必要があります`,
                   })
 
                   firstNumberedNode = null

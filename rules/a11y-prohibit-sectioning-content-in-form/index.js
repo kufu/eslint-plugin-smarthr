@@ -1,5 +1,5 @@
 const { rootPath } = require('../../libs/common')
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const SECTIONING_CONTENT_EXPECTED_NAMES = {
   '(A|^a)rticle$': '(Article)$',
@@ -57,7 +57,7 @@ const searchBubbleUpForSectioningContent = (node) => {
       return null
     case 'JSXElement':
       const openingElement = node.openingElement
-      const elementName = openingElement.name.name
+      const elementName = getTagName(openingElement)
 
       if (elementName) {
         // formかFieldsetでラップされていればNG
@@ -96,7 +96,7 @@ const searchBubbleUpForFormControl = (node) => {
       return null
     case 'JSXElement':
       const openingElement = node.openingElement
-      const elementName = openingElement.name.name
+      const elementName = getTagName(openingElement)
 
       if (elementName) {
         // SectioningContentでラップされていればNG
@@ -148,7 +148,7 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const elementName = node.name.name
+        const elementName = getTagName(node)
 
         if (elementName) {
           // HINT: smarthr-ui/SideNav,IndexNav は対象外とする

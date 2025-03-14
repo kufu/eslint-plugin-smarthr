@@ -1,4 +1,4 @@
-const { generateTagFormatter } = require('../../libs/format_styled_components')
+const { getTagName, generateTagFormatter } = require('../../libs/format_styled_components')
 
 const FIELDSET_EXPECTED_NAMES = {
   '((F|^f)ieldset)$': '(Fieldset)$',
@@ -39,7 +39,8 @@ const searchBubbleUp = (node) => {
       return null
     case 'JSXElement':
       // formかFieldsetでラップされていればOK
-      if (node.openingElement.name.name && (wrapperRegex.test(node.openingElement.name.name) || node.openingElement.attributes.some(includeAsAttrFormOrFieldset))) {
+      const tagName = getTagName(node)
+      if (tagName && (wrapperRegex.test(tagName) || node.openingElement.attributes.some(includeAsAttrFormOrFieldset))) {
         return node
       }
       break
@@ -75,7 +76,7 @@ module.exports = {
     return {
       ...generateTagFormatter({ context, EXPECTED_NAMES, UNEXPECTED_NAMES }),
       JSXOpeningElement: (node) => {
-        const elementName = node.name.name
+        const elementName = getTagName(node)
 
         if (elementName && targetRegex.test(elementName)) {
           const result = searchBubbleUp(node.parent.parent)

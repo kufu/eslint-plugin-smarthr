@@ -1,3 +1,5 @@
+const { getTagName } = require('../../libs/format_styled_components')
+
 const SCHEMA = []
 
 const prohibitAttributies = [
@@ -16,7 +18,8 @@ module.exports = {
   create(context) {
     return {
       JSXAttribute: (node) => {
-        const hit = prohibitAttributies.find((attr) => attr === node.name.name)
+        const tagName = getTagName(node)
+        const hit = prohibitAttributies.find((attr) => attr === tagName)
 
         if (hit) {
           context.report({
