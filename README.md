@@ -1,5 +1,12 @@
 # eslint-plugin-smarthr
 
+## Disclaimer
+
+This repository has been archived. 
+The project has been moved to [kufu/tamatebako/packages/eslint-plugin-smarthr](https://github.com/kufu/tamatebako/tree/master/packages/eslint-plugin-smarthr) and is being actively maintained there.
+
+---
+
 - [a11y-anchor-has-href-attribute](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-anchor-has-href-attribute)
 - [a11y-clickable-element-has-text](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-clickable-element-has-text)
 - [a11y-delegate-element-has-role-presentation](https://github.com/kufu/eslint-plugin-smarthr/tree/main/rules/a11y-delegate-element-has-role-presentation)
